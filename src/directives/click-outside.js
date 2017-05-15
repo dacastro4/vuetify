@@ -14,7 +14,10 @@ function directive (e, el, binding, v) {
 export default {
   bind (el, binding, v) {
     v.context.$vuetify.load(() => {
-      const click = e => directive(e, el, binding, v)
+      const click = e => { 
+        e.stopPropagation();
+        directive(e, el, binding, v) 
+      }
       document.querySelector('[data-app]').addEventListener('click', click, false)
       el._clickOutside = click
     })
