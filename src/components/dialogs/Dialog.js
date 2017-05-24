@@ -1,19 +1,17 @@
 import Bootable from '../../mixins/bootable'
+import Overlayable from '../../mixins/overlayable'
 import Toggleable from '../../mixins/toggleable'
 
 export default {
   name: 'dialog',
 
-  mixins: [Bootable, Toggleable],
+  mixins: [Bootable, Overlayable, Toggleable],
 
   props: {
+    disabled: Boolean,
     persistent: Boolean,
     fullscreen: Boolean,
     lazy: Boolean,
-    overlay: {
-      type: Boolean,
-      default: true
-    },
     origin: {
       type: String,
       default: 'center center'
@@ -47,6 +45,16 @@ export default {
     }
   },
 
+  watch: {
+    isActive (val) {
+      if (val) {
+        !this.fullscreen && !this.hideOverlay && this.genOverlay()
+      } else {
+        this.removeOverlay()
+      }
+    }
+  },
+
   methods: {
     closeConditional (e) {
       // close dialog if !persistent and clicked outside
@@ -77,23 +85,19 @@ export default {
         on: {
           click: e => {
             e.stopPropagation()
-            this.isActive = !this.isActive
+            if (!this.disabled) this.isActive = !this.isActive
           }
         }
       }, [this.$slots.activator]))
     }
 
-    let dialog = h(this.computedTransition, {
+    const dialog = h(this.computedTransition, {
       props: { origin: this.origin }
     }, [h('div', data, [this.$slots.default])])
 
-    if (this.overlay) {
-      dialog = h('v-overlay', {
-        props: { value: this.isActive }
-      }, [dialog])
-    }
-
-    children.push(dialog)
+    children.push(h('div', {
+      'class': 'dialog__content'
+    }, [dialog]))
 
     return h('div', {
       'class': 'dialog__container'

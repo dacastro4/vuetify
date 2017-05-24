@@ -3,17 +3,16 @@
   
   &:before
     background: $grey.darken-2
-    border-radius: .2rem
+    border-radius: 2px
     color: #FFFFFF
     content: attr(data-tooltip)
-    font-size: 10px
-    display: flex
-    align-items: center
+    font-size: 12px
+    display: inline-block
     opacity: 0
-    height: 22px
-    padding: 0 8px
+    padding: 5px 8px
     position: absolute
     pointer-events: none
+    text-transform: initial
     transition: $secondary-transition
     visibility: hidden
     width: auto
@@ -70,8 +69,7 @@
     
   @media $display-breakpoints.sm-and-down
     &:before
-      padding: 0 16px
-      height: 32px
+      padding: 10px 16px
       
     &[data-tooltip-location='bottom']
       &:hover
