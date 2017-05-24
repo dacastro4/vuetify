@@ -1,5 +1,5 @@
 /*!
-* Vuetify v0.12.11
+* Vuetify v0.12.12
 * Forged by John Leider
 * Released under the MIT License.
 */   
@@ -7171,7 +7171,7 @@ function directive (e, el, binding, v) {
     v.context.$vuetify.load(function () {
       var outside = document.querySelector('[data-app]') || document.body
       var click = function (e) { return directive(e, el, binding, v); }
-      outside.addEventListener('click', click, false)
+      // outside.addEventListener('click', click, false)
       el._clickOutside = click
     })
   },
