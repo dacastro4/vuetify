@@ -16,7 +16,7 @@ export default {
     v.context.$vuetify.load(() => {
       const outside = document.querySelector('[data-app]') || document.body
       const click = e => directive(e, el, binding, v)
-      outside.addEventListener('click', click, false)
+      // outside.addEventListener('click', click, false)
       el._clickOutside = click
     })
   },
