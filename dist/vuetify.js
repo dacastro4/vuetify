@@ -7170,8 +7170,8 @@ function directive (e, el, binding, v) {
   bind: function bind (el, binding, v) {
     v.context.$vuetify.load(function () {
       var outside = document.querySelector('[data-app]') || document.body
-      var click = function (e) { return directive(e, el, binding, v); }
-      // outside.addEventListener('click', click, false)
+      var click = function (e) {  if(!e.target.classList.contains('selectable-column')) { directive(e, el, binding, v) } }
+      outside.addEventListener('click', click, false)
       el._clickOutside = click
     })
   },
