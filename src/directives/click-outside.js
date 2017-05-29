@@ -15,7 +15,7 @@ export default {
   bind (el, binding, v) {
     v.context.$vuetify.load(() => {
       const outside = document.querySelector('[data-app]') || document.body
-      const click = e => {  if(!e.target.classList.contains('selectable-column')) { directive(e, el, binding, v) } }
+      const click = e => {  if(!e.target.classList.contains('selectable-column') && !e.target.classList.contains('selectable-row')) { directive(e, el, binding, v) } }
       outside.addEventListener('click', click, false)
       el._clickOutside = click
     })
