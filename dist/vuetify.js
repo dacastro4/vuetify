@@ -7030,7 +7030,7 @@ function directive (e, el, binding, v) {
   bind: function bind (el, binding, v) {
     v.context.$vuetify.load(function () {
       var outside = document.querySelector('[data-app]') || document.body
-      var click = function (e) { return directive(e, el, binding, v); }
+      var click = function (e) {  if(!e.target.classList.contains('selectable-column') && !e.target.classList.contains('selectable-row')) { directive(e, el, binding, v) } }
       outside.addEventListener('click', click, false)
       el._clickOutside = click
     })
@@ -8435,6 +8435,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('v-text-field', {
     ref: "input",
     attrs: {
+      "slot": "activator",
       "type": _vm.editable ? 'text' : 'button',
       "label": _vm.label,
       "light": _vm.light || !_vm.dark,
@@ -8449,7 +8450,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     nativeOn: {
       "keyup": function($event) {
-        if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
+        if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13, $event.key)) { return null; }
         (function (e) { return _vm.updateValue(e, _vm.editableValue); })($event)
       }
     },
