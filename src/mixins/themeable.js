@@ -1,12 +1,17 @@
 export default {
+  name: 'themeable',
+
   props: {
-    dark: {
-      type: Boolean,
-      default: true
-    },
-    light: {
-      type: Boolean,
-      default: false
+    dark: Boolean,
+    light: Boolean
+  },
+
+  computed: {
+    themeClasses () {
+      return {
+        'theme--light': this.light,
+        'theme--dark': this.dark
+      }
     }
   }
 }

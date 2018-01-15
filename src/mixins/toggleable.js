@@ -1,22 +1,30 @@
-export default {
-  data () {
-    return {
-      isActive: this.value
-    }
-  },
+export function factory (prop = 'value', event = 'input') {
+  return {
+    name: 'toggleable',
 
-  props: {
-    value: {
-      required: false
-    }
-  },
+    model: { prop, event },
 
-  watch: {
-    value (val) {
-      this.isActive = Boolean(val)
+    props: {
+      [prop]: { required: false }
     },
-    isActive (val) {
-      val !== this.value && this.$emit('input', val)
+
+    data () {
+      return {
+        isActive: !!this[prop]
+      }
+    },
+
+    watch: {
+      [prop] (val) {
+        this.isActive = !!val
+      },
+      isActive (val) {
+        !!val !== this[prop] && this.$emit(event, val)
+      }
     }
   }
 }
+
+const Toggleable = factory()
+
+export default Toggleable

@@ -1,29 +1,51 @@
+// Components
+import VPicker from '../components/VPicker'
+
+// Mixins
+import Colorable from './colorable'
+import Themeable from './themeable'
+
 export default {
-  data () {
-    return {
-      isSaving: false
-    }
+  name: 'picker',
+
+  components: {
+    VPicker
   },
 
+  mixins: [
+    Colorable,
+    Themeable
+  ],
+
   props: {
-    dark: Boolean,
-    actions: Boolean,
+    headerColor: String,
     landscape: Boolean,
-    noTitle: Boolean,
-    scrollable: Boolean,
-    value: {
-      required: true
-    }
+    noTitle: Boolean
   },
 
   methods: {
-    save () {},
-    cancel () {},
-    genSlot () {
-      return this.$scopedSlots.default({
+    genPickerTitle () {},
+    genPickerBody () {},
+    genPickerActionsSlot () {
+      return this.$scopedSlots.default ? this.$scopedSlots.default({
         save: this.save,
         cancel: this.cancel
-      })
+      }) : this.$slots.default
+    },
+    genPicker (staticClass) {
+      return this.$createElement('v-picker', {
+        staticClass,
+        props: {
+          landscape: this.landscape,
+          dark: this.dark,
+          light: this.light,
+          color: this.headerColor || this.color
+        }
+      }, [
+        this.noTitle ? null : this.genPickerTitle(),
+        this.genPickerBody(),
+        this.$createElement('template', { slot: 'actions' }, [this.genPickerActionsSlot()])
+      ])
     }
   }
 }
