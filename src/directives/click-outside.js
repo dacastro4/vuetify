@@ -68,7 +68,11 @@ export default {
   // available, iOS does not support
   // clicks on body
   inserted (el, binding) {
-    const onClick = e => directive(e, el, binding)
+    const onClick = e => {
+      if (!e.target.classList.contains('selectable-column') && !e.target.classList.contains('selectable-row')) {
+        directive(e, el, binding)
+      }
+    }
     // iOS does not recognize click events on document
     // or body, this is the entire purpose of the v-app
     // component and [data-app], stop removing this
