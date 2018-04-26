@@ -1,20 +1,41 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_carousel.styl');
 
-import VBtn from '../VBtn';
-import VIcon from '../VIcon';
+var _VBtn = require('../VBtn');
 
-import Bootable from '../../mixins/bootable';
-import Themeable from '../../mixins/themeable';
-import { provide as RegistrableProvide } from '../../mixins/registrable';
+var _VBtn2 = _interopRequireDefault(_VBtn);
 
-import Touch from '../../directives/touch';
+var _VIcon = require('../VIcon');
 
-export default {
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+var _bootable = require('../../mixins/bootable');
+
+var _bootable2 = _interopRequireDefault(_bootable);
+
+var _themeable = require('../../mixins/themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+var _registrable = require('../../mixins/registrable');
+
+var _touch = require('../../directives/touch');
+
+var _touch2 = _interopRequireDefault(_touch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-carousel',
 
-  mixins: [Bootable, Themeable, RegistrableProvide('carousel')],
+  mixins: [_bootable2.default, _themeable2.default, (0, _registrable.provide)('carousel')],
 
-  directives: { Touch: Touch },
+  directives: { Touch: _touch2.default },
 
   data: function data() {
     return {
@@ -44,13 +65,13 @@ export default {
         return value > 0;
       }
     },
-    prependIcon: {
-      type: [Boolean, String],
-      default: 'chevron_left'
-    },
-    appendIcon: {
+    nextIcon: {
       type: [Boolean, String],
       default: 'chevron_right'
+    },
+    prevIcon: {
+      type: [Boolean, String],
+      default: 'chevron_left'
     },
     value: Number
   },
@@ -105,14 +126,14 @@ export default {
 
       return this.$createElement('div', {
         staticClass: 'carousel__' + direction
-      }, [this.$createElement(VBtn, {
+      }, [this.$createElement(_VBtn2.default, {
         props: {
           icon: true,
           dark: this.dark || !this.light,
           light: this.light
         },
         on: { click: fn }
-      }, [this.$createElement(VIcon, {
+      }, [this.$createElement(_VIcon2.default, {
         props: { 'size': '46px' }
       }, icon)])]);
     },
@@ -120,7 +141,7 @@ export default {
       var _this = this;
 
       return this.items.map(function (item, index) {
-        return _this.$createElement(VBtn, {
+        return _this.$createElement(_VBtn2.default, {
           class: {
             'carousel__controls__item': true,
             'carousel__controls__item--active': index === _this.inputValue
@@ -133,7 +154,7 @@ export default {
           },
           key: index,
           on: { click: _this.select.bind(_this, index) }
-        }, [_this.$createElement(VIcon, {
+        }, [_this.$createElement(_VIcon2.default, {
           props: { size: '18px' }
         }, _this.delimiterIcon)]);
       });
@@ -189,6 +210,6 @@ export default {
           right: this.prev
         }
       }]
-    }, [this.hideControls ? null : this.genIcon('left', this.prependIcon, this.prev), this.hideControls ? null : this.genIcon('right', this.appendIcon, this.next), this.hideDelimiters ? null : this.genDelimiters(), this.$slots.default]);
+    }, [this.hideControls ? null : this.genIcon('left', this.prevIcon, this.prev), this.hideControls ? null : this.genIcon('right', this.nextIcon, this.next), this.hideDelimiters ? null : this.genDelimiters(), this.$slots.default]);
   }
 };

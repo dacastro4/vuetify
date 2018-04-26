@@ -1,15 +1,16 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Tabs props
  *
  * @mixin
  */
-export default {
+exports.default = {
   props: {
     alignWithTitle: Boolean,
-    appendIcon: {
-      type: String,
-      default: 'chevron_right'
-    },
     centered: Boolean,
     fixedTabs: Boolean,
     grow: Boolean,
@@ -29,7 +30,11 @@ export default {
         return !isNaN(parseInt(v));
       }
     },
-    prependIcon: {
+    nextIcon: {
+      type: String,
+      default: 'chevron_right'
+    },
+    prevIcon: {
       type: String,
       default: 'chevron_left'
     },

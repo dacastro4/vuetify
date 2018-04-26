@@ -1,8 +1,18 @@
-import VDivider from './VDivider';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VDivider = require('./VDivider');
+
+var _VDivider2 = _interopRequireDefault(_VDivider);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* istanbul ignore next */
-VDivider.install = function install(Vue) {
-  Vue.component(VDivider.name, VDivider);
+_VDivider2.default.install = function install(Vue) {
+  Vue.component(_VDivider2.default.name, _VDivider2.default);
 };
 
-export default VDivider;
+exports.default = _VDivider2.default;

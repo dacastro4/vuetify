@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 function inserted(el, binding) {
   var callback = binding.value;
   var options = binding.options || { passive: true };
@@ -18,6 +23,8 @@ function inserted(el, binding) {
 }
 
 function unbind(el, binding) {
+  if (!el._onScroll) return;
+
   var _el$_onScroll = el._onScroll,
       callback = _el$_onScroll.callback,
       options = _el$_onScroll.options,
@@ -28,7 +35,7 @@ function unbind(el, binding) {
   delete el._onScroll;
 }
 
-export default {
+exports.default = {
   name: 'scroll',
   inserted: inserted,
   unbind: unbind

@@ -1,25 +1,50 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_navigation-drawer.styl');
 
-// Mixins
-import Applicationable from '../../mixins/applicationable';
-import Overlayable from '../../mixins/overlayable';
-import SSRBootable from '../../mixins/ssr-bootable';
-import Themeable from '../../mixins/themeable';
+var _applicationable = require('../../mixins/applicationable');
 
-// Directives
-import ClickOutside from '../../directives/click-outside';
-import Resize from '../../directives/resize';
-import Touch from '../../directives/touch';
+var _applicationable2 = _interopRequireDefault(_applicationable);
 
-export default {
+var _overlayable = require('../../mixins/overlayable');
+
+var _overlayable2 = _interopRequireDefault(_overlayable);
+
+var _ssrBootable = require('../../mixins/ssr-bootable');
+
+var _ssrBootable2 = _interopRequireDefault(_ssrBootable);
+
+var _themeable = require('../../mixins/themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+var _clickOutside = require('../../directives/click-outside');
+
+var _clickOutside2 = _interopRequireDefault(_clickOutside);
+
+var _resize = require('../../directives/resize');
+
+var _resize2 = _interopRequireDefault(_resize);
+
+var _touch = require('../../directives/touch');
+
+var _touch2 = _interopRequireDefault(_touch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-navigation-drawer',
 
-  mixins: [Applicationable(null, ['miniVariant', 'right', 'width']), Overlayable, SSRBootable, Themeable],
+  mixins: [(0, _applicationable2.default)(null, ['miniVariant', 'right', 'width']), _overlayable2.default, _ssrBootable2.default, _themeable2.default],
 
   directives: {
-    ClickOutside: ClickOutside,
-    Resize: Resize,
-    Touch: Touch
+    ClickOutside: _clickOutside2.default,
+    Resize: _resize2.default,
+    Touch: _touch2.default
   },
 
   data: function data() {
@@ -103,7 +128,7 @@ export default {
       };
     },
     isMobile: function isMobile() {
-      return !this.permanent && !this.temporary && this.$vuetify.breakpoint.width < parseInt(this.mobileBreakPoint, 10);
+      return !this.stateless && !this.permanent && !this.temporary && this.$vuetify.breakpoint.width < parseInt(this.mobileBreakPoint, 10);
     },
     marginTop: function marginTop() {
       if (!this.app) return 0;
@@ -148,8 +173,8 @@ export default {
 
   watch: {
     $route: function $route() {
-      if (this.reactsToRoute) {
-        this.isActive = !this.closeConditional();
+      if (this.reactsToRoute && this.closeConditional()) {
+        this.isActive = false;
       }
     },
     isActive: function isActive(val) {
@@ -210,7 +235,7 @@ export default {
       };
     },
     closeConditional: function closeConditional() {
-      return this.reactsToClick;
+      return this.isActive && this.reactsToClick;
     },
     genDirectives: function genDirectives() {
       var _this = this;
@@ -256,13 +281,15 @@ export default {
       if (this.isActive && !this.right) return;
       this.calculateTouchArea();
 
-      if (Math.abs(e.touchendX - e.touchstartX) < 100) return;else if (!this.right && e.touchstartX <= this.touchArea.left) this.isActive = true;else if (this.right && this.isActive) this.isActive = false;
+      if (Math.abs(e.touchendX - e.touchstartX) < 100) return;
+      if (!this.right && e.touchstartX <= this.touchArea.left) this.isActive = true;else if (this.right && this.isActive) this.isActive = false;
     },
     swipeLeft: function swipeLeft(e) {
       if (this.isActive && this.right) return;
       this.calculateTouchArea();
 
-      if (Math.abs(e.touchendX - e.touchstartX) < 100) return;else if (this.right && e.touchstartX >= this.touchArea.right) this.isActive = true;else if (!this.right && this.isActive) this.isActive = false;
+      if (Math.abs(e.touchendX - e.touchstartX) < 100) return;
+      if (this.right && e.touchstartX >= this.touchArea.right) this.isActive = true;else if (!this.right && this.isActive) this.isActive = false;
     },
 
     /**
@@ -287,6 +314,10 @@ export default {
           if (!_this2.miniVariant) return;
 
           _this2.$emit('update:miniVariant', false);
+        },
+        transitionend: function transitionend(e) {
+          _this2.$emit('transitionend', e);
+          window.dispatchEvent(new Event('resize'));
         }
       }
     };
@@ -294,3 +325,8 @@ export default {
     return h('aside', data, [this.$slots.default, h('div', { 'class': 'navigation-drawer__border' })]);
   }
 };
+
+// Directives
+
+
+// Mixins

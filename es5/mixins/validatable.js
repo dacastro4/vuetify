@@ -1,8 +1,14 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-import { consoleError } from '../util/console';
+var _console = require('../util/console');
 
-export default {
+exports.default = {
   name: 'validatable',
 
   data: function data() {
@@ -127,7 +133,7 @@ export default {
         if (valid === false || typeof valid === 'string') {
           this.errorBucket.push(valid);
         } else if (valid !== true) {
-          consoleError('Rules should return a string or boolean, received \'' + (typeof valid === 'undefined' ? 'undefined' : _typeof(valid)) + '\' instead', this);
+          (0, _console.consoleError)('Rules should return a string or boolean, received \'' + (typeof valid === 'undefined' ? 'undefined' : _typeof(valid)) + '\' instead', this);
         }
       }
 

@@ -1,8 +1,18 @@
-import VAlert from './VAlert';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VAlert = require('./VAlert');
+
+var _VAlert2 = _interopRequireDefault(_VAlert);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* istanbul ignore next */
-VAlert.install = function install(Vue) {
-  Vue.component(VAlert.name, VAlert);
+_VAlert2.default.install = function install(Vue) {
+  Vue.component(_VAlert2.default.name, _VAlert2.default);
 };
 
-export default VAlert;
+exports.default = _VAlert2.default;

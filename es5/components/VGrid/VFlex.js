@@ -1,5 +1,15 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_grid.styl');
 
-import Grid from './grid';
+var _grid = require('./grid');
 
-export default Grid('flex');
+var _grid2 = _interopRequireDefault(_grid);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = (0, _grid2.default)('flex');

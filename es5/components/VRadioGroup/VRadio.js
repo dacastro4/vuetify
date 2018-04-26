@@ -1,29 +1,49 @@
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+'use strict';
 
-// Components
-import { VFadeTransition } from '../transitions';
-import VIcon from '../VIcon';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; // Components
+
 
 // Mixins
-import Colorable from '../../mixins/colorable';
-import Rippleable from '../../mixins/rippleable';
-import TabFocusable from '../../mixins/tab-focusable';
-import Themeable from '../../mixins/themeable';
-import { inject as RegistrableInject } from '../../mixins/registrable';
 
-export default {
+
+var _transitions = require('../transitions');
+
+var _VIcon = require('../VIcon');
+
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _rippleable = require('../../mixins/rippleable');
+
+var _rippleable2 = _interopRequireDefault(_rippleable);
+
+var _tabFocusable = require('../../mixins/tab-focusable');
+
+var _tabFocusable2 = _interopRequireDefault(_tabFocusable);
+
+var _themeable = require('../../mixins/themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+var _registrable = require('../../mixins/registrable');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-radio',
 
   inheritAttrs: false,
 
   inject: ['isMandatory', 'name'],
 
-  components: {
-    VFadeTransition: VFadeTransition,
-    VIcon: VIcon
-  },
-
-  mixins: [Colorable, Rippleable, RegistrableInject('radio', 'v-radio', 'v-radio-group'), TabFocusable, Themeable],
+  mixins: [_colorable2.default, _rippleable2.default, (0, _registrable.inject)('radio', 'v-radio', 'v-radio-group'), _tabFocusable2.default, _themeable2.default],
 
   data: function data() {
     return {
@@ -97,7 +117,7 @@ export default {
         class: this.classes,
         attrs: {
           role: 'radio',
-          'aria-checked': this.isActive && 'true' || 'false',
+          'aria-checked': this.isActive ? 'true' : 'false',
           'aria-label': this.label
         },
         on: {
@@ -122,7 +142,7 @@ export default {
       }, this.$slots.label || this.label);
     },
     toggle: function toggle() {
-      var mandatory = this.isMandatory && this.isMandatory() || false;
+      var mandatory = !!this.isMandatory && this.isMandatory();
 
       if (!this.disabled && (!this.isActive || !mandatory)) {
         this.$refs.input.checked = true;
@@ -139,7 +159,7 @@ export default {
     this.radio.unregister(this);
   },
   render: function render(h) {
-    var transition = h('v-fade-transition', {}, [h('v-icon', {
+    var transition = h(_transitions.VFadeTransition, {}, [h(_VIcon2.default, {
       staticClass: 'icon--selection-control',
       'class': {
         'icon--radio': this.isActive

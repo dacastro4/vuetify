@@ -1,14 +1,34 @@
-import VTimePicker from './VTimePicker';
-import VTimePickerClock from './VTimePickerClock';
-import VTimePickerTitle from './VTimePickerTitle';
+'use strict';
 
-export { VTimePicker, VTimePickerClock, VTimePickerTitle };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.VTimePickerTitle = exports.VTimePickerClock = exports.VTimePicker = undefined;
+
+var _VTimePicker = require('./VTimePicker');
+
+var _VTimePicker2 = _interopRequireDefault(_VTimePicker);
+
+var _VTimePickerClock = require('./VTimePickerClock');
+
+var _VTimePickerClock2 = _interopRequireDefault(_VTimePickerClock);
+
+var _VTimePickerTitle = require('./VTimePickerTitle');
+
+var _VTimePickerTitle2 = _interopRequireDefault(_VTimePickerTitle);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.VTimePicker = _VTimePicker2.default;
+exports.VTimePickerClock = _VTimePickerClock2.default;
+exports.VTimePickerTitle = _VTimePickerTitle2.default;
 
 /* istanbul ignore next */
-VTimePicker.install = function install(Vue) {
-  Vue.component(VTimePicker.name, VTimePicker);
-  Vue.component(VTimePickerClock.name, VTimePickerClock);
-  Vue.component(VTimePickerTitle.name, VTimePickerTitle);
+
+_VTimePicker2.default.install = function install(Vue) {
+  Vue.component(_VTimePicker2.default.name, _VTimePicker2.default);
+  Vue.component(_VTimePickerClock2.default.name, _VTimePickerClock2.default);
+  Vue.component(_VTimePickerTitle2.default.name, _VTimePickerTitle2.default);
 };
 
-export default VTimePicker;
+exports.default = _VTimePicker2.default;

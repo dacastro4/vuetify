@@ -1,8 +1,31 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _console = require('../../../util/console');
+
+var _VCheckbox = require('../../VCheckbox');
+
+var _VCheckbox2 = _interopRequireDefault(_VCheckbox);
+
+var _VIcon = require('../../VIcon');
+
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-import { consoleWarn } from '../../../util/console';
+exports.default = {
+  props: {
+    sortIcon: {
+      type: String,
+      default: 'arrow_upward'
+    }
+  },
 
-export default {
   methods: {
     genTHead: function genTHead() {
       var _this = this;
@@ -18,12 +41,12 @@ export default {
           all: this.everyItem
         });
 
-        children = [this.needsTR(row) ? this.genTR(row) : row, this.genTProgress()];
+        children = [this.hasTag(row, 'th') ? this.genTR(row) : row, this.genTProgress()];
       } else {
         var _row = this.headers.map(function (o) {
           return _this.genHeader(o);
         });
-        var checkbox = this.$createElement('v-checkbox', {
+        var checkbox = this.$createElement(_VCheckbox2.default, {
           props: {
             dark: this.dark,
             light: this.light,
@@ -60,13 +83,13 @@ export default {
         }
       };
 
-      if ('sortable' in header && header.sortable || !('sortable' in header)) {
+      if (header.sortable == null || header.sortable) {
         this.genHeaderSortingData(header, children, data, classes);
       } else {
         data.attrs['aria-label'] += ': Not sorted.'; // TODO: Localization
       }
 
-      classes.push('text-xs-' + (header.align || 'right'));
+      classes.push('text-xs-' + (header.align || 'left'));
       if (Array.isArray(header.class)) {
         classes.push.apply(classes, _toConsumableArray(header.class));
       } else if (header.class) {
@@ -80,7 +103,7 @@ export default {
       var _this2 = this;
 
       if (!('value' in header)) {
-        consoleWarn('Headers must have a value property that corresponds to a value in the v-model array', this);
+        (0, _console.consoleWarn)('Headers must have a value property that corresponds to a value in the v-model array', this);
       }
 
       data.attrs.tabIndex = 0;
@@ -99,12 +122,12 @@ export default {
       };
 
       classes.push('sortable');
-      var icon = this.$createElement('v-icon', {
+      var icon = this.$createElement(_VIcon2.default, {
         props: {
           small: true
         }
-      }, 'arrow_upward');
-      if (header.align && header.align === 'left') {
+      }, this.sortIcon);
+      if (!header.align || header.align === 'left') {
         children.push(icon);
       } else {
         children.unshift(icon);

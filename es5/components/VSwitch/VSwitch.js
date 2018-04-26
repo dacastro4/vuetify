@@ -1,20 +1,35 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_input-groups.styl');
+
 require('../../../src/stylus/components/_selection-controls.styl');
+
 require('../../../src/stylus/components/_switch.styl');
 
-// Mixins
-import Rippleable from '../../mixins/rippleable';
-import Selectable from '../../mixins/selectable';
+var _rippleable = require('../../mixins/rippleable');
 
-// Directives
-import Touch from '../../directives/touch';
+var _rippleable2 = _interopRequireDefault(_rippleable);
 
-export default {
+var _selectable = require('../../mixins/selectable');
+
+var _selectable2 = _interopRequireDefault(_selectable);
+
+var _touch = require('../../directives/touch');
+
+var _touch2 = _interopRequireDefault(_touch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-switch',
 
-  mixins: [Rippleable, Selectable],
+  mixins: [_rippleable2.default, _selectable2.default],
 
-  directives: { Touch: Touch },
+  directives: { Touch: _touch2.default },
 
   computed: {
     classes: function classes() {
@@ -76,3 +91,8 @@ export default {
     return this.genInputGroup([container]);
   }
 };
+
+// Directives
+
+
+// Mixins

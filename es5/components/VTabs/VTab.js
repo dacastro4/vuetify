@@ -1,13 +1,29 @@
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+'use strict';
 
-// Mixins
-import Routable from '../../mixins/routable';
-import { inject as RegistrableInject } from '../../mixins/registrable';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-export default {
+var _routable = require('../../mixins/routable');
+
+var _routable2 = _interopRequireDefault(_routable);
+
+var _registrable = require('../../mixins/registrable');
+
+var _helpers = require('../../util/helpers');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; } // Mixins
+
+
+// Utilities
+
+
+exports.default = {
   name: 'v-tab',
 
-  mixins: [RegistrableInject('tabs', 'v-tab', 'v-tabs'), Routable],
+  mixins: [(0, _registrable.inject)('tabs', 'v-tab', 'v-tabs'), _routable2.default],
 
   inject: ['tabClick'],
 
@@ -39,22 +55,23 @@ export default {
     action: function action() {
       var to = this.to || this.href;
 
-      if (typeof to === 'string') return to.replace('#', '');
-      if (to === Object(to) && to.hasOwnProperty('path')) return to.path;
+      if (this.$router && this.to === Object(this.to)) {
+        var resolve = this.$router.resolve(this.to, this.$route, this.append);
 
-      return this;
+        to = resolve.href;
+      }
+
+      return typeof to === 'string' ? to.replace('#', '') : this;
     }
   },
 
   watch: {
-    $route: {
-      immediate: true,
-      handler: 'onRouteChange'
-    }
+    $route: 'onRouteChange'
   },
 
   mounted: function mounted() {
     this.tabs.register(this);
+    this.onRouteChange();
   },
   beforeDestroy: function beforeDestroy() {
     this.tabs.unregister(this);
@@ -75,10 +92,12 @@ export default {
     onRouteChange: function onRouteChange() {
       var _this = this;
 
-      if (!this.to) return;
+      if (!this.to || !this.$refs.link) return;
+
+      var path = '_vnode.data.class.' + this.activeClass;
 
       this.$nextTick(function () {
-        if (_this.$el.firstChild.className.indexOf(_this.activeClass) > -1) {
+        if ((0, _helpers.getObjectValueByPath)(_this.$refs.link, path)) {
           _this.tabClick(_this);
         }
       });
@@ -96,6 +115,8 @@ export default {
     // being disabled
 
     var tag = this.disabled ? 'div' : link.tag;
+
+    data.ref = 'link';
 
     return h('div', {
       staticClass: 'tabs__div'

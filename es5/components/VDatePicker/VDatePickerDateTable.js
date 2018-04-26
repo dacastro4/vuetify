@@ -1,16 +1,29 @@
-// Mixins
-import Colorable from '../../mixins/colorable';
-import DatePickerTable from './mixins/date-picker-table';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _datePickerTable = require('./mixins/date-picker-table');
+
+var _datePickerTable2 = _interopRequireDefault(_datePickerTable);
+
+var _util = require('./util');
+
+var _helpers = require('../../util/helpers');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Utils
-import { pad, createNativeLocaleFormatter, monthChange } from './util';
-import { createRange } from '../../util/helpers';
-import isValueAllowed from '../../util/isValueAllowed';
-
-export default {
+// Mixins
+exports.default = {
   name: 'v-date-picker-date-table',
 
-  mixins: [Colorable, DatePickerTable],
+  mixins: [_colorable2.default, _datePickerTable2.default],
 
   props: {
     events: {
@@ -35,20 +48,20 @@ export default {
 
   computed: {
     formatter: function formatter() {
-      return this.format || createNativeLocaleFormatter(this.locale, { day: 'numeric', timeZone: 'UTC' }, { start: 8, length: 2 });
+      return this.format || (0, _util.createNativeLocaleFormatter)(this.locale, { day: 'numeric', timeZone: 'UTC' }, { start: 8, length: 2 });
     },
     weekdayFormatter: function weekdayFormatter() {
-      return this.weekdayFormat || createNativeLocaleFormatter(this.locale, { weekday: 'narrow', timeZone: 'UTC' });
+      return this.weekdayFormat || (0, _util.createNativeLocaleFormatter)(this.locale, { weekday: 'narrow', timeZone: 'UTC' });
     },
     weekDays: function weekDays() {
       var _this = this;
 
       var first = parseInt(this.firstDayOfWeek, 10);
 
-      return this.weekdayFormatter ? createRange(7).map(function (i) {
+      return this.weekdayFormatter ? (0, _helpers.createRange)(7).map(function (i) {
         return _this.weekdayFormatter('2017-01-' + (first + i + 15));
       }) // 2017-01-15 is Sunday
-      : createRange(7).map(function (i) {
+      : (0, _helpers.createRange)(7).map(function (i) {
         return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][(i + first) % 7];
       });
     }
@@ -56,7 +69,7 @@ export default {
 
   methods: {
     calculateTableDate: function calculateTableDate(delta) {
-      return monthChange(this.tableDate, Math.sign(delta || 1));
+      return (0, _util.monthChange)(this.tableDate, Math.sign(delta || 1));
     },
     genTHead: function genTHead() {
       var _this2 = this;
@@ -83,9 +96,18 @@ export default {
 
     // Returns number of the days from the firstDayOfWeek to the first day of the current month
     weekDaysBeforeFirstDayOfTheMonth: function weekDaysBeforeFirstDayOfTheMonth() {
-      var firstDayOfTheMonth = new Date(this.displayedYear + '-' + pad(this.displayedMonth + 1) + '-01T00:00:00+00:00');
+      var firstDayOfTheMonth = new Date(this.displayedYear + '-' + (0, _util.pad)(this.displayedMonth + 1) + '-01T00:00:00+00:00');
       var weekDay = firstDayOfTheMonth.getUTCDay();
       return (weekDay - parseInt(this.firstDayOfWeek) + 7) % 7;
+    },
+    isEvent: function isEvent(date) {
+      if (Array.isArray(this.events)) {
+        return this.events.indexOf(date) > -1;
+      } else if (this.events instanceof Function) {
+        return this.events(date);
+      } else {
+        return false;
+      }
     },
     genTBody: function genTBody() {
       var children = [];
@@ -96,10 +118,9 @@ export default {
       while (day--) {
         rows.push(this.$createElement('td'));
       }for (day = 1; day <= daysInMonth; day++) {
-        var date = this.displayedYear + '-' + pad(this.displayedMonth + 1) + '-' + pad(day);
-        var isEvent = isValueAllowed(date, this.events, false);
+        var date = this.displayedYear + '-' + (0, _util.pad)(this.displayedMonth + 1) + '-' + (0, _util.pad)(day);
 
-        rows.push(this.$createElement('td', [this.genButton(date, true), isEvent ? this.genEvent(date) : null]));
+        rows.push(this.$createElement('td', [this.genButton(date, true), this.isEvent(date) ? this.genEvent(date) : null]));
 
         if (rows.length % 7 === 0) {
           children.push(this.genTR(rows));

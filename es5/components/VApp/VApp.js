@@ -1,21 +1,40 @@
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 require('../../../src/stylus/components/_app.styl');
 
+var _appTheme = require('./mixins/app-theme');
+
+var _appTheme2 = _interopRequireDefault(_appTheme);
+
+var _appBreakpoint = require('./mixins/app-breakpoint');
+
+var _appBreakpoint2 = _interopRequireDefault(_appBreakpoint);
+
+var _resize = require('../../directives/resize');
+
+var _resize2 = _interopRequireDefault(_resize);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 // Component level mixins
-import AppTheme from './mixins/app-theme';
-import AppBreakpoint from './mixins/app-breakpoint';
+
 
 // Directives
-import Resize from '../../directives/resize';
 
-export default {
+
+exports.default = {
   name: 'v-app',
 
-  mixins: [AppBreakpoint, AppTheme],
+  mixins: [_appBreakpoint2.default, _appTheme2.default],
 
   directives: {
-    Resize: Resize
+    Resize: _resize2.default
   },
 
   props: {

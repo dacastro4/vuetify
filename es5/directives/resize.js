@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 function inserted(el, binding) {
   var callback = binding.value;
   var options = binding.options || { passive: true };
@@ -23,7 +28,7 @@ function unbind(el, binding) {
   delete el._onResize;
 }
 
-export default {
+exports.default = {
   name: 'resize',
   inserted: inserted,
   unbind: unbind

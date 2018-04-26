@@ -1,4 +1,10 @@
-import { escapeHTML } from '../../../util/helpers';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _helpers = require('../../../util/helpers');
 
 /**
  * Select autocomplete
@@ -7,7 +13,7 @@ import { escapeHTML } from '../../../util/helpers';
  *
  * Handles logic when using the "autocomplete" prop
  */
-export default {
+exports.default = {
   props: {
     filter: {
       type: Function,
@@ -37,19 +43,19 @@ export default {
     genFiltered: function genFiltered(text) {
       text = (text || '').toString();
 
-      if (!this.isAutocomplete || !this.searchValue || this.filteredItems.length < 1) return escapeHTML(text);
+      if (!this.isAutocomplete || !this.searchValue || this.filteredItems.length < 1) return (0, _helpers.escapeHTML)(text);
 
       var _getMaskedCharacters = this.getMaskedCharacters(text),
           start = _getMaskedCharacters.start,
           middle = _getMaskedCharacters.middle,
           end = _getMaskedCharacters.end;
 
-      return '' + escapeHTML(start) + this.genHighlight(middle) + escapeHTML(end);
+      return '' + (0, _helpers.escapeHTML)(start) + this.genHighlight(middle) + (0, _helpers.escapeHTML)(end);
     },
     genHighlight: function genHighlight(text) {
-      if (this.isNotFiltering) return escapeHTML(text);
+      if (this.isNotFiltering) return (0, _helpers.escapeHTML)(text);
 
-      return '<span class="list__tile__mask">' + escapeHTML(text) + '</span>';
+      return '<span class="list__tile__mask">' + (0, _helpers.escapeHTML)(text) + '</span>';
     },
     getMaskedCharacters: function getMaskedCharacters(text) {
       var searchValue = (this.searchValue || '').toString().toLowerCase();
@@ -69,15 +75,19 @@ export default {
       this.blur();
     },
     onTabDown: function onTabDown(e) {
+      var _this2 = this;
+
       // If tabbing through inputs and
       // and there is no need for an
       // update, blur the v-select
       if (!this.isAutocomplete || !this.getCurrentTag() || this.combobox) return this.tabOut();
 
+      var menuIndex = this.getMenuIndex();
+
       // When adding tags, if searching and
       // there is not a filtered options,
       // add the value to the tags list
-      if (this.tags && this.searchValue && !this.filteredItems.length) {
+      if (this.tags && this.searchValue && menuIndex === -1) {
         e.preventDefault();
 
         return this.updateTags(this.searchValue);
@@ -86,8 +96,13 @@ export default {
       // An item that is selected by
       // menu-index should toggled
       if (this.menuIsActive) {
+        // Reset the list index if searching
+        this.searchValue && this.$nextTick(function () {
+          return setTimeout(_this2.resetMenuIndex, 0);
+        });
+
         e.preventDefault();
-        this.selectListTile(this.getMenuIndex());
+        this.selectListTile(menuIndex);
       }
     },
     onEnterDown: function onEnterDown() {
@@ -98,7 +113,7 @@ export default {
       this.menuIsActive = false;
     },
     onKeyDown: function onKeyDown(e) {
-      var _this2 = this;
+      var _this3 = this;
 
       // If enter, space, up, or down is pressed, open menu
       if (!this.menuIsActive && [13, 32, 38, 40].includes(e.keyCode)) {
@@ -129,7 +144,7 @@ export default {
       if (e.keyCode === 37 && this.$refs.input.selectionStart === 0 && this.selectedItems.length) {
         this.updateTags(this.searchValue);
         this.$nextTick(function () {
-          _this2.selectedIndex = Math.max(_this2.selectedItems.length - 2, 0);
+          _this3.selectedIndex = Math.max(_this3.selectedItems.length - 2, 0);
         });
       }
 
@@ -144,7 +159,7 @@ export default {
       this.$refs.menu.tiles[index].click();
     },
     updateTags: function updateTags(content) {
-      var _this3 = this;
+      var _this4 = this;
 
       // Avoid direct mutation
       // for vuex strict mode
@@ -170,11 +185,8 @@ export default {
       this.selectedItems = selectedItems;
 
       this.$nextTick(function () {
-        _this3.searchValue = searchValue;
-        _this3.$emit('input', _this3.combobox ? content : _this3.selectedItems);
-
-        // Combobox should close its menu when tags are updated
-        _this3.menuIsActive = !_this3.combobox;
+        _this4.searchValue = searchValue;
+        _this4.$emit('input', _this4.combobox ? content : _this4.selectedItems);
       });
     }
   }

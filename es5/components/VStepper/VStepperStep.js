@@ -1,12 +1,23 @@
-import VIcon from '../VIcon';
-import Ripple from '../../directives/ripple';
+'use strict';
 
-export default {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VIcon = require('../VIcon');
+
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+var _ripple = require('../../directives/ripple');
+
+var _ripple2 = _interopRequireDefault(_ripple);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-stepper-step',
 
-  components: { VIcon: VIcon },
-
-  directives: { Ripple: Ripple },
+  directives: { Ripple: _ripple2.default },
 
   inject: ['stepClick'],
 
@@ -87,12 +98,12 @@ export default {
     var stepContent = void 0;
 
     if (this.hasError) {
-      stepContent = [h('v-icon', {}, this.errorIcon)];
+      stepContent = [h(_VIcon2.default, {}, this.errorIcon)];
     } else if (this.complete) {
       if (this.editable) {
-        stepContent = [h('v-icon', {}, this.editIcon)];
+        stepContent = [h(_VIcon2.default, {}, this.editIcon)];
       } else {
-        stepContent = [h('v-icon', {}, this.completeIcon)];
+        stepContent = [h(_VIcon2.default, {}, this.completeIcon)];
       }
     } else {
       stepContent = this.step;

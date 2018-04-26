@@ -1,8 +1,18 @@
-import VJumbotron from './VJumbotron';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VJumbotron = require('./VJumbotron');
+
+var _VJumbotron2 = _interopRequireDefault(_VJumbotron);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* istanbul ignore next */
-VJumbotron.install = function install(Vue) {
-  Vue.component(VJumbotron.name, VJumbotron);
+_VJumbotron2.default.install = function install(Vue) {
+  Vue.component(_VJumbotron2.default.name, _VJumbotron2.default);
 };
 
-export default VJumbotron;
+exports.default = _VJumbotron2.default;

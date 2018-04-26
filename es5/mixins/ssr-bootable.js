@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * SSRBootable
  *
@@ -6,7 +11,7 @@
  * Used in layout components (drawer, toolbar, content)
  * to avoid an entry animation when using SSR
  */
-export default {
+exports.default = {
   name: 'ssr-bootable',
 
   data: function data() {

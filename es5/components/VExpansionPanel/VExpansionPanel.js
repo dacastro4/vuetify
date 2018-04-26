@@ -1,18 +1,35 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 require('../../../src/stylus/components/_expansion-panel.styl');
 
-import Themeable from '../../mixins/themeable';
+var _themeable = require('../../mixins/themeable');
 
-export default {
+var _themeable2 = _interopRequireDefault(_themeable);
+
+var _registrable = require('../../mixins/registrable');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-expansion-panel',
 
-  mixins: [Themeable],
+  mixins: [_themeable2.default, (0, _registrable.provide)('expansionPanel')],
 
   provide: function provide() {
     return {
       panelClick: this.panelClick,
       focusable: this.focusable
+    };
+  },
+  data: function data() {
+    return {
+      items: []
     };
   },
 
@@ -25,27 +42,28 @@ export default {
   },
 
   methods: {
-    getChildren: function getChildren() {
-      return this.$children.filter(function (c) {
-        return c.$options && c.$options.name === 'v-expansion-panel-content';
-      });
-    },
     panelClick: function panelClick(uid) {
-      var children = this.getChildren();
-
       if (!this.expand) {
-        for (var index = children.length; --index >= 0;) {
-          children[index].toggle(uid);
+        for (var i = 0; i < this.items.length; i++) {
+          this.items[i].toggle(uid);
         }
         return;
       }
 
-      for (var _index = children.length; --_index >= 0;) {
-        if (children[_index]._uid === uid) {
-          children[_index].toggle(uid);
+      for (var _i = 0; _i < this.items.length; _i++) {
+        if (this.items[_i].uid === uid) {
+          this.items[_i].toggle(uid);
           return;
         }
       }
+    },
+    register: function register(uid, toggle) {
+      this.items.push({ uid: uid, toggle: toggle });
+    },
+    unregister: function unregister(uid) {
+      this.items = this.items.filter(function (i) {
+        return i.uid !== uid;
+      });
     }
   },
 

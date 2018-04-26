@@ -1,3 +1,9 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 /**
@@ -8,7 +14,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
  * Event based methods for
  * the v-select component
  */
-export default {
+exports.default = {
   methods: {
     blur: function blur() {
       this.deactivateInput();
@@ -48,7 +54,7 @@ export default {
             return _this2.showMenuItems();
           }
 
-          _this2.focus();
+          _this2.selectedIndex > -1 ? _this2.selectedIndex = -1 : _this2.focus();
         },
         focus: function focus(e) {
           if (_this2.disabled || _this2.readonly || _this2.isFocused) {

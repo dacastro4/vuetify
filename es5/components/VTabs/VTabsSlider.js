@@ -1,9 +1,19 @@
-import Colorable from '../../mixins/colorable';
+'use strict';
 
-export default {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-tabs-slider',
 
-  mixins: [Colorable],
+  mixins: [_colorable2.default],
 
   data: function data() {
     return {

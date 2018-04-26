@@ -1,12 +1,13 @@
-import { VTabTransition, VTabReverseTransition } from '../transitions';
+'use strict';
 
-export default {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _transitions = require('../transitions');
+
+exports.default = {
   name: 'v-stepper-content',
-
-  components: {
-    VTabTransition: VTabTransition,
-    VTabReverseTransition: VTabReverseTransition
-  },
 
   data: function data() {
     return {
@@ -34,7 +35,7 @@ export default {
       };
     },
     computedTransition: function computedTransition() {
-      return this.isReverse ? 'v-tab-reverse-transition' : 'v-tab-transition';
+      return this.isReverse ? _transitions.VTabReverseTransition : _transitions.VTabTransition;
     },
     styles: function styles() {
       if (!this.isVertical) return {};

@@ -1,19 +1,43 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+'use strict';
 
-// Styles
-require('../../../src/stylus/components/_input-groups.styl');
-require('../../../src/stylus/components/_text-fields.styl');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // Styles
+
 
 // Mixins
-import Colorable from '../../mixins/colorable';
-import Input from '../../mixins/input';
-import Maskable from '../../mixins/maskable';
-import Soloable from '../../mixins/soloable';
 
-export default {
+
+require('../../../src/stylus/components/_input-groups.styl');
+
+require('../../../src/stylus/components/_text-fields.styl');
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _input = require('../../mixins/input');
+
+var _input2 = _interopRequireDefault(_input);
+
+var _maskable = require('../../mixins/maskable');
+
+var _maskable2 = _interopRequireDefault(_maskable);
+
+var _soloable = require('../../mixins/soloable');
+
+var _soloable2 = _interopRequireDefault(_soloable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var dirtyTypes = ['color', 'file', 'time', 'date', 'datetime-local', 'week', 'month'];
+
+exports.default = {
   name: 'v-text-field',
 
-  mixins: [Colorable, Input, Maskable, Soloable],
+  mixins: [_colorable2.default, _input2.default, _maskable2.default, _soloable2.default],
 
   inheritAttrs: false,
 
@@ -39,10 +63,22 @@ export default {
     counter: [Boolean, Number, String],
     fullWidth: Boolean,
     multiLine: Boolean,
+    noResize: Boolean,
     placeholder: String,
     prefix: String,
+    rowHeight: {
+      type: [Number, String],
+      default: 24,
+      validator: function validator(v) {
+        return !isNaN(parseFloat(v));
+      }
+    },
     rows: {
-      default: 5
+      type: [Number, String],
+      default: 5,
+      validator: function validator(v) {
+        return !isNaN(parseInt(v, 10));
+      }
     },
     singleLine: Boolean,
     suffix: String,
@@ -61,6 +97,7 @@ export default {
         'input-group--single-line': this.singleLine || this.isSolo,
         'input-group--multi-line': this.multiLine,
         'input-group--full-width': this.fullWidth,
+        'input-group--no-resize': this.noResizeHandle,
         'input-group--prefix': this.prefix,
         'input-group--suffix': this.suffix,
         'input-group--textarea': this.textarea
@@ -100,10 +137,16 @@ export default {
       }
     },
     isDirty: function isDirty() {
-      return this.lazyValue != null && this.lazyValue.toString().length > 0 || this.badInput || ['time', 'date', 'datetime-local', 'week', 'month'].includes(this.type);
+      return this.lazyValue != null && this.lazyValue.toString().length > 0 || this.badInput || dirtyTypes.includes(this.type);
+    },
+    isTextarea: function isTextarea() {
+      return this.multiLine || this.textarea;
+    },
+    noResizeHandle: function noResizeHandle() {
+      return this.isTextarea && (this.noResize || this.shouldAutoGrow);
     },
     shouldAutoGrow: function shouldAutoGrow() {
-      return (this.multiLine || this.textarea) && this.autoGrow;
+      return this.isTextarea && this.autoGrow;
     }
   },
 
@@ -150,9 +193,8 @@ export default {
 
       this.$nextTick(function () {
         var height = _this2.$refs.input ? _this2.$refs.input.scrollHeight : 0;
-        var minHeight = _this2.rows * 24;
-        var inputHeight = height < minHeight ? minHeight : height;
-        _this2.inputHeight = inputHeight + (_this2.textarea ? 4 : 0);
+        var minHeight = parseInt(_this2.rows, 10) * parseFloat(_this2.rowHeight);
+        _this2.inputHeight = Math.max(minHeight, height);
       });
     },
     onInput: function onInput(e) {
@@ -188,7 +230,7 @@ export default {
       // Prevents closing of a
       // dialog when pressing
       // enter
-      if (this.multiLine && this.isFocused && e.keyCode === 13) {
+      if (this.isTextarea && this.isFocused && e.keyCode === 13) {
         e.stopPropagation();
       }
 
@@ -203,19 +245,19 @@ export default {
       }, this.count);
     },
     genInput: function genInput() {
-      var tag = this.multiLine || this.textarea ? 'textarea' : 'input';
+      var tag = this.isTextarea ? 'textarea' : 'input';
       var listeners = Object.assign({}, this.$listeners);
       delete listeners['change']; // Change should not be bound externally
 
       var data = {
         style: {},
         domProps: {
-          autofocus: this.autofocus,
-          disabled: this.disabled,
-          required: this.required,
           value: this.maskText(this.lazyValue)
         },
         attrs: _extends({}, this.$attrs, {
+          autofocus: this.autofocus,
+          disabled: this.disabled,
+          required: this.required,
           readonly: this.readonly,
           tabindex: this.tabindex,
           'aria-label': (!this.$attrs || !this.$attrs.id) && this.label // Label `for` will be set if we have an id
@@ -233,12 +275,12 @@ export default {
         data.style.height = this.inputHeight && this.inputHeight + 'px';
       }
 
-      if (this.placeholder) data.domProps.placeholder = this.placeholder;
+      if (this.placeholder) data.attrs.placeholder = this.placeholder;
 
-      if (!this.textarea && !this.multiLine) {
-        data.domProps.type = this.type;
+      if (!this.isTextarea) {
+        data.attrs.type = this.type;
       } else {
-        data.domProps.rows = this.rows;
+        data.attrs.rows = this.rows;
       }
 
       if (this.mask) {

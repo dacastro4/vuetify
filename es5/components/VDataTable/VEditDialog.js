@@ -1,7 +1,29 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_small-dialog.styl');
 
-export default {
+var _returnable = require('../../mixins/returnable');
+
+var _returnable2 = _interopRequireDefault(_returnable);
+
+var _VBtn = require('../VBtn');
+
+var _VBtn2 = _interopRequireDefault(_VBtn);
+
+var _VMenu = require('../VMenu');
+
+var _VMenu2 = _interopRequireDefault(_VMenu);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-edit-dialog',
+
+  mixins: [_returnable2.default],
 
   data: function data() {
     return {
@@ -17,6 +39,7 @@ export default {
     },
     large: Boolean,
     lazy: Boolean,
+    persistent: Boolean,
     saveText: {
       default: 'Save'
     },
@@ -28,13 +51,7 @@ export default {
 
   watch: {
     isActive: function isActive(val) {
-      val && this.$emit('open') && setTimeout(this.focus, 50); // Give DOM time to paint
-
-      if (!val) {
-        !this.isSaving && this.$emit('cancel');
-        this.isSaving && this.$emit('close');
-        this.isSaving = false;
-      }
+      val && setTimeout(this.focus, 50); // Give DOM time to paint
     }
   },
 
@@ -46,13 +63,8 @@ export default {
       var input = this.$refs.content.querySelector('input');
       input && input.focus();
     },
-    save: function save() {
-      this.isSaving = true;
-      this.isActive = false;
-      this.$emit('save');
-    },
     genButton: function genButton(fn, text) {
-      return this.$createElement('v-btn', {
+      return this.$createElement(_VBtn2.default, {
         props: {
           flat: true,
           color: 'primary',
@@ -62,18 +74,23 @@ export default {
       }, text);
     },
     genActions: function genActions() {
+      var _this = this;
+
       return this.$createElement('div', {
         'class': 'small-dialog__actions'
-      }, [this.genButton(this.cancel, this.cancelText), this.genButton(this.save, this.saveText)]);
+      }, [this.genButton(this.cancel, this.cancelText), this.genButton(function () {
+        return _this.save(_this.returnValue);
+      }, this.saveText)]);
     },
     genContent: function genContent() {
-      var _this = this;
+      var _this2 = this;
 
       return this.$createElement('div', {
         on: {
           keydown: function keydown(e) {
-            e.keyCode === 27 && _this.cancel();
-            e.keyCode === 13 && _this.save();
+            var input = _this2.$refs.content.querySelector('input');
+            e.keyCode === 27 && _this2.cancel();
+            e.keyCode === 13 && input && _this2.save(input.value);
           }
         },
         ref: 'content'
@@ -82,9 +99,9 @@ export default {
   },
 
   render: function render(h) {
-    var _this2 = this;
+    var _this3 = this;
 
-    return h('v-menu', {
+    return h(_VMenu2.default, {
       'class': 'small-dialog',
       props: {
         contentClass: 'small-dialog__content',
@@ -92,12 +109,13 @@ export default {
         origin: 'top right',
         right: true,
         value: this.isActive,
+        closeOnClick: !this.persistent,
         closeOnContentClick: false,
         lazy: this.lazy
       },
       on: {
         input: function input(val) {
-          return _this2.isActive = val;
+          return _this3.isActive = val;
         }
       }
     }, [h('a', {
@@ -105,3 +123,5 @@ export default {
     }, this.$slots.default), this.genContent(), this.large ? this.genActions() : null]);
   }
 };
+
+// Mixins

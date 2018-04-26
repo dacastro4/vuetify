@@ -1,8 +1,14 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _helpers = require('../util/helpers');
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-import { getZIndex } from '../util/helpers';
-
-export default {
+exports.default = {
   name: 'stackable',
 
   data: function data() {
@@ -22,10 +28,12 @@ export default {
      * @return {number}
      */
     activeZIndex: function activeZIndex() {
+      if (typeof window === 'undefined') return 0;
+
       var content = this.stackElement || this.$refs.content;
       // Return current zindex if not active
 
-      var index = !this.isActive ? getZIndex(content) : this.getMaxZIndex(this.stackExclude || [content]) + 2;
+      var index = !this.isActive ? (0, _helpers.getZIndex)(content) : this.getMaxZIndex(this.stackExclude || [content]) + 2;
 
       if (index == null) return index;
 
@@ -41,7 +49,7 @@ export default {
       var base = this.stackBase || this.$el;
       // Start with lowest allowed z-index or z-index of
       // base component's element, whichever is greater
-      var zis = [this.stackMinZIndex, getZIndex(base)];
+      var zis = [this.stackMinZIndex, (0, _helpers.getZIndex)(base)];
       // Convert the NodeList to an array to
       // prevent an Edge bug with Symbol.iterator
       // https://github.com/vuetifyjs/vuetify/issues/2146
@@ -50,7 +58,7 @@ export default {
       // Get z-index for all active dialogs
       for (var index = 0; index < activeElements.length; index++) {
         if (!exclude.includes(activeElements[index])) {
-          zis.push(getZIndex(activeElements[index]));
+          zis.push((0, _helpers.getZIndex)(activeElements[index]));
         }
       }
 

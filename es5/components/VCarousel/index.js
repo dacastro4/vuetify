@@ -1,12 +1,28 @@
-import VCarousel from './VCarousel';
-import VCarouselItem from './VCarouselItem';
+'use strict';
 
-export { VCarousel, VCarouselItem };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.VCarouselItem = exports.VCarousel = undefined;
+
+var _VCarousel = require('./VCarousel');
+
+var _VCarousel2 = _interopRequireDefault(_VCarousel);
+
+var _VCarouselItem = require('./VCarouselItem');
+
+var _VCarouselItem2 = _interopRequireDefault(_VCarouselItem);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.VCarousel = _VCarousel2.default;
+exports.VCarouselItem = _VCarouselItem2.default;
 
 /* istanbul ignore next */
-VCarousel.install = function install(Vue) {
-  Vue.component(VCarousel.name, VCarousel);
-  Vue.component(VCarouselItem.name, VCarouselItem);
+
+_VCarousel2.default.install = function install(Vue) {
+  Vue.component(_VCarousel2.default.name, _VCarousel2.default);
+  Vue.component(_VCarouselItem2.default.name, _VCarouselItem2.default);
 };
 
-export default VCarousel;
+exports.default = _VCarousel2.default;

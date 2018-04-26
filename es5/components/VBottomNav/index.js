@@ -1,8 +1,18 @@
-import VBottomNav from './VBottomNav';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VBottomNav = require('./VBottomNav');
+
+var _VBottomNav2 = _interopRequireDefault(_VBottomNav);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* istanbul ignore next */
-VBottomNav.install = function install(Vue) {
-  Vue.component(VBottomNav.name, VBottomNav);
+_VBottomNav2.default.install = function install(Vue) {
+  Vue.component(_VBottomNav2.default.name, _VBottomNav2.default);
 };
 
-export default VBottomNav;
+exports.default = _VBottomNav2.default;

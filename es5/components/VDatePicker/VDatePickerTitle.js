@@ -1,19 +1,26 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_date-picker-title.styl');
 
+var _VIcon = require('../VIcon');
+
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+var _pickerButton = require('../../mixins/picker-button');
+
+var _pickerButton2 = _interopRequireDefault(_pickerButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // Components
-import VIcon from '../VIcon';
-
-// Mixins
-import PickerButton from '../../mixins/picker-button';
-
-export default {
+exports.default = {
   name: 'v-date-picker-title',
 
-  components: {
-    VIcon: VIcon
-  },
-
-  mixins: [PickerButton],
+  mixins: [_pickerButton2.default],
 
   data: function data() {
     return {
@@ -33,6 +40,9 @@ export default {
     },
     yearIcon: {
       type: String
+    },
+    value: {
+      type: String
     }
   },
 
@@ -43,13 +53,14 @@ export default {
   },
 
   watch: {
-    date: 'setReversing',
-    year: 'setReversing'
+    value: function value(val, prev) {
+      this.isReversing = val < prev;
+    }
   },
 
   methods: {
     genYearIcon: function genYearIcon() {
-      return this.$createElement('v-icon', {
+      return this.$createElement(_VIcon2.default, {
         props: {
           dark: true
         }
@@ -64,15 +75,12 @@ export default {
           name: this.computedTransition
         }
       }, [this.$createElement('div', {
-        domProps: { innerHTML: this.date },
-        key: this.date
+        domProps: { innerHTML: this.date || '&nbsp;' },
+        key: this.value
       })]);
     },
     genTitleDate: function genTitleDate(title) {
       return this.genPickerButton('selectingYear', false, this.genTitleText(title), 'date-picker-title__date');
-    },
-    setReversing: function setReversing(val, prev) {
-      this.isReversing = val < prev;
     }
   },
 
@@ -82,3 +90,5 @@ export default {
     }, [this.getYearBtn(), this.genTitleDate()]);
   }
 };
+
+// Mixins

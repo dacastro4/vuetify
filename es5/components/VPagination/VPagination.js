@@ -1,19 +1,33 @@
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 require('../../../src/stylus/components/_pagination.styl');
 
-import VIcon from '../VIcon';
+var _VIcon = require('../VIcon');
 
-import Resize from '../../directives/resize';
+var _VIcon2 = _interopRequireDefault(_VIcon);
 
-import Colorable from '../../mixins/colorable';
+var _resize = require('../../directives/resize');
 
-export default {
+var _resize2 = _interopRequireDefault(_resize);
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+exports.default = {
   name: 'v-pagination',
 
-  mixins: [Colorable],
+  mixins: [_colorable2.default],
 
-  directives: { Resize: Resize },
+  directives: { Resize: _resize2.default },
 
   data: function data() {
     return {
@@ -94,6 +108,7 @@ export default {
 
       this.selected = null;
 
+      this.$nextTick(this.onResize);
       // TODO: Change this (f75dee3a, cbdf7caa)
       setTimeout(function () {
         return _this.selected = _this.value;
@@ -132,7 +147,7 @@ export default {
           'pagination__navigation--disabled': disabled
         },
         on: disabled ? {} : { click: fn }
-      }, [h(VIcon, [icon])])]);
+      }, [h(_VIcon2.default, [icon])])]);
     },
     genItem: function genItem(h, i) {
       var _this2 = this;
@@ -153,7 +168,7 @@ export default {
       var _this3 = this;
 
       return this.items.map(function (i, index) {
-        return h('li', { key: index }, [isNaN(i) && h('span', { class: 'pagination__more' }, [i]) || _this3.genItem(h, i)]);
+        return h('li', { key: index }, [isNaN(i) ? h('span', { class: 'pagination__more' }, [i]) : _this3.genItem(h, i)]);
       });
     }
   },
@@ -162,7 +177,11 @@ export default {
     var children = [this.genIcon(h, this.prevIcon, this.value <= 1, this.previous), this.genItems(h), this.genIcon(h, this.nextIcon, this.value >= this.length, this.next)];
 
     return h('ul', {
-      directives: [{ name: 'resize', value: this.onResize }],
+      directives: [{
+        modifiers: { quiet: true },
+        name: 'resize',
+        value: this.onResize
+      }],
       class: this.classes
     }, children);
   }

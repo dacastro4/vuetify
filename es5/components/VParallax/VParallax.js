@@ -1,11 +1,21 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_parallax.styl');
 
-import Translatable from '../../mixins/translatable';
+var _translatable = require('../../mixins/translatable');
 
-export default {
+var _translatable2 = _interopRequireDefault(_translatable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-parallax',
 
-  mixins: [Translatable],
+  mixins: [_translatable2.default],
 
   data: function data() {
     return {

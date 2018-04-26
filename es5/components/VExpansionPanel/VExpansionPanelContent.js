@@ -1,24 +1,42 @@
-import { VExpandTransition } from '../transitions';
+'use strict';
 
-import Bootable from '../../mixins/bootable';
-import Toggleable from '../../mixins/toggleable';
-import Rippleable from '../../mixins/rippleable';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-import VIcon from '../VIcon';
+var _transitions = require('../transitions');
 
-import ClickOutside from '../../directives/click-outside';
+var _bootable = require('../../mixins/bootable');
 
-export default {
+var _bootable2 = _interopRequireDefault(_bootable);
+
+var _toggleable = require('../../mixins/toggleable');
+
+var _toggleable2 = _interopRequireDefault(_toggleable);
+
+var _rippleable = require('../../mixins/rippleable');
+
+var _rippleable2 = _interopRequireDefault(_rippleable);
+
+var _registrable = require('../../mixins/registrable');
+
+var _VIcon = require('../VIcon');
+
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+var _clickOutside = require('../../directives/click-outside');
+
+var _clickOutside2 = _interopRequireDefault(_clickOutside);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-expansion-panel-content',
 
-  mixins: [Bootable, Toggleable, Rippleable],
-
-  components: {
-    VIcon: VIcon
-  },
+  mixins: [_bootable2.default, _toggleable2.default, _rippleable2.default, (0, _registrable.inject)('expansionPanel', 'v-expansion-panel', 'v-expansion-panel-content')],
 
   directives: {
-    ClickOutside: ClickOutside
+    ClickOutside: _clickOutside2.default
   },
 
   inject: ['focusable', 'panelClick'],
@@ -31,6 +49,10 @@ export default {
 
 
   props: {
+    expandIcon: {
+      type: String,
+      default: 'keyboard_arrow_down'
+    },
     hideActions: Boolean,
     ripple: {
       type: [Boolean, Object],
@@ -68,7 +90,7 @@ export default {
     genIcon: function genIcon(h) {
       if (this.hideActions) return null;
 
-      var icon = this.$slots.actions || this.$createElement('v-icon', 'keyboard_arrow_down');
+      var icon = this.$slots.actions || this.$createElement(_VIcon2.default, this.expandIcon);
 
       return this.$createElement('div', {
         staticClass: 'header__icon'
@@ -89,13 +111,19 @@ export default {
     }
   },
 
+  mounted: function mounted() {
+    this.expansionPanel.register(this._uid, this.toggle);
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.expansionPanel.unregister(this._uid);
+  },
   render: function render(h) {
     var _this3 = this;
 
     var children = [];
 
     this.$slots.header && children.push(this.genHeader());
-    children.push(h(VExpandTransition, [this.genBody()]));
+    children.push(h(_transitions.VExpandTransition, [this.genBody()]));
 
     return h('li', {
       staticClass: 'expansion-panel__container',

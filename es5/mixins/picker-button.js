@@ -1,4 +1,9 @@
-export default {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
   methods: {
     genPickerButton: function genPickerButton(prop, value, content) {
       var _this = this;

@@ -1,3 +1,9 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var _touchstart = function _touchstart(event, wrapper) {
@@ -151,7 +157,7 @@ function unbind(el, _ref3, _ref4) {
   delete target._touchHandlers[context._uid];
 }
 
-export default {
+exports.default = {
   name: 'touch',
   inserted: inserted,
   unbind: unbind

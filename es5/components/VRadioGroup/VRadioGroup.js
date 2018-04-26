@@ -1,16 +1,28 @@
-// Styles
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_input-groups.styl');
+
 require('../../../src/stylus/components/_selection-controls.styl');
+
 require('../../../src/stylus/components/_radio-group.styl');
 
-// Mixins
-import Input from '../../mixins/input';
-import { provide as RegistrableProvide } from '../../mixins/registrable';
+var _input = require('../../mixins/input');
 
-export default {
+var _input2 = _interopRequireDefault(_input);
+
+var _registrable = require('../../mixins/registrable');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Mixins
+exports.default = {
   name: 'v-radio-group',
 
-  mixins: [Input, RegistrableProvide('radio')],
+  mixins: [_input2.default, (0, _registrable.provide)('radio')],
 
   model: {
     prop: 'inputValue',
@@ -131,4 +143,4 @@ export default {
     };
     return this.genInputGroup(this.$slots.default, data);
   }
-};
+}; // Styles

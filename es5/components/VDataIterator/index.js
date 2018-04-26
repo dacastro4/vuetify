@@ -1,7 +1,17 @@
-import VDataIterator from './VDataIterator';
+'use strict';
 
-VDataIterator.install = function install(Vue) {
-  Vue.component(VDataIterator.name, VDataIterator);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VDataIterator = require('./VDataIterator');
+
+var _VDataIterator2 = _interopRequireDefault(_VDataIterator);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_VDataIterator2.default.install = function install(Vue) {
+  Vue.component(_VDataIterator2.default.name, _VDataIterator2.default);
 };
 
-export default VDataIterator;
+exports.default = _VDataIterator2.default;

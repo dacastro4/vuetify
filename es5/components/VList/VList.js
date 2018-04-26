@@ -1,14 +1,24 @@
-// Styles
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_lists.styl');
 
-// Mixins
-import Themeable from '../../mixins/themeable';
-import { provide as RegistrableProvide } from '../../mixins/registrable';
+var _themeable = require('../../mixins/themeable');
 
-export default {
+var _themeable2 = _interopRequireDefault(_themeable);
+
+var _registrable = require('../../mixins/registrable');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Mixins
+exports.default = {
   name: 'v-list',
 
-  mixins: [RegistrableProvide('list'), Themeable],
+  mixins: [(0, _registrable.provide)('list'), _themeable2.default],
 
   provide: function provide() {
     return {
@@ -72,6 +82,6 @@ export default {
       'class': this.classes
     };
 
-    return h('ul', data, [this.$slots.default]);
+    return h('div', data, [this.$slots.default]);
   }
-};
+}; // Styles

@@ -1,10 +1,23 @@
-import Colorable from './colorable';
-import Input from './input';
+'use strict';
 
-export default {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _colorable = require('./colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _input = require('./input');
+
+var _input2 = _interopRequireDefault(_input);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'selectable',
 
-  mixins: [Input, Colorable],
+  mixins: [_input2.default, _colorable2.default],
 
   model: {
     prop: 'inputValue',

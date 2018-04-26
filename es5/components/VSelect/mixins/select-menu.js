@@ -1,3 +1,8 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Select menu methods
  *
@@ -6,7 +11,7 @@
  * Menu based methods for
  * the v-select component
  */
-export default {
+exports.default = {
   methods: {
     activateInput: function activateInput() {
       this.isActive = true;

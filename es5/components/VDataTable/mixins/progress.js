@@ -1,10 +1,15 @@
-export default {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
   methods: {
     genTProgress: function genTProgress() {
       var col = this.$createElement('th', {
         staticClass: 'column',
         attrs: {
-          colspan: '100%'
+          colspan: this.headerColumns
         }
       }, [this.genProgress()]);
 

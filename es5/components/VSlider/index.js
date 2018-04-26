@@ -1,8 +1,18 @@
-import VSlider from './VSlider';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VSlider = require('./VSlider');
+
+var _VSlider2 = _interopRequireDefault(_VSlider);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* istanbul ignore next */
-VSlider.install = function install(Vue) {
-  Vue.component(VSlider.name, VSlider);
+_VSlider2.default.install = function install(Vue) {
+  Vue.component(_VSlider2.default.name, _VSlider2.default);
 };
 
-export default VSlider;
+exports.default = _VSlider2.default;

@@ -1,19 +1,26 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_time-picker-clock.styl');
 
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _themeable = require('../../mixins/themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // Mixins
-import Colorable from '../../mixins/colorable';
-import Themeable from '../../mixins/themeable';
-
-// Utils
-import isValueAllowed from '../../util/isValueAllowed';
-
-var outerRadius = 0.8;
-var innerRadius = 0.5;
-
-export default {
+exports.default = {
   name: 'v-time-picker-clock',
 
-  mixins: [Colorable, Themeable],
+  mixins: [_colorable2.default, _themeable2.default],
 
   data: function data() {
     return {
@@ -25,12 +32,7 @@ export default {
 
 
   props: {
-    allowedValues: {
-      type: [Array, Object, Function],
-      default: function _default() {
-        return null;
-      }
-    },
+    allowedValues: Function,
     double: Boolean,
     format: {
       type: Function,
@@ -40,11 +42,11 @@ export default {
     },
     max: {
       type: Number,
-      require: true
+      required: true
     },
     min: {
       type: Number,
-      require: true
+      required: true
     },
     scrollable: Boolean,
     rotate: {
@@ -59,15 +61,18 @@ export default {
       type: Number,
       default: 1
     },
-    value: {
-      type: Number,
-      required: true
-    }
+    value: Number
   },
 
   computed: {
     count: function count() {
       return this.max - this.min + 1;
+    },
+    innerRadius: function innerRadius() {
+      return this.radius - Math.max(this.radius * 0.4, 48);
+    },
+    outerRadius: function outerRadius() {
+      return this.radius - 4;
     },
     roundCount: function roundCount() {
       return this.double ? this.count / 2 : this.count;
@@ -80,6 +85,9 @@ export default {
     },
     radius: function radius() {
       return this.size / 2;
+    },
+    displayedValue: function displayedValue() {
+      return this.value == null ? this.min : this.value;
     }
   },
 
@@ -92,21 +100,21 @@ export default {
   methods: {
     wheel: function wheel(e) {
       e.preventDefault();
-      var value = this.value + Math.sign(e.wheelDelta || 1);
+      var value = this.displayedValue + Math.sign(e.wheelDelta || 1);
       this.update((value - this.min + this.count) % this.count + this.min);
     },
     handScale: function handScale(value) {
-      return this.double && value - this.min >= this.roundCount ? innerRadius / outerRadius : 1;
+      return this.double && value - this.min >= this.roundCount ? this.innerRadius / this.radius : this.outerRadius / this.radius;
     },
     isAllowed: function isAllowed(value) {
-      return isValueAllowed(value, this.allowedValues);
+      return !this.allowedValues || this.allowedValues(value);
     },
     genValues: function genValues() {
       var children = [];
 
       for (var value = this.min; value <= this.max; value = value + this.step) {
         var classes = {
-          active: value === this.value,
+          active: value === this.displayedValue,
           disabled: !this.isAllowed(value)
         };
 
@@ -120,12 +128,12 @@ export default {
       return children;
     },
     genHand: function genHand() {
-      var scale = 'scaleY(' + this.handScale(this.value) + ')';
-      var angle = this.rotate + this.degreesPerUnit * (this.value - this.min);
+      var scale = 'scaleY(' + this.handScale(this.displayedValue) + ')';
+      var angle = this.rotate + this.degreesPerUnit * (this.displayedValue - this.min);
 
       return this.$createElement('div', {
         staticClass: 'time-picker-clock__hand',
-        'class': this.addBackgroundColorClassChecks(),
+        'class': this.value == null ? {} : this.addBackgroundColorClassChecks(),
         style: {
           transform: 'rotate(' + angle + 'deg) ' + scale
         }
@@ -139,7 +147,7 @@ export default {
       return { transform: 'translate(' + x + 'px, ' + y + 'px)' };
     },
     getPosition: function getPosition(value) {
-      var radius = 0.83 * this.radius * this.handScale(value);
+      var radius = (this.radius - 24) * this.handScale(value);
       var rotateRadians = this.rotate * Math.PI / 180;
       return {
         x: Math.round(Math.sin((value - this.min) * this.degrees + rotateRadians) * radius),
@@ -172,7 +180,7 @@ export default {
       var center = { x: width / 2, y: -width / 2 };
       var coords = { x: clientX - left, y: top - clientY };
       var handAngle = Math.round(this.angle(center, coords) - this.rotate + 360) % 360;
-      var insideClick = this.double && this.euclidean(center, coords) / this.radius < (outerRadius + innerRadius) / 2;
+      var insideClick = this.double && this.euclidean(center, coords) < (this.outerRadius + this.innerRadius) / 2 - 16;
       var value = Math.round(handAngle / this.degreesPerUnit) + this.min + (insideClick ? this.roundCount : 0);
 
       // Necessary to fix edge case when selecting left part of max value
@@ -205,9 +213,8 @@ export default {
 
     var data = {
       staticClass: 'time-picker-clock',
-      style: {
-        width: this.size + 'px',
-        height: this.size + 'px'
+      class: {
+        'time-picker-clock--indeterminate': this.value == null
       },
       on: {
         mousedown: this.onMouseDown,
@@ -219,6 +226,10 @@ export default {
         touchend: this.onMouseUp,
         mousemove: this.onDragMove,
         touchmove: this.onDragMove
+      },
+      style: {
+        height: this.size + 'px',
+        width: this.size + 'px'
       },
       ref: 'clock'
     };

@@ -1,8 +1,18 @@
-import VBtn from './VBtn';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VBtn = require('./VBtn');
+
+var _VBtn2 = _interopRequireDefault(_VBtn);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* istanbul ignore next */
-VBtn.install = function install(Vue) {
-  Vue.component(VBtn.name, VBtn);
+_VBtn2.default.install = function install(Vue) {
+  Vue.component(_VBtn2.default.name, _VBtn2.default);
 };
 
-export default VBtn;
+exports.default = _VBtn2.default;

@@ -1,4 +1,10 @@
-export default function Grid(name) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Grid;
+function Grid(name) {
   return {
     name: 'v-' + name,
 

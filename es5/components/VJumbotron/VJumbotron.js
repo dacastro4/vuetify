@@ -1,14 +1,29 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_jumbotrons.styl');
 
-// Mixins
-import Colorable from '../../mixins/colorable';
-import Routable from '../../mixins/routable';
-import Themeable from '../../mixins/themeable';
+var _colorable = require('../../mixins/colorable');
 
-export default {
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _routable = require('../../mixins/routable');
+
+var _routable2 = _interopRequireDefault(_routable);
+
+var _themeable = require('../../mixins/themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-jumbotron',
 
-  mixins: [Colorable, Routable, Themeable],
+  mixins: [_colorable2.default, _routable2.default, _themeable2.default],
 
   props: {
     gradient: String,
@@ -86,3 +101,5 @@ export default {
     return h(tag, data, [this.genWrapper()]);
   }
 };
+
+// Mixins

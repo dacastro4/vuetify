@@ -1,42 +1,68 @@
-// Styles
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_tabs.styl');
 
-// Component imports
-import VIcon from '../VIcon';
-import VTabsItems from './VTabsItems';
-import VTabsSlider from './VTabsSlider';
+var _tabsComputed = require('./mixins/tabs-computed');
 
-// Component level mixins
-import TabsComputed from './mixins/tabs-computed';
-import TabsGenerators from './mixins/tabs-generators';
-import TabsProps from './mixins/tabs-props';
-import TabsTouch from './mixins/tabs-touch';
-import TabsWatchers from './mixins/tabs-watchers';
+var _tabsComputed2 = _interopRequireDefault(_tabsComputed);
 
-// Mixins
-import Colorable from '../../mixins/colorable';
-import SSRBootable from '../../mixins/ssr-bootable';
-import Themeable from '../../mixins/themeable';
-import { provide as RegistrableProvide } from '../../mixins/registrable';
+var _tabsGenerators = require('./mixins/tabs-generators');
+
+var _tabsGenerators2 = _interopRequireDefault(_tabsGenerators);
+
+var _tabsProps = require('./mixins/tabs-props');
+
+var _tabsProps2 = _interopRequireDefault(_tabsProps);
+
+var _tabsTouch = require('./mixins/tabs-touch');
+
+var _tabsTouch2 = _interopRequireDefault(_tabsTouch);
+
+var _tabsWatchers = require('./mixins/tabs-watchers');
+
+var _tabsWatchers2 = _interopRequireDefault(_tabsWatchers);
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _ssrBootable = require('../../mixins/ssr-bootable');
+
+var _ssrBootable2 = _interopRequireDefault(_ssrBootable);
+
+var _themeable = require('../../mixins/themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+var _registrable = require('../../mixins/registrable');
+
+var _resize = require('../../directives/resize');
+
+var _resize2 = _interopRequireDefault(_resize);
+
+var _touch = require('../../directives/touch');
+
+var _touch2 = _interopRequireDefault(_touch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Directives
-import Resize from '../../directives/resize';
-import Touch from '../../directives/touch';
 
-export default {
+
+// Mixins
+// Styles
+exports.default = {
   name: 'v-tabs',
 
-  components: {
-    VIcon: VIcon,
-    VTabsItems: VTabsItems,
-    VTabsSlider: VTabsSlider
-  },
-
-  mixins: [RegistrableProvide('tabs'), Colorable, SSRBootable, TabsComputed, TabsProps, TabsGenerators, TabsTouch, TabsWatchers, Themeable],
+  mixins: [(0, _registrable.provide)('tabs'), _colorable2.default, _ssrBootable2.default, _tabsComputed2.default, _tabsProps2.default, _tabsGenerators2.default, _tabsTouch2.default, _tabsWatchers2.default, _themeable2.default],
 
   directives: {
-    Resize: Resize,
-    Touch: Touch
+    Resize: _resize2.default,
+    Touch: _touch2.default
   },
 
   provide: function provide() {
@@ -49,13 +75,13 @@ export default {
   },
   data: function data() {
     return {
-      prependIconVisible: false,
-      appendIconVisible: false,
       bar: [],
       content: [],
       isBooted: false,
       isOverflowing: false,
       lazyValue: this.value,
+      nextIconVisible: false,
+      prevIconVisible: false,
       resizeTimeout: null,
       reverse: false,
       scrollOffset: 0,
@@ -65,35 +91,53 @@ export default {
       tabsContainer: null,
       tabs: [],
       tabItems: null,
-      transitionTime: 300
+      transitionTime: 300,
+      widths: {
+        bar: 0,
+        container: 0,
+        wrapper: 0
+      }
     };
   },
 
 
+  watch: {
+    tabs: 'onResize'
+  },
+
+  mounted: function mounted() {
+    this.checkIcons();
+  },
+
+
   methods: {
-    checkPrependIcon: function checkPrependIcon() {
+    checkIcons: function checkIcons() {
+      this.prevIconVisible = this.checkPrevIcon();
+      this.nextIconVisible = this.checkNextIcon();
+    },
+    checkPrevIcon: function checkPrevIcon() {
       return this.scrollOffset > 0;
     },
-    checkAppendIcon: function checkAppendIcon() {
+    checkNextIcon: function checkNextIcon() {
       // Check one scroll ahead to know the width of right-most item
-      var container = this.$refs.container;
-      var wrapper = this.$refs.wrapper;
-
-      return container.clientWidth > this.scrollOffset + wrapper.clientWidth;
+      return this.widths.container > this.scrollOffset + this.widths.wrapper;
     },
     callSlider: function callSlider() {
-      this.setOverflow();
-      if (!this.activeTab) return false;
+      var _this = this;
+
+      if (this.hideSlider || !this.activeTab) return false;
 
       // Give screen time to paint
-      var action = this.activeTab.action;
+      var action = (this.activeTab || {}).action;
       var activeTab = action === this.activeTab ? this.activeTab : this.tabs.find(function (tab) {
         return tab.action === action;
       });
 
-      if (!activeTab) return;
-      this.sliderWidth = activeTab.$el.scrollWidth;
-      this.sliderLeft = activeTab.$el.offsetLeft;
+      this.$nextTick(function () {
+        if (!activeTab || !activeTab.$el) return;
+        _this.sliderWidth = activeTab.$el.scrollWidth;
+        _this.sliderLeft = activeTab.$el.offsetLeft;
+      });
     },
 
     /**
@@ -101,15 +145,19 @@ export default {
      * width of the container, call resize
      * after the transition is complete
      */
-    onContainerResize: function onContainerResize() {
-      clearTimeout(this.resizeTimeout);
-      this.resizeTimeout = setTimeout(this.callSlider, this.transitionTime);
-    },
     onResize: function onResize() {
+      var _this2 = this;
+
       if (this._isDestroyed) return;
 
-      this.callSlider();
-      this.scrollIntoView();
+      this.setWidths();
+
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = setTimeout(function () {
+        _this2.callSlider();
+        _this2.scrollIntoView();
+        _this2.checkIcons();
+      }, this.transitionTime);
     },
     overflowCheck: function overflowCheck(e, fn) {
       this.isOverflowing && fn(e);
@@ -118,16 +166,25 @@ export default {
       this.scrollOffset = this.newOffset(direction);
     },
     setOverflow: function setOverflow() {
-      this.isOverflowing = this.$refs.bar.clientWidth < this.$refs.container.clientWidth;
+      this.isOverflowing = this.widths.bar < this.widths.container;
+    },
+    setWidths: function setWidths() {
+      var bar = this.$refs.bar ? this.$refs.bar.clientWidth : 0;
+      var container = this.$refs.container ? this.$refs.container.clientWidth : 0;
+      var wrapper = this.$refs.wrapper ? this.$refs.wrapper.clientWidth : 0;
+
+      this.widths = { bar: bar, container: container, wrapper: wrapper };
+
+      this.setOverflow();
     },
     findActiveLink: function findActiveLink() {
-      var _this = this;
+      var _this3 = this;
 
       if (!this.tabs.length || this.lazyValue) return;
 
       var activeIndex = this.tabs.findIndex(function (tabItem, index) {
         var id = tabItem.action === tabItem ? index.toString() : tabItem.action;
-        return id === _this.lazyValue || tabItem.$el.firstChild.className.indexOf(_this.activeClass) > -1;
+        return id === _this3.lazyValue || tabItem.$el.firstChild.className.indexOf(_this3.activeClass) > -1;
       });
 
       var index = activeIndex > -1 ? activeIndex : 0;
@@ -147,7 +204,6 @@ export default {
       for (var i = 0; i < length; i++) {
         var vnode = this.$slots.default[i];
 
-        /* istanbul ignore else */
         if (vnode.componentOptions) {
           switch (vnode.componentOptions.Ctor.options.name) {
             case 'v-tabs-slider':
@@ -163,6 +219,8 @@ export default {
             default:
               tab.push(vnode);
           }
+        } else {
+          tab.push(vnode);
         }
       }
 
@@ -172,18 +230,18 @@ export default {
       this.tabs.push(options);
     },
     scrollIntoView: function scrollIntoView() {
-      if (!this.activeTab) return false;
+      if (!this.activeTab) return;
+      if (!this.isOverflowing) return this.scrollOffset = 0;
 
+      var totalWidth = this.widths.wrapper + this.scrollOffset;
       var _activeTab$$el = this.activeTab.$el,
           clientWidth = _activeTab$$el.clientWidth,
           offsetLeft = _activeTab$$el.offsetLeft;
 
-      var wrapperWidth = this.$refs.wrapper.clientWidth;
-      var totalWidth = wrapperWidth + this.scrollOffset;
       var itemOffset = clientWidth + offsetLeft;
       var additionalOffset = clientWidth * 0.3;
 
-      /* instanbul ignore else */
+      /* istanbul ignore else */
       if (offsetLeft < this.scrollOffset) {
         this.scrollOffset = Math.max(offsetLeft - additionalOffset, 0);
       } else if (totalWidth < itemOffset) {
@@ -195,7 +253,7 @@ export default {
       this.scrollIntoView();
     },
     tabProxy: function tabProxy(val) {
-      this.inputValue = val;
+      this.lazyValue = val;
     },
     registerItems: function registerItems(fn) {
       this.tabItems = fn;
@@ -217,11 +275,6 @@ export default {
     }
   },
 
-  mounted: function mounted() {
-    this.callSlider();
-    this.prependIconVisible = this.checkPrependIcon();
-    this.appendIconVisible = this.checkAppendIcon();
-  },
   render: function render(h) {
     var _parseNodes = this.parseNodes(),
         tab = _parseNodes.tab,
@@ -237,6 +290,8 @@ export default {
         modifiers: { quiet: true },
         value: this.onResize
       }]
-    }, [this.genBar([this.genSlider(slider), tab]), this.genItems(items, item)]);
+    }, [this.genBar([this.hideSlider ? null : this.genSlider(slider), tab]), this.genItems(items, item)]);
   }
 };
+
+// Component level mixins

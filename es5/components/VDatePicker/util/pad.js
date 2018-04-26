@@ -1,5 +1,10 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var padStart = function padStart(string, targetLength, padString) {
-  targetLength = targetLength >>> 0;
+  targetLength = targetLength >> 0;
   string = String(string);
   padString = String(padString);
   if (string.length > targetLength) {
@@ -13,7 +18,7 @@ var padStart = function padStart(string, targetLength, padString) {
   return padString.slice(0, targetLength) + String(string);
 };
 
-export default (function (n) {
+exports.default = function (n) {
   var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
   return padStart(n, length, '0');
-});
+};

@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Menu position
  *
@@ -6,7 +11,7 @@
  * Used for calculating an automatic position (used for VSelect)
  * Will position the VMenu content properly over the VSelect
  */
-export default {
+exports.default = {
   methods: {
     // Revisit this
     calculateScroll: function calculateScroll() {

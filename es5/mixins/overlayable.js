@@ -1,6 +1,12 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../src/stylus/components/_overlay.styl');
 
-export default {
+exports.default = {
   name: 'overlayable',
 
   data: function data() {
@@ -46,6 +52,7 @@ export default {
 
       parent && parent.insertBefore(this.overlay, parent.firstChild);
 
+      // eslint-disable-next-line no-unused-expressions
       this.overlay.clientHeight; // Force repaint
       requestAnimationFrame(function () {
         _this.overlay.className += ' overlay--active';

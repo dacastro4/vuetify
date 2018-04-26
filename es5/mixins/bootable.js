@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Bootable
  * @mixin
@@ -6,7 +11,7 @@
  * Looks for change in "isActive" to automatically boot
  * Otherwise can be set manually
  */
-export default {
+exports.default = {
   name: 'bootable',
 
   data: function data() {
@@ -27,7 +32,7 @@ export default {
 
   methods: {
     showLazyContent: function showLazyContent(content) {
-      return this.isBooted || !this.lazy ? content : null;
+      return this.isBooted || !this.lazy || this.isActive ? content : null;
     }
   }
 };

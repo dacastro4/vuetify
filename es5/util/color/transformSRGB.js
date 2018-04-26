@@ -1,3 +1,10 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fromXYZ = fromXYZ;
+exports.toXYZ = toXYZ;
 // For converting XYZ to sRGB
 var srgbForwardMatrix = [[3.2406, -1.5372, -0.4986], [-0.9689, 1.8758, 0.0415], [0.0557, -0.2040, 1.0570]];
 
@@ -18,7 +25,7 @@ function clamp(value) {
   return Math.max(0, Math.min(1, value));
 }
 
-export function fromXYZ(xyz) {
+function fromXYZ(xyz) {
   var rgb = Array(3);
   var transform = srgbForwardTransform;
   var matrix = srgbForwardMatrix;
@@ -32,7 +39,7 @@ export function fromXYZ(xyz) {
   return (rgb[0] << 16) + (rgb[1] << 8) + (rgb[2] << 0);
 }
 
-export function toXYZ(rgb) {
+function toXYZ(rgb) {
   var xyz = Array(3);
   var transform = srgbReverseTransform;
   var matrix = srgbReverseMatrix;

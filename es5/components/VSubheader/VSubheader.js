@@ -1,13 +1,23 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_subheaders.styl');
 
-import Themeable from '../../mixins/themeable';
+var _themeable = require('../../mixins/themeable');
 
-export default {
+var _themeable2 = _interopRequireDefault(_themeable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-subheader',
 
   functional: true,
 
-  mixins: [Themeable],
+  mixins: [_themeable2.default],
 
   props: {
     inset: Boolean
@@ -24,6 +34,6 @@ export default {
     if (props.light) data.staticClass += ' theme--light';
     if (props.dark) data.staticClass += ' theme--dark';
 
-    return h('li', data, children);
+    return h('div', data, children);
   }
 };

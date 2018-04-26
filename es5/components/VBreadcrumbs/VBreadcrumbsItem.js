@@ -1,11 +1,21 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _routable = require('../../mixins/routable');
+
+var _routable2 = _interopRequireDefault(_routable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-import Routable from '../../mixins/routable';
-
-export default {
+exports.default = {
   name: 'v-breadcrumbs-item',
 
-  mixins: [Routable],
+  mixins: [_routable2.default],
 
   props: {
     // In a breadcrumb, the currently

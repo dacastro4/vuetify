@@ -1,66 +1,103 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+'use strict';
 
-// Styles
-require('../../../src/stylus/components/_text-fields.styl');
-require('../../../src/stylus/components/_input-groups.styl');
-require('../../../src/stylus/components/_select.styl');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-// Components
-import VBtn from '../VBtn';
-import VCard from '../VCard';
-import VCheckbox from '../VCheckbox';
-import VChip from '../VChip';
-import { VList, VListTile, VListTileAction, VListTileContent, VListTileTitle } from '../VList';
-import VMenu from '../VMenu';
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // Styles
+
 
 // Mixins
-import Colorable from '../../mixins/colorable';
-import Dependent from '../../mixins/dependent';
-import Filterable from '../../mixins/filterable';
-import Input from '../../mixins/input';
-import Maskable from '../../mixins/maskable';
-import Soloable from '../../mixins/soloable';
+
 
 // Component level mixins
-import Autocomplete from './mixins/select-autocomplete';
-import Computed from './mixins/select-computed';
-import Events from './mixins/select-events';
-import Generators from './mixins/select-generators';
-import Helpers from './mixins/select-helpers';
-import Menu from './mixins/select-menu';
-import Props from './mixins/select-props';
-import Watchers from './mixins/select-watchers';
+
 
 // Directives
-import ClickOutside from '../../directives/click-outside';
 
-export default {
+
+require('../../../src/stylus/components/_text-fields.styl');
+
+require('../../../src/stylus/components/_input-groups.styl');
+
+require('../../../src/stylus/components/_select.styl');
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _dependent = require('../../mixins/dependent');
+
+var _dependent2 = _interopRequireDefault(_dependent);
+
+var _filterable = require('../../mixins/filterable');
+
+var _filterable2 = _interopRequireDefault(_filterable);
+
+var _input = require('../../mixins/input');
+
+var _input2 = _interopRequireDefault(_input);
+
+var _maskable = require('../../mixins/maskable');
+
+var _maskable2 = _interopRequireDefault(_maskable);
+
+var _soloable = require('../../mixins/soloable');
+
+var _soloable2 = _interopRequireDefault(_soloable);
+
+var _selectAutocomplete = require('./mixins/select-autocomplete');
+
+var _selectAutocomplete2 = _interopRequireDefault(_selectAutocomplete);
+
+var _selectComputed = require('./mixins/select-computed');
+
+var _selectComputed2 = _interopRequireDefault(_selectComputed);
+
+var _selectEvents = require('./mixins/select-events');
+
+var _selectEvents2 = _interopRequireDefault(_selectEvents);
+
+var _selectGenerators = require('./mixins/select-generators');
+
+var _selectGenerators2 = _interopRequireDefault(_selectGenerators);
+
+var _selectHelpers = require('./mixins/select-helpers');
+
+var _selectHelpers2 = _interopRequireDefault(_selectHelpers);
+
+var _selectMenu = require('./mixins/select-menu');
+
+var _selectMenu2 = _interopRequireDefault(_selectMenu);
+
+var _selectProps = require('./mixins/select-props');
+
+var _selectProps2 = _interopRequireDefault(_selectProps);
+
+var _selectWatchers = require('./mixins/select-watchers');
+
+var _selectWatchers2 = _interopRequireDefault(_selectWatchers);
+
+var _clickOutside = require('../../directives/click-outside');
+
+var _clickOutside2 = _interopRequireDefault(_clickOutside);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-select',
 
   inheritAttrs: false,
 
-  components: {
-    VCard: VCard,
-    VCheckbox: VCheckbox,
-    VChip: VChip,
-    VList: VList,
-    VListTile: VListTile,
-    VListTileAction: VListTileAction,
-    VListTileContent: VListTileContent,
-    VListTileTitle: VListTileTitle,
-    VMenu: VMenu,
-    VBtn: VBtn
-  },
-
   directives: {
-    ClickOutside: ClickOutside
+    ClickOutside: _clickOutside2.default
   },
 
-  mixins: [Autocomplete, Colorable, Dependent, Events, Filterable, Generators, Helpers, Input, Maskable, Menu, Props, Soloable, Watchers,
+  mixins: [_selectAutocomplete2.default, _colorable2.default, _dependent2.default, _selectEvents2.default, _filterable2.default, _selectGenerators2.default, _selectHelpers2.default, _input2.default, _maskable2.default, _selectMenu2.default, _selectProps2.default, _soloable2.default, _selectWatchers2.default,
   // Input and Computed both
   // contain isDirty props
   // last gets merged in
-  Computed],
+  _selectComputed2.default],
 
   data: function data() {
     return {
@@ -73,7 +110,6 @@ export default {
       lazySearch: null,
       isActive: false,
       menuIsActive: false,
-      searchTimeout: null,
       selectedIndex: -1,
       selectedItems: [],
       shouldBreak: false
@@ -101,6 +137,7 @@ export default {
 
   methods: {
     needsTile: function needsTile(tile) {
+      // TODO: use the component name instead of tag
       return tile.componentOptions == null || tile.componentOptions.tag !== 'v-list-tile';
     },
     changeSelectedIndex: function changeSelectedIndex(keyCode) {
@@ -129,7 +166,7 @@ export default {
       }
     },
     closeConditional: function closeConditional(e) {
-      return !!this.content && !this.content.contains(e.target) && !!this.$el && !this.$el.contains(e.target);
+      return this.isActive && !!this.content && !this.content.contains(e.target) && !!this.$el && !this.$el.contains(e.target);
     },
     filterDuplicates: function filterDuplicates(arr) {
       var uniqueValues = new Map();
@@ -246,13 +283,14 @@ export default {
         var inputValue = this.inputValue.slice();
         var i = this.findExistingIndex(item);
 
-        i !== -1 && inputValue.splice(i, 1) || inputValue.push(item);
+        i !== -1 ? inputValue.splice(i, 1) : inputValue.push(item);
         this.inputValue = inputValue.map(function (i) {
           selectedItems.push(i);
           return _this7.returnObject ? i : _this7.getValue(i);
         });
 
         this.selectedItems = selectedItems;
+        this.selectedIndex = -1;
       }
 
       this.searchValue = !this.isMultiple && !this.chips && !this.$scopedSlots.selection ? this.getText(this.selectedItem) : null;

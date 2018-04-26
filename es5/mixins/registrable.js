@@ -1,21 +1,29 @@
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+'use strict';
 
-import { consoleWarn } from '../util/console';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.inject = inject;
+exports.provide = provide;
+
+var _console = require('../util/console');
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function generateWarning(child, parent) {
   return function () {
-    return consoleWarn('The ' + child + ' component must be used inside a ' + parent);
+    return (0, _console.consoleWarn)('The ' + child + ' component must be used inside a ' + parent);
   };
 }
 
-export function inject(namespace, child, parent) {
+function inject(namespace, child, parent) {
   var defaultImpl = child && parent ? {
     register: generateWarning(child, parent),
     unregister: generateWarning(child, parent)
   } : null;
 
   return {
-    name: 'registerable-inject',
+    name: 'registrable-inject',
 
     inject: _defineProperty({}, namespace, {
       default: defaultImpl
@@ -23,9 +31,9 @@ export function inject(namespace, child, parent) {
   };
 }
 
-export function provide(namespace) {
+function provide(namespace) {
   return {
-    name: 'registerable-provide',
+    name: 'registrable-provide',
 
     methods: {
       register: null,

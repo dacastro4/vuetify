@@ -1,20 +1,27 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_snackbars.styl');
 
-import { VSlideYTransition, VSlideYReverseTransition } from '../transitions';
+var _colorable = require('../../mixins/colorable');
 
-import Colorable from '../../mixins/colorable';
-import Toggleable from '../../mixins/toggleable';
-import { factory as PositionableFactory } from '../../mixins/positionable';
+var _colorable2 = _interopRequireDefault(_colorable);
 
-export default {
+var _toggleable = require('../../mixins/toggleable');
+
+var _toggleable2 = _interopRequireDefault(_toggleable);
+
+var _positionable = require('../../mixins/positionable');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-snackbar',
 
-  components: {
-    VSlideYTransition: VSlideYTransition,
-    VSlideYReverseTransition: VSlideYReverseTransition
-  },
-
-  mixins: [Colorable, Toggleable, PositionableFactory(['absolute', 'top', 'bottom', 'left', 'right'])],
+  mixins: [_colorable2.default, _toggleable2.default, (0, _positionable.factory)(['absolute', 'top', 'bottom', 'left', 'right'])],
 
   data: function data() {
     return {
@@ -24,6 +31,7 @@ export default {
 
 
   props: {
+    autoHeight: Boolean,
     multiLine: Boolean,
     // TODO: change this to closeDelay to match other API in delayable.js
     timeout: {
@@ -35,19 +43,17 @@ export default {
 
   computed: {
     classes: function classes() {
-      return this.addBackgroundColorClassChecks({
+      return {
         'snack--active': this.isActive,
         'snack--absolute': this.absolute,
+        'snack--auto-height': this.autoHeight,
         'snack--bottom': this.bottom || !this.top,
         'snack--left': this.left,
         'snack--multi-line': this.multiLine && !this.vertical,
         'snack--right': this.right,
         'snack--top': this.top,
         'snack--vertical': this.vertical
-      });
-    },
-    computedTransition: function computedTransition() {
-      return this.top ? 'v-slide-y-transition' : 'v-slide-y-reverse-transition';
+      };
     }
   },
 
@@ -89,14 +95,19 @@ export default {
 
     if (this.isActive) {
       children.push(h('div', {
+        staticClass: 'snack',
+        class: this.classes,
+        on: this.$listeners
+      }, [h('div', {
+        staticClass: 'snack__wrapper',
+        class: this.addBackgroundColorClassChecks()
+      }, [h('div', {
         staticClass: 'snack__content'
-      }, this.$slots.default));
+      }, this.$slots.default)])]));
     }
 
-    return h('div', {
-      staticClass: 'snack',
-      'class': this.classes,
-      on: this.$listeners
-    }, [h(this.computedTransition, children)]);
+    return h('transition', {
+      attrs: { name: 'snack-transition' }
+    }, children);
   }
 };

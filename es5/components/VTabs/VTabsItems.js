@@ -1,15 +1,24 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _registrable = require('../../mixins/registrable');
+
+var _touch = require('../../directives/touch');
+
+var _touch2 = _interopRequireDefault(_touch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // Mixins
-import { provide as RegistrableProvide } from '../../mixins/registrable';
-
-// Directives
-import Touch from '../../directives/touch';
-
-export default {
+exports.default = {
   name: 'v-tabs-items',
 
-  mixins: [RegistrableProvide('tabs')],
+  mixins: [(0, _registrable.provide)('tabs')],
 
-  directives: { Touch: Touch },
+  directives: { Touch: _touch2.default },
 
   inject: {
     registerItems: {
@@ -150,3 +159,5 @@ export default {
     return h('div', data, this.$slots.default);
   }
 };
+
+// Directives

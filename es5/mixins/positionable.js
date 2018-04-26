@@ -1,6 +1,13 @@
-import { filterObjectOnKeys } from '../util/helpers';
+'use strict';
 
-export function factory() {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.factory = factory;
+
+var _helpers = require('../util/helpers');
+
+function factory() {
   var selected = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
   var props = {
@@ -14,8 +21,8 @@ export function factory() {
 
   return {
     name: 'positionable',
-    props: selected.length && filterObjectOnKeys(props, selected) || props
+    props: selected.length ? (0, _helpers.filterObjectOnKeys)(props, selected) : props
   };
 }
 
-export default factory();
+exports.default = factory();

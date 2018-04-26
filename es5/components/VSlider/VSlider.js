@@ -1,24 +1,37 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_sliders.styl');
 
-import { addOnceEventListener, createRange } from '../../util/helpers';
+var _helpers = require('../../util/helpers');
 
-import Colorable from '../../mixins/colorable';
-import Input from '../../mixins/input';
+var _colorable = require('../../mixins/colorable');
 
-import ClickOutside from '../../directives/click-outside';
+var _colorable2 = _interopRequireDefault(_colorable);
 
-import { VScaleTransition } from '../transitions';
+var _input = require('../../mixins/input');
 
-import { consoleWarn } from '../../util/console';
+var _input2 = _interopRequireDefault(_input);
 
-export default {
+var _clickOutside = require('../../directives/click-outside');
+
+var _clickOutside2 = _interopRequireDefault(_clickOutside);
+
+var _transitions = require('../transitions');
+
+var _console = require('../../util/console');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-slider',
 
-  mixins: [Colorable, Input],
+  mixins: [_colorable2.default, _input2.default],
 
-  directives: { ClickOutside: ClickOutside },
-
-  components: { VScaleTransition: VScaleTransition },
+  directives: { ClickOutside: _clickOutside2.default },
 
   data: function data() {
     return {
@@ -159,7 +172,7 @@ export default {
     this.inputValue = this.value;
 
     // Without a v-app, iOS does not work with body selectors
-    this.app = document.querySelector('[data-app]') || consoleWarn('Missing v-app or a non-body wrapping element with the [data-app] attribute', this);
+    this.app = document.querySelector('[data-app]') || (0, _console.consoleWarn)('Missing v-app or a non-body wrapping element with the [data-app] attribute', this);
   },
 
 
@@ -171,10 +184,10 @@ export default {
 
       if ('touches' in e) {
         this.app.addEventListener('touchmove', this.onMouseMove, options);
-        addOnceEventListener(this.app, 'touchend', this.onMouseUp);
+        (0, _helpers.addOnceEventListener)(this.app, 'touchend', this.onMouseUp);
       } else {
         this.app.addEventListener('mousemove', this.onMouseMove, options);
-        addOnceEventListener(this.app, 'mouseup', this.onMouseUp);
+        (0, _helpers.addOnceEventListener)(this.app, 'mouseup', this.onMouseUp);
       }
     },
     onMouseUp: function onMouseUp() {
@@ -231,7 +244,7 @@ export default {
       }
     },
     genThumbLabel: function genThumbLabel(h) {
-      return h('v-scale-transition', {
+      return h(_transitions.VScaleTransition, {
         props: { origin: 'bottom center' }
       }, [h('div', {
         staticClass: 'slider__thumb--label__container',
@@ -280,7 +293,7 @@ export default {
     genSteps: function genSteps(h) {
       var _this = this;
 
-      var ticks = createRange(this.numTicks + 1).map(function (i) {
+      var ticks = (0, _helpers.createRange)(this.numTicks + 1).map(function (i) {
         var span = h('span', {
           key: i,
           staticClass: 'slider__tick',

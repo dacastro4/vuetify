@@ -1,3 +1,9 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = theme;
 /* eslint-disable no-multi-spaces */
 var THEME_DEFAULTS = {
   primary: '#1976D2', // blue.darken2
@@ -9,7 +15,7 @@ var THEME_DEFAULTS = {
   warning: '#FFC107' // amber.base
 };
 
-export default function theme() {
+function theme() {
   var theme = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   return Object.assign({}, THEME_DEFAULTS, theme);

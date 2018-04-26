@@ -1,23 +1,35 @@
-import Bootable from '../../mixins/bootable';
+'use strict';
 
-import { VTabTransition, VTabReverseTransition } from '../transitions';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-import { inject as RegistrableInject } from '../../mixins/registrable';
+var _bootable = require('../../mixins/bootable');
 
-import Touch from '../../directives/touch';
+var _bootable2 = _interopRequireDefault(_bootable);
 
-export default {
+var _transitions = require('../transitions');
+
+var _registrable = require('../../mixins/registrable');
+
+var _touch = require('../../directives/touch');
+
+var _touch2 = _interopRequireDefault(_touch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-tab-item',
 
-  mixins: [Bootable, RegistrableInject('tabs', 'v-tab-item', 'v-tabs-items')],
+  mixins: [_bootable2.default, (0, _registrable.inject)('tabs', 'v-tab-item', 'v-tabs-items')],
 
   components: {
-    VTabTransition: VTabTransition,
-    VTabReverseTransition: VTabReverseTransition
+    VTabTransition: _transitions.VTabTransition,
+    VTabReverseTransition: _transitions.VTabReverseTransition
   },
 
   directives: {
-    Touch: Touch
+    Touch: _touch2.default
   },
 
   data: function data() {

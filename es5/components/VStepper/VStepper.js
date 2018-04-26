@@ -1,11 +1,21 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_steppers.styl');
 
-import Themeable from '../../mixins/themeable';
+var _themeable = require('../../mixins/themeable');
 
-export default {
+var _themeable2 = _interopRequireDefault(_themeable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-stepper',
 
-  mixins: [Themeable],
+  mixins: [_themeable2.default],
 
   provide: function provide() {
     return {
@@ -80,6 +90,7 @@ export default {
       this.content = [];
       for (var index = 0; index < this.$children.length; index++) {
         var child = this.$children[index];
+        // TODO: use the component name instead of tag
         if (child.$options._componentTag === 'v-stepper-step') {
           this.steps.push(child);
         } else if (child.$options._componentTag === 'v-stepper-content') {

@@ -1,31 +1,40 @@
-// Styles
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_footer.styl');
 
-// Mixins
-import Applicationable from '../../mixins/applicationable';
-import Colorable from '../../mixins/colorable';
-import Themeable from '../../mixins/themeable';
+var _applicationable = require('../../mixins/applicationable');
 
-export default {
+var _applicationable2 = _interopRequireDefault(_applicationable);
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _themeable = require('../../mixins/themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Styles
+exports.default = {
   name: 'v-footer',
 
-  mixins: [Applicationable('footer', ['height']), Colorable, Themeable],
+  mixins: [(0, _applicationable2.default)('footer', ['height']), _colorable2.default, _themeable2.default],
 
   props: {
     height: {
       default: 32,
-      type: [Number, String],
-      validator: function validator(v) {
-        return !isNaN(parseInt(v));
-      }
+      type: [Number, String]
     },
     inset: Boolean
   },
 
   computed: {
-    computedHeight: function computedHeight() {
-      return parseInt(this.height);
-    },
     computedMarginBottom: function computedMarginBottom() {
       if (!this.app) return;
 
@@ -39,7 +48,7 @@ export default {
     },
     styles: function styles() {
       var styles = {
-        height: this.computedHeight + 'px'
+        height: isNaN(this.height) ? this.height : this.height + 'px'
       };
 
       if (this.computedPaddingLeft) {
@@ -65,7 +74,7 @@ export default {
      * @return {number}
      */
     updateApplication: function updateApplication() {
-      return this.computedHeight;
+      return isNaN(this.height) ? this.$el ? this.$el.clientHeight : 0 : this.height;
     }
   },
 
@@ -86,3 +95,5 @@ export default {
     return h('footer', data, this.$slots.default);
   }
 };
+
+// Mixins

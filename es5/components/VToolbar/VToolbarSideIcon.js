@@ -1,7 +1,20 @@
-import VBtn from '../../components/VBtn';
-import VIcon from '../../components/VIcon';
+'use strict';
 
-export default {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VBtn = require('../../components/VBtn');
+
+var _VBtn2 = _interopRequireDefault(_VBtn);
+
+var _VIcon = require('../../components/VIcon');
+
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-toolbar-side-icon',
 
   functional: true,
@@ -24,6 +37,6 @@ export default {
 
     var defaultSlot = slots().default;
 
-    return h(VBtn, d, defaultSlot || [h(VIcon, 'menu')]);
+    return h(_VBtn2.default, d, defaultSlot || [h(_VIcon2.default, 'menu')]);
   }
 };

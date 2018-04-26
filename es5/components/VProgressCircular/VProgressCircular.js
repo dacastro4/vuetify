@@ -1,11 +1,21 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_progress-circular.styl');
 
-import Colorable from '../../mixins/colorable';
+var _colorable = require('../../mixins/colorable');
 
-export default {
+var _colorable2 = _interopRequireDefault(_colorable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-progress-circular',
 
-  mixins: [Colorable],
+  mixins: [_colorable2.default],
 
   props: {
     button: Boolean,
@@ -35,13 +45,7 @@ export default {
 
   computed: {
     calculatedSize: function calculatedSize() {
-      var size = Number(this.size);
-
-      if (this.button) {
-        size += 8;
-      }
-
-      return size;
+      return Number(this.size) + (this.button ? 8 : 0);
     },
     circumference: function circumference() {
       return 2 * Math.PI * this.radius;
@@ -52,9 +56,6 @@ export default {
         'progress-circular--indeterminate': this.indeterminate,
         'progress-circular--button': this.button
       });
-    },
-    cxy: function cxy() {
-      return this.indeterminate && !this.button ? 50 : this.calculatedSize / 2;
     },
     normalizedValue: function normalizedValue() {
       if (this.value < 0) {
@@ -68,7 +69,7 @@ export default {
       return this.value;
     },
     radius: function radius() {
-      return this.indeterminate && !this.button ? 20 : (this.calculatedSize - this.width) / 2;
+      return 20;
     },
     strokeDashArray: function strokeDashArray() {
       return Math.round(this.circumference * 1000) / 1000;
@@ -76,22 +77,22 @@ export default {
     strokeDashOffset: function strokeDashOffset() {
       return (100 - this.normalizedValue) / 100 * this.circumference + 'px';
     },
+    strokeWidth: function strokeWidth() {
+      return this.width / this.size * this.viewBoxSize * 2;
+    },
     styles: function styles() {
       return {
         height: this.calculatedSize + 'px',
         width: this.calculatedSize + 'px'
       };
     },
-    svgSize: function svgSize() {
-      return this.indeterminate ? false : this.calculatedSize;
-    },
     svgStyles: function svgStyles() {
       return {
         transform: 'rotate(' + this.rotate + 'deg)'
       };
     },
-    viewBox: function viewBox() {
-      return this.indeterminate ? '25 25 50 50' : false;
+    viewBoxSize: function viewBoxSize() {
+      return this.radius / (1 - this.width / this.size);
     }
   },
 
@@ -101,25 +102,23 @@ export default {
         class: 'progress-circular__' + name,
         attrs: {
           fill: 'transparent',
-          cx: this.cxy,
-          cy: this.cxy,
+          cx: 2 * this.viewBoxSize,
+          cy: 2 * this.viewBoxSize,
           r: this.radius,
-          'stroke-width': this.width,
+          'stroke-width': this.strokeWidth,
           'stroke-dasharray': this.strokeDashArray,
           'stroke-dashoffset': offset
         }
       });
     },
     genSvg: function genSvg(h) {
-      var children = [!this.indeterminate && this.genCircle(h, 'underlay', 0), this.genCircle(h, 'overlay', this.strokeDashOffset)];
+      var children = [this.indeterminate || this.genCircle(h, 'underlay', 0), this.genCircle(h, 'overlay', this.strokeDashOffset)];
 
       return h('svg', {
         style: this.svgStyles,
         attrs: {
           xmlns: 'http://www.w3.org/2000/svg',
-          height: this.svgSize,
-          width: this.svgSize,
-          viewBox: this.viewBox
+          viewBox: this.viewBoxSize + ' ' + this.viewBoxSize + ' ' + 2 * this.viewBoxSize + ' ' + 2 * this.viewBoxSize
         }
       }, children);
     }

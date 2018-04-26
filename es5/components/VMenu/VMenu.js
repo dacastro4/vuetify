@@ -1,30 +1,76 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_menus.styl');
 
-// Mixins
-import Delayable from '../../mixins/delayable';
-import Dependent from '../../mixins/dependent';
-import Detachable from '../../mixins/detachable';
-import Menuable from '../../mixins/menuable.js';
-import Toggleable from '../../mixins/toggleable';
+var _delayable = require('../../mixins/delayable');
 
-// Component level mixins
-import Activator from './mixins/menu-activator';
-import Generators from './mixins/menu-generators';
-import Keyable from './mixins/menu-keyable';
-import Position from './mixins/menu-position';
+var _delayable2 = _interopRequireDefault(_delayable);
+
+var _dependent = require('../../mixins/dependent');
+
+var _dependent2 = _interopRequireDefault(_dependent);
+
+var _detachable = require('../../mixins/detachable');
+
+var _detachable2 = _interopRequireDefault(_detachable);
+
+var _menuable = require('../../mixins/menuable.js');
+
+var _menuable2 = _interopRequireDefault(_menuable);
+
+var _returnable = require('../../mixins/returnable');
+
+var _returnable2 = _interopRequireDefault(_returnable);
+
+var _toggleable = require('../../mixins/toggleable');
+
+var _toggleable2 = _interopRequireDefault(_toggleable);
+
+var _menuActivator = require('./mixins/menu-activator');
+
+var _menuActivator2 = _interopRequireDefault(_menuActivator);
+
+var _menuGenerators = require('./mixins/menu-generators');
+
+var _menuGenerators2 = _interopRequireDefault(_menuGenerators);
+
+var _menuKeyable = require('./mixins/menu-keyable');
+
+var _menuKeyable2 = _interopRequireDefault(_menuKeyable);
+
+var _menuPosition = require('./mixins/menu-position');
+
+var _menuPosition2 = _interopRequireDefault(_menuPosition);
+
+var _clickOutside = require('../../directives/click-outside');
+
+var _clickOutside2 = _interopRequireDefault(_clickOutside);
+
+var _resize = require('../../directives/resize');
+
+var _resize2 = _interopRequireDefault(_resize);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Directives
-import ClickOutside from '../../directives/click-outside';
-import Resize from '../../directives/resize';
 
-export default {
+
+// Component level mixins
+
+
+// Mixins
+exports.default = {
   name: 'v-menu',
 
-  mixins: [Activator, Dependent, Delayable, Detachable, Generators, Keyable, Menuable, Position, Toggleable],
+  mixins: [_menuActivator2.default, _dependent2.default, _delayable2.default, _detachable2.default, _menuGenerators2.default, _menuKeyable2.default, _menuable2.default, _menuPosition2.default, _returnable2.default, _toggleable2.default],
 
   directives: {
-    ClickOutside: ClickOutside,
-    Resize: Resize
+    ClickOutside: _clickOutside2.default,
+    Resize: _resize2.default
   },
 
   data: function data() {
@@ -133,11 +179,15 @@ export default {
       // Once transitioning, calculate scroll position
       setTimeout(this.calculateScroll, 50);
     },
+    closeConditional: function closeConditional() {
+      return this.isActive && this.closeOnClick;
+    },
     onResize: function onResize() {
       if (!this.isActive) return;
 
       // Account for screen resize
       // and orientation change
+      // eslint-disable-next-line no-unused-expressions
       this.$refs.content.offsetWidth;
       this.updateDimensions();
 

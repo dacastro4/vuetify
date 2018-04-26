@@ -1,4 +1,9 @@
-export default {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
   props: {
     appendIcon: {
       type: String,
@@ -10,17 +15,13 @@ export default {
     autocomplete: Boolean,
     browserAutocomplete: {
       type: String,
-      default: 'on'
+      default: 'off'
     },
     cacheItems: Boolean,
     chips: Boolean,
     clearable: Boolean,
     combobox: Boolean,
     contentClass: String,
-    debounceSearch: {
-      type: [Number, String],
-      default: 200
-    },
     deletableChips: Boolean,
     dense: Boolean,
     editable: Boolean,

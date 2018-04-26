@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * A modified version of https://gist.github.com/cb109/b074a65f7595cffc21cea59ce8d15f9b
  */
@@ -145,4 +150,4 @@ var breakpoint = {
   }
 };
 
-export default breakpoint;
+exports.default = breakpoint;

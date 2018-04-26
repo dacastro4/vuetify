@@ -1,9 +1,12 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 function style(el, value) {
   el.style['transform'] = value;
   el.style['webkitTransform'] = value;
 }
-
-var RippleDataAttribute = 'data-ripple';
 
 var ripple = {
   /**
@@ -11,11 +14,10 @@ var ripple = {
    * @param {Element} el
    * @param {{ class?: string, center?: boolean }} [value={}]
    */
-  show: function show(e, el, _ref) {
-    var _ref$value = _ref.value,
-        value = _ref$value === undefined ? {} : _ref$value;
+  show: function show(e, el) {
+    var value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-    if (el.getAttribute(RippleDataAttribute) !== 'true') {
+    if (!el._ripple || !el._ripple.enabled) {
       return;
     }
 
@@ -54,9 +56,7 @@ var ripple = {
   },
 
   hide: function hide(el) {
-    if (el.getAttribute(RippleDataAttribute) !== 'true') {
-      return;
-    }
+    if (!el._ripple || !el._ripple.enabled) return;
 
     var ripples = el.getElementsByClassName('ripple__animation');
 
@@ -81,59 +81,71 @@ var ripple = {
   }
 };
 
-function isRippleEnabled(binding) {
-  return typeof binding.value === 'undefined' || !!binding.value;
+function isRippleEnabled(value) {
+  return typeof value === 'undefined' || !!value;
+}
+
+function rippleShow(e) {
+  var value = {};
+  var element = e.currentTarget;
+  value.center = element._ripple.centered;
+  if (element._ripple.class) {
+    value.class = element._ripple.class;
+  }
+  ripple.show(e, element, value);
+}
+
+function rippleHide(e) {
+  ripple.hide(e.currentTarget);
+}
+
+function updateRipple(el, binding, wasEnabled) {
+  var enabled = isRippleEnabled(binding.value);
+  if (!enabled) {
+    ripple.hide(el);
+  }
+  el._ripple = el._ripple || {};
+  el._ripple.enabled = enabled;
+  var value = binding.value || {};
+  if (value.center) {
+    el._ripple.centered = true;
+  }
+  if (value.class) {
+    el._ripple.class = binding.value.class;
+  }
+  if (enabled && !wasEnabled) {
+    if ('ontouchstart' in window) {
+      el.addEventListener('touchend', rippleHide, false);
+      el.addEventListener('touchcancel', rippleHide, false);
+    }
+
+    el.addEventListener('mousedown', rippleShow, false);
+    el.addEventListener('mouseup', rippleHide, false);
+    el.addEventListener('mouseleave', rippleHide, false);
+    // Anchor tags can be dragged, causes other hides to fail - #1537
+    el.addEventListener('dragstart', rippleHide, false);
+  } else if (!enabled && wasEnabled) {
+    removeListeners(el);
+  }
+}
+
+function removeListeners(el) {
+  el.removeEventListener('touchstart', rippleShow, false);
+  el.removeEventListener('mousedown', rippleShow, false);
+  el.removeEventListener('touchend', rippleHide, false);
+  el.removeEventListener('touchcancel', rippleHide, false);
+  el.removeEventListener('mouseup', rippleHide, false);
+  el.removeEventListener('mouseleave', rippleHide, false);
+  el.removeEventListener('dragstart', rippleHide, false);
 }
 
 function directive(el, binding) {
-  el.setAttribute(RippleDataAttribute, isRippleEnabled(binding));
-
-  if ('ontouchstart' in window) {
-    el.addEventListener('touchend', function () {
-      return ripple.hide(el);
-    }, false);
-    el.addEventListener('touchcancel', function () {
-      return ripple.hide(el);
-    }, false);
-  }
-
-  el.addEventListener('mousedown', function (e) {
-    return ripple.show(e, el, binding);
-  }, false);
-  el.addEventListener('mouseup', function () {
-    return ripple.hide(el);
-  }, false);
-  el.addEventListener('mouseleave', function () {
-    return ripple.hide(el);
-  }, false);
-  // Anchor tags can be dragged, causes other hides to fail - #1537
-  el.addEventListener('dragstart', function () {
-    return ripple.hide(el);
-  }, false);
+  updateRipple(el, binding, false);
 }
 
 function unbind(el, binding) {
-  el.removeEventListener('touchstart', function (e) {
-    return ripple.show(e, el, binding);
-  }, false);
-  el.removeEventListener('mousedown', function (e) {
-    return ripple.show(e, el, binding);
-  }, false);
-  el.removeEventListener('touchend', function () {
-    return ripple.hide(el);
-  }, false);
-  el.removeEventListener('touchcancel', function () {
-    return ripple.hide(el);
-  }, false);
-  el.removeEventListener('mouseup', function () {
-    return ripple.hide(el);
-  }, false);
-  el.removeEventListener('mouseleave', function () {
-    return ripple.hide(el);
-  }, false);
-  el.removeEventListener('dragstart', function () {
-    return ripple.hide(el);
-  }, false);
+  delete el._ripple;
+  removeListeners(el);
 }
 
 function update(el, binding) {
@@ -141,10 +153,11 @@ function update(el, binding) {
     return;
   }
 
-  el.setAttribute(RippleDataAttribute, isRippleEnabled(binding));
+  var wasEnabled = isRippleEnabled(binding.oldValue);
+  updateRipple(el, binding, wasEnabled);
 }
 
-export default {
+exports.default = {
   name: 'ripple',
   bind: directive,
   unbind: unbind,

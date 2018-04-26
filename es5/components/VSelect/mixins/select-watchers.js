@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Select watchers
  *
@@ -6,7 +11,7 @@
  * Watchers for the
  * v-select component
  */
-export default {
+exports.default = {
   watch: {
     filteredItems: function filteredItems() {
       this.$refs.menu && this.$refs.menu.updateDimensions();
@@ -104,23 +109,24 @@ export default {
       }
 
       // Activate menu if inactive and searching
-      if (this.isActive && !this.menuIsActive && val !== this.getValue(this.selectedItem)) {
+      if (this.isActive && !this.menuIsActive && val !== this.getText(this.selectedItem)) {
         this.menuIsActive = true;
       }
 
       // Only reset list index
       // if typing in search
-      val || prev && this.resetMenuIndex();
+      !val && prev && this.resetMenuIndex();
 
       this.$nextTick(function () {
         if (val && !_this3.isAnyValueAllowed) {
           _this3.setMenuIndex(0);
         }
+        if (val !== null && _this3.selectedIndex > -1) {
+          _this3.selectedIndex = -1;
+        }
       });
     },
     selectedItems: function selectedItems() {
-      clearTimeout(this.searchTimeout);
-
       if (this.isAutocomplete) {
         this.$nextTick(this.$refs.menu.updateDimensions);
       }

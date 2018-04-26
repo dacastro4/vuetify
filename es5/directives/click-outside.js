@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 function closeConditional() {
   return false;
 }
@@ -35,7 +40,9 @@ function directive(e, el, binding) {
   // Toggleable can return true if it wants to deactivate.
   // Note that, because we're in the capture phase, this callback will occure before
   // the bubbling click event on any outside elements.
-  !clickedInEls(e, elements) && binding.value();
+  !clickedInEls(e, elements) && setTimeout(function () {
+    isActive(e) && binding.value();
+  }, 0);
 }
 
 function clickedInEls(e, elements) {
@@ -82,7 +89,7 @@ function clickedInEl(el, x, y) {
   return x >= b.left && x <= b.right && y >= b.top && y <= b.bottom;
 }
 
-export default {
+exports.default = {
   name: 'click-outside',
   // [data-app] may not be found
   // if using bind, inserted makes

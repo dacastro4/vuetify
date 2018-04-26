@@ -1,9 +1,24 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 require('../../../src/stylus/components/_icons.styl');
 
-import Themeable from '../../mixins/themeable';
-import Colorable from '../../mixins/colorable';
+var _themeable = require('../../mixins/themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _helpers = require('../../util/helpers');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var SIZE_MAP = {
   small: '16px',
@@ -19,12 +34,12 @@ function isFontAwesome5(iconType) {
   });
 }
 
-export default {
+exports.default = {
   name: 'v-icon',
 
   functional: true,
 
-  mixins: [Colorable, Themeable],
+  mixins: [_colorable2.default, _themeable2.default],
 
   props: {
     disabled: Boolean,
@@ -53,7 +68,7 @@ export default {
     var explicitSize = Object.keys(sizes).find(function (key) {
       return sizes[key] && key;
     });
-    var fontSize = explicitSize && SIZE_MAP[explicitSize] || props.size;
+    var fontSize = explicitSize && SIZE_MAP[explicitSize] || (0, _helpers.convertToUnit)(props.size);
 
     if (fontSize) data.style = _extends({ fontSize: fontSize }, data.style);
 
@@ -94,7 +109,7 @@ export default {
       'icon--right': props.right,
       'theme--dark': props.dark,
       'theme--light': props.light
-    }, props.color ? Colorable.methods.addTextColorClassChecks.call(props, {}, props.color) : {});
+    }, props.color ? _colorable2.default.methods.addTextColorClassChecks.call(props, {}, props.color) : {});
 
     // Order classes
     // * Component class

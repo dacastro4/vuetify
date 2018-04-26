@@ -1,15 +1,27 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+'use strict';
 
-// Components
-import VJumbotron from '../VJumbotron';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // Components
+
 
 // Mixins
-import { inject as RegistrableInject } from '../../mixins/registrable';
 
-export default {
+
+var _VJumbotron = require('../VJumbotron');
+
+var _VJumbotron2 = _interopRequireDefault(_VJumbotron);
+
+var _registrable = require('../../mixins/registrable');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-carousel-item',
 
-  mixins: [RegistrableInject('carousel', 'v-carousel-item', 'v-carousel')],
+  mixins: [(0, _registrable.inject)('carousel', 'v-carousel-item', 'v-carousel')],
 
   inheritAttrs: false,
 
@@ -52,7 +64,7 @@ export default {
     this.carousel.unregister(this._uid, this.open);
   },
   render: function render(h) {
-    var item = h(VJumbotron, {
+    var item = h(_VJumbotron2.default, {
       props: _extends({}, this.$attrs, {
         height: '100%'
       }),

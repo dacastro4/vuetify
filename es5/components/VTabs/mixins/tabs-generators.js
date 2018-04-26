@@ -1,9 +1,29 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VTabsItems = require('../VTabsItems');
+
+var _VTabsItems2 = _interopRequireDefault(_VTabsItems);
+
+var _VTabsSlider = require('../VTabsSlider');
+
+var _VTabsSlider2 = _interopRequireDefault(_VTabsSlider);
+
+var _VIcon = require('../../VIcon');
+
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Tabs generators
  *
  * @mixin
  */
-export default {
+exports.default = {
   methods: {
     genBar: function genBar(items) {
       return this.$createElement('div', {
@@ -13,7 +33,7 @@ export default {
           'theme--light': this.light
         }),
         ref: 'bar'
-      }, [this.genTransition('prepend'), this.genWrapper(this.genContainer(items)), this.genTransition('append')]);
+      }, [this.genTransition('prev'), this.genWrapper(this.genContainer(items)), this.genTransition('next')]);
     },
     genContainer: function genContainer(items) {
       return this.$createElement('div', {
@@ -36,7 +56,7 @@ export default {
 
       if (!this.hasArrows || !this[direction + 'IconVisible']) return null;
 
-      return this.$createElement('v-icon', {
+      return this.$createElement(_VIcon2.default, {
         staticClass: 'tabs__icon tabs__icon--' + direction,
         props: {
           disabled: !this[direction + 'IconVisible']
@@ -52,7 +72,7 @@ export default {
       if (items.length > 0) return items;
       if (!item.length) return null;
 
-      return this.$createElement('v-tabs-items', item);
+      return this.$createElement(_VTabsItems2.default, item);
     },
     genTransition: function genTransition(direction) {
       return this.$createElement('transition', {
@@ -86,7 +106,7 @@ export default {
     },
     genSlider: function genSlider(items) {
       if (!items.length) {
-        items = [this.$createElement('v-tabs-slider', {
+        items = [this.$createElement(_VTabsSlider2.default, {
           props: { color: this.sliderColor }
         })];
       }

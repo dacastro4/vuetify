@@ -1,20 +1,25 @@
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 require('../../../src/stylus/components/_progress-linear.styl');
 
-import Colorable from '../../mixins/colorable';
+var _colorable = require('../../mixins/colorable');
 
-import { VFadeTransition, VSlideXTransition } from '../transitions';
+var _colorable2 = _interopRequireDefault(_colorable);
 
-export default {
+var _transitions = require('../transitions');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+exports.default = {
   name: 'v-progress-linear',
 
-  components: {
-    VFadeTransition: VFadeTransition,
-    VSlideXTransition: VSlideXTransition
-  },
-
-  mixins: [Colorable],
+  mixins: [_colorable2.default],
 
   props: {
     active: {
@@ -110,8 +115,8 @@ export default {
   },
 
   render: function render(h) {
-    var fade = h('v-fade-transition', [this.indeterminate && this.genIndeterminate(h)]);
-    var slide = h('v-slide-x-transition', [!this.indeterminate && this.genDeterminate(h)]);
+    var fade = h(_transitions.VFadeTransition, [this.indeterminate && this.genIndeterminate(h)]);
+    var slide = h(_transitions.VSlideXTransition, [!this.indeterminate && this.genDeterminate(h)]);
 
     var bar = h('div', {
       staticClass: 'progress-linear__bar',

@@ -1,3 +1,9 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -9,7 +15,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
  *
  * Used for creating the DOM elements for VMenu
  */
-export default {
+exports.default = {
   methods: {
     genActivator: function genActivator() {
       if (!this.$slots.activator) return null;
@@ -51,9 +57,7 @@ export default {
           return _this.isActive = false;
         },
         args: {
-          closeConditional: function closeConditional() {
-            return _this.closeOnClick;
-          },
+          closeConditional: this.closeConditional,
           include: function include() {
             return [_this.$el].concat(_toConsumableArray(_this.getOpenDependentElements()));
           }

@@ -1,12 +1,19 @@
-import { factory as PositionableFactory } from './positionable';
+'use strict';
 
-export default function applicationable(value) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = applicationable;
+
+var _positionable = require('./positionable');
+
+function applicationable(value) {
   var events = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
   return {
     name: 'applicationable',
 
-    mixins: [PositionableFactory(['absolute', 'fixed'])],
+    mixins: [(0, _positionable.factory)(['absolute', 'fixed'])],
 
     props: {
       app: Boolean
@@ -22,20 +29,27 @@ export default function applicationable(value) {
       // If previous value was app
       // reset the provided prop
       app: function app(x, prev) {
-        prev ? this.removeApplication() : this.callUpdate();
+        prev ? this.removeApplication(true) : this.callUpdate();
       }
     },
 
+    activated: function activated() {
+      this.callUpdate();
+    },
     created: function created() {
       for (var i = 0, length = events.length; i < length; i++) {
         this.$watch(events[i], this.callUpdate);
       }
+      this.callUpdate();
     },
     mounted: function mounted() {
       this.callUpdate();
     },
+    deactivated: function deactivated() {
+      this.removeApplication();
+    },
     destroyed: function destroyed() {
-      this.app && this.removeApplication();
+      this.removeApplication();
     },
 
 
@@ -43,10 +57,12 @@ export default function applicationable(value) {
       callUpdate: function callUpdate() {
         if (!this.app) return;
 
-        this.$vuetify.application[this.applicationProperty] = this.updateApplication();
+        this.$vuetify.application.bind(this._uid, this.applicationProperty, this.updateApplication());
       },
-      removeApplication: function removeApplication() {
-        this.$vuetify.application[this.applicationProperty] = 0;
+      removeApplication: function removeApplication(force) {
+        if (!force && !this.app) return;
+
+        this.$vuetify.application.unbind(this._uid, this.applicationProperty);
       },
 
       updateApplication: function updateApplication() {}

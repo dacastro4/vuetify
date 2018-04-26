@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Menu keyable
  *
@@ -7,7 +12,7 @@
  * Handles opening and closing of VMenu from keystrokes
  * Will conditionally highlight VListTiles for VSelect
  */
-export default {
+exports.default = {
   data: function data() {
     return {
       listIndex: -1,
@@ -24,8 +29,9 @@ export default {
       this.getTiles();
 
       if (next in this.tiles) {
-        this.tiles[next].classList.add('list__tile--highlighted');
-        this.$refs.content.scrollTop = next * 48;
+        var tile = this.tiles[next];
+        tile.classList.add('list__tile--highlighted');
+        this.$refs.content.scrollTop = tile.offsetTop - tile.clientHeight;
       }
 
       prev in this.tiles && this.tiles[prev].classList.remove('list__tile--highlighted');

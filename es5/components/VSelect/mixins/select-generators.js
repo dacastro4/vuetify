@@ -1,9 +1,51 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _helpers = require('../../../util/helpers');
+
+var _console = require('../../../util/console');
+
+var _VBtn = require('../../VBtn');
+
+var _VBtn2 = _interopRequireDefault(_VBtn);
+
+var _VCard = require('../../VCard');
+
+var _VCard2 = _interopRequireDefault(_VCard);
+
+var _VCheckbox = require('../../VCheckbox');
+
+var _VCheckbox2 = _interopRequireDefault(_VCheckbox);
+
+var _VChip = require('../../VChip');
+
+var _VChip2 = _interopRequireDefault(_VChip);
+
+var _VDivider = require('../../VDivider');
+
+var _VDivider2 = _interopRequireDefault(_VDivider);
+
+var _VMenu = require('../../VMenu');
+
+var _VMenu2 = _interopRequireDefault(_VMenu);
+
+var _VSubheader = require('../../VSubheader');
+
+var _VSubheader2 = _interopRequireDefault(_VSubheader);
+
+var _VList = require('../../VList');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-import { getObjectValueByPath } from '../../../util/helpers';
-import { consoleWarn } from '../../../util/console';
+// Components
+
 
 /**
  * Select generators
@@ -12,7 +54,7 @@ import { consoleWarn } from '../../../util/console';
  *
  * Used for creating the DOM elements for VSelect
  */
-export default {
+exports.default = {
   methods: {
     genMenu: function genMenu() {
       var _this = this;
@@ -46,11 +88,11 @@ export default {
         }
       };
 
-      if (this.isAutocomplete) data.props.transition = '';
+      if (this.isAutocomplete) data.props.transition = false;
 
       this.minWidth && (data.props.minWidth = this.minWidth);
 
-      return this.$createElement('v-menu', data, [this.genList()]);
+      return this.$createElement(_VMenu2.default, data, [this.genList()]);
     },
     getMenuIndex: function getMenuIndex() {
       return this.$refs.menu ? this.$refs.menu.listIndex : -1;
@@ -127,6 +169,8 @@ export default {
 
         data.on = _extends({}, this.genListeners(), {
           input: function input(e) {
+            if (_this2.selectedIndex > -1) return;
+
             _this2.searchValue = _this2.unmaskText(e.target.value);
           }
         });
@@ -140,11 +184,11 @@ export default {
     },
     genSegmentedBtn: function genSegmentedBtn(item) {
       if (!item.text || !item.callback) {
-        consoleWarn('When using \'segmented\' prop without a selection slot, items must contain both a text and callback property', this);
+        (0, _console.consoleWarn)('When using \'segmented\' prop without a selection slot, items must contain both a text and callback property', this);
         return null;
       }
 
-      return this.$createElement('v-btn', {
+      return this.$createElement(_VBtn2.default, {
         props: {
           flat: true
         },
@@ -177,7 +221,7 @@ export default {
         _this3.selectedIndex = index;
       };
 
-      return this.$createElement('v-chip', {
+      return this.$createElement(_VChip2.default, {
         staticClass: 'chip--select-multi',
         attrs: { tabindex: '-1' },
         props: {
@@ -222,7 +266,7 @@ export default {
         }
       }
 
-      return this.$createElement('v-card', [this.$createElement('v-list', {
+      return this.$createElement(_VCard2.default, [this.$createElement(_VList.VList, {
         props: {
           dense: this.dense
         },
@@ -230,19 +274,19 @@ export default {
       }, children)]);
     },
     genHeader: function genHeader(item) {
-      return this.$createElement('v-subheader', {
+      return this.$createElement(_VSubheader2.default, {
         props: item
       }, item.header);
     },
     genDivider: function genDivider(item) {
-      return this.$createElement('v-divider', {
+      return this.$createElement(_VDivider2.default, {
         props: item
       });
     },
     genLabel: function genLabel() {
       var singleLine = this.singleLine || this.isDropdown;
 
-      if (singleLine && this.isDirty || singleLine && this.isFocused && this.searchValue) return null;
+      if (singleLine && (this.isDirty || this.isFocused && this.searchValue)) return null;
 
       var data = {};
 
@@ -256,7 +300,7 @@ export default {
       var active = this.selectedItems.indexOf(item) !== -1;
 
       if (typeof disabled === 'undefined') {
-        disabled = getObjectValueByPath(item, this.itemDisabled);
+        disabled = (0, _helpers.getObjectValueByPath)(item, this.itemDisabled);
       }
 
       var data = {
@@ -282,10 +326,10 @@ export default {
 
       if (this.$scopedSlots.item) {
         var tile = this.$scopedSlots.item({ parent: this, item: item, tile: data });
-        return this.needsTile(tile) ? this.$createElement('v-list-tile', data, [tile]) : tile;
+        return this.needsTile(tile) ? this.$createElement(_VList.VListTile, data, [tile]) : tile;
       }
 
-      return this.$createElement('v-list-tile', data, [this.genAction(item, active), this.genContent(item)]);
+      return this.$createElement(_VList.VListTile, data, [this.genAction(item, active), this.genContent(item)]);
     },
     genAction: function genAction(item, active) {
       var _this6 = this;
@@ -302,7 +346,7 @@ export default {
         }
       };
 
-      return this.$createElement('v-list-tile-action', data, [this.$createElement('v-checkbox', {
+      return this.$createElement(_VList.VListTileAction, data, [this.$createElement(_VCheckbox2.default, {
         props: {
           color: this.computedColor,
           inputValue: active
@@ -312,7 +356,7 @@ export default {
     genContent: function genContent(item) {
       var text = this.getText(item);
 
-      return this.$createElement('v-list-tile-content', [this.$createElement('v-list-tile-title', {
+      return this.$createElement(_VList.VListTileContent, [this.$createElement(_VList.VListTileTitle, {
         domProps: {
           innerHTML: this.genFiltered(text)
         }

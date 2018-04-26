@@ -1,32 +1,44 @@
-import { createSimpleTransition, createJavaScriptTransition } from '../../util/helpers';
+'use strict';
 
-import ExpandTransitionGenerator from './expand-transition';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.VRowExpandTransition = exports.VExpandTransition = exports.VSlideYReverseTransition = exports.VSlideYTransition = exports.VSlideXReverseTransition = exports.VSlideXTransition = exports.VScaleTransition = exports.VFadeTransition = exports.VDialogBottomTransition = exports.VDialogTransition = exports.VFabTransition = exports.VMenuTransition = exports.VTabReverseTransition = exports.VTabTransition = exports.VCarouselReverseTransition = exports.VCarouselTransition = exports.VBottomSheetTranstion = undefined;
+
+var _helpers = require('../../util/helpers');
+
+var _expandTransition = require('./expand-transition');
+
+var _expandTransition2 = _interopRequireDefault(_expandTransition);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Component specific transitions
-export var VBottomSheetTranstion = createSimpleTransition('bottom-sheet-transition');
-export var VCarouselTransition = createSimpleTransition('carousel-transition');
-export var VCarouselReverseTransition = createSimpleTransition('carousel-reverse-transition');
-export var VTabTransition = createSimpleTransition('tab-transition');
-export var VTabReverseTransition = createSimpleTransition('tab-reverse-transition');
-export var VMenuTransition = createSimpleTransition('menu-transition');
-export var VFabTransition = createSimpleTransition('fab-transition', 'center center', 'out-in');
+var VBottomSheetTranstion = exports.VBottomSheetTranstion = (0, _helpers.createSimpleTransition)('bottom-sheet-transition');
+var VCarouselTransition = exports.VCarouselTransition = (0, _helpers.createSimpleTransition)('carousel-transition');
+var VCarouselReverseTransition = exports.VCarouselReverseTransition = (0, _helpers.createSimpleTransition)('carousel-reverse-transition');
+var VTabTransition = exports.VTabTransition = (0, _helpers.createSimpleTransition)('tab-transition');
+var VTabReverseTransition = exports.VTabReverseTransition = (0, _helpers.createSimpleTransition)('tab-reverse-transition');
+var VMenuTransition = exports.VMenuTransition = (0, _helpers.createSimpleTransition)('menu-transition');
+var VFabTransition = exports.VFabTransition = (0, _helpers.createSimpleTransition)('fab-transition', 'center center', 'out-in');
 
 // Generic transitions
-export var VDialogTransition = createSimpleTransition('dialog-transition');
-export var VDialogBottomTransition = createSimpleTransition('dialog-bottom-transition');
-export var VFadeTransition = createSimpleTransition('fade-transition');
-export var VScaleTransition = createSimpleTransition('scale-transition');
-export var VSlideXTransition = createSimpleTransition('slide-x-transition');
-export var VSlideXReverseTransition = createSimpleTransition('slide-x-reverse-transition');
-export var VSlideYTransition = createSimpleTransition('slide-y-transition');
-export var VSlideYReverseTransition = createSimpleTransition('slide-y-reverse-transition');
+var VDialogTransition = exports.VDialogTransition = (0, _helpers.createSimpleTransition)('dialog-transition');
+var VDialogBottomTransition = exports.VDialogBottomTransition = (0, _helpers.createSimpleTransition)('dialog-bottom-transition');
+var VFadeTransition = exports.VFadeTransition = (0, _helpers.createSimpleTransition)('fade-transition');
+var VScaleTransition = exports.VScaleTransition = (0, _helpers.createSimpleTransition)('scale-transition');
+var VSlideXTransition = exports.VSlideXTransition = (0, _helpers.createSimpleTransition)('slide-x-transition');
+var VSlideXReverseTransition = exports.VSlideXReverseTransition = (0, _helpers.createSimpleTransition)('slide-x-reverse-transition');
+var VSlideYTransition = exports.VSlideYTransition = (0, _helpers.createSimpleTransition)('slide-y-transition');
+var VSlideYReverseTransition = exports.VSlideYReverseTransition = (0, _helpers.createSimpleTransition)('slide-y-reverse-transition');
 
 // JavaScript transitions
-export var VExpandTransition = createJavaScriptTransition('expand-transition', ExpandTransitionGenerator());
-export var VRowExpandTransition = createJavaScriptTransition('row-expand-transition', ExpandTransitionGenerator('datatable__expand-col--expanded'));
+var VExpandTransition = exports.VExpandTransition = (0, _helpers.createJavaScriptTransition)('expand-transition', (0, _expandTransition2.default)());
+var VRowExpandTransition = exports.VRowExpandTransition = (0, _helpers.createJavaScriptTransition)('row-expand-transition', (0, _expandTransition2.default)('datatable__expand-col--expanded'));
 
-export default install;
+exports.default = install;
 /* istanbul ignore next */
+
 function install(Vue) {
   Vue.component('v-bottom-sheet-transition', VBottomSheetTranstion);
   Vue.component('v-carousel-transition', VCarouselTransition);

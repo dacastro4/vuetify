@@ -1,9 +1,24 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_button-toggle.styl');
 
-import ButtonGroup from '../../mixins/button-group';
-import Themeable from '../../mixins/themeable';
+var _buttonGroup = require('../../mixins/button-group');
 
-export default {
+var _buttonGroup2 = _interopRequireDefault(_buttonGroup);
+
+var _themeable = require('../../mixins/themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+var _console = require('../../util/console');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-btn-toggle',
 
   model: {
@@ -11,7 +26,7 @@ export default {
     event: 'change'
   },
 
-  mixins: [ButtonGroup, Themeable],
+  mixins: [_buttonGroup2.default, _themeable2.default],
 
   props: {
     inputValue: {
@@ -72,9 +87,29 @@ export default {
       }
 
       this.$emit('change', items);
+    },
+    updateAllValues: function updateAllValues() {
+      if (!this.multiple) return;
+
+      var items = [];
+
+      for (var i = 0; i < this.buttons.length; ++i) {
+        var item = this.getValue(i);
+        var index = this.inputValue.indexOf(item);
+        if (index !== -1) {
+          items.push(item);
+        }
+      }
+
+      this.$emit('change', items);
     }
   },
 
+  created: function created() {
+    if (this.multiple && !Array.isArray(this.inputValue)) {
+      (0, _console.consoleWarn)('Model must be bound to an array if the multiple property is true.', this);
+    }
+  },
   render: function render(h) {
     return h('div', { class: this.classes }, this.$slots.default);
   }

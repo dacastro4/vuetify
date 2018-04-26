@@ -1,10 +1,26 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-import Positionable from './positionable';
+var _positionable = require('./positionable');
 
-import Stackable from './stackable';
-import Themeable from './themeable';
+var _positionable2 = _interopRequireDefault(_positionable);
 
+var _stackable = require('./stackable');
+
+var _stackable2 = _interopRequireDefault(_stackable);
+
+var _themeable = require('./themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* eslint-disable object-property-newline */
 var dimensions = {
   activator: {
     top: 0, left: 0,
@@ -19,6 +35,7 @@ var dimensions = {
     offsetTop: 0, scrollHeight: 0
   },
   hasWindow: false
+  /* eslint-enable object-property-newline */
 
   /**
    * Menuable
@@ -30,10 +47,10 @@ var dimensions = {
    * Can calculate X and Y axis overflows
    * As well as be manually positioned
    */
-};export default {
+};exports.default = {
   name: 'menuable',
 
-  mixins: [Positionable, Stackable, Themeable],
+  mixins: [_positionable2.default, _stackable2.default, _themeable2.default],
 
   data: function data() {
     return {
@@ -137,7 +154,7 @@ var dimensions = {
     isActive: function isActive(val) {
       if (this.disabled) return;
 
-      val && this.callActivate() || this.callDeactivate();
+      val ? this.callActivate() : this.callDeactivate();
     }
   },
 
@@ -218,7 +235,8 @@ var dimensions = {
       if (!this.hasWindow) {
         this.hasWindow = typeof window !== 'undefined';
       }
-
+    },
+    checkForPageYOffset: function checkForPageYOffset() {
       if (this.hasWindow) {
         this.pageYOffset = this.getOffsetTop();
       }
@@ -301,6 +319,7 @@ var dimensions = {
       var _this3 = this;
 
       this.checkForWindow();
+      this.checkForPageYOffset();
 
       var dimensions = {};
 

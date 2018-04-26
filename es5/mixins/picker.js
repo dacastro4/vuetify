@@ -1,23 +1,41 @@
-// Components
-import VPicker from '../components/VPicker';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VPicker = require('../components/VPicker');
+
+var _VPicker2 = _interopRequireDefault(_VPicker);
+
+var _colorable = require('./colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _themeable = require('./themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Mixins
-import Colorable from './colorable';
-import Themeable from './themeable';
-
-export default {
+exports.default = {
   name: 'picker',
 
-  components: {
-    VPicker: VPicker
-  },
-
-  mixins: [Colorable, Themeable],
+  mixins: [_colorable2.default, _themeable2.default],
 
   props: {
+    fullWidth: Boolean,
     headerColor: String,
     landscape: Boolean,
-    noTitle: Boolean
+    noTitle: Boolean,
+    width: {
+      type: [Number, String],
+      default: 290,
+      validator: function validator(value) {
+        return parseInt(value, 10) > 0;
+      }
+    }
   },
 
   methods: {
@@ -30,15 +48,18 @@ export default {
       }) : this.$slots.default;
     },
     genPicker: function genPicker(staticClass) {
-      return this.$createElement('v-picker', {
+      return this.$createElement(_VPicker2.default, {
         staticClass: staticClass,
+        class: this.fullWidth ? ['picker--full-width'] : [],
         props: {
-          landscape: this.landscape,
+          color: this.headerColor || this.color,
           dark: this.dark,
+          fullWidth: this.fullWidth,
+          landscape: this.landscape,
           light: this.light,
-          color: this.headerColor || this.color
+          width: this.width
         }
       }, [this.noTitle ? null : this.genPickerTitle(), this.genPickerBody(), this.$createElement('template', { slot: 'actions' }, [this.genPickerActionsSlot()])]);
     }
   }
-};
+}; // Components

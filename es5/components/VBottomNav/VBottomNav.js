@@ -1,15 +1,30 @@
-// Styles
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_bottom-navs.styl');
 
-// Mixins
-import Applicationable from '../../mixins/applicationable';
-import ButtonGroup from '../../mixins/button-group';
-import Colorable from '../../mixins/colorable';
+var _applicationable = require('../../mixins/applicationable');
 
-export default {
+var _applicationable2 = _interopRequireDefault(_applicationable);
+
+var _buttonGroup = require('../../mixins/button-group');
+
+var _buttonGroup2 = _interopRequireDefault(_buttonGroup);
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Styles
+exports.default = {
   name: 'v-bottom-nav',
 
-  mixins: [Applicationable('bottom', ['height', 'value']), ButtonGroup, Colorable],
+  mixins: [(0, _applicationable2.default)('bottom', ['height', 'value']), _buttonGroup2.default, _colorable2.default],
 
   props: {
     active: [Number, String],
@@ -76,3 +91,5 @@ export default {
     }, this.$slots.default);
   }
 };
+
+// Mixins

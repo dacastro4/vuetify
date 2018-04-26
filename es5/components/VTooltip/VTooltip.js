@@ -1,19 +1,46 @@
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 require('../../../src/stylus/components/_tooltips.styl');
 
-// Mixins
-import Colorable from '../../mixins/colorable';
-import Delayable from '../../mixins/delayable';
-import Dependent from '../../mixins/dependent';
-import Detachable from '../../mixins/detachable';
-import Menuable from '../../mixins/menuable';
-import Toggleable from '../../mixins/toggleable';
+var _colorable = require('../../mixins/colorable');
 
-export default {
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _delayable = require('../../mixins/delayable');
+
+var _delayable2 = _interopRequireDefault(_delayable);
+
+var _dependent = require('../../mixins/dependent');
+
+var _dependent2 = _interopRequireDefault(_dependent);
+
+var _detachable = require('../../mixins/detachable');
+
+var _detachable2 = _interopRequireDefault(_detachable);
+
+var _menuable = require('../../mixins/menuable');
+
+var _menuable2 = _interopRequireDefault(_menuable);
+
+var _toggleable = require('../../mixins/toggleable');
+
+var _toggleable2 = _interopRequireDefault(_toggleable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// Mixins
+
+
+exports.default = {
   name: 'v-tooltip',
 
-  mixins: [Colorable, Delayable, Dependent, Detachable, Menuable, Toggleable],
+  mixins: [_colorable2.default, _delayable2.default, _dependent2.default, _detachable2.default, _menuable2.default, _toggleable2.default],
 
   data: function data() {
     return {
@@ -71,7 +98,7 @@ export default {
       var top = 0;
 
       if (this.top || this.bottom) {
-        top = activator.top - (this.top ? activator.height : -activator.height) - (this.top ? 0 : -10);
+        top = activator.top + (this.bottom ? activator.height : -content.height) + (this.bottom ? 10 : -10);
       } else if (this.left || this.right) {
         top = activator.top + activator.height / 2 - content.height / 2;
       }

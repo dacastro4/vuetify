@@ -1,27 +1,42 @@
-import { consoleWarn } from './console';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.colorToInt = colorToInt;
+exports.intToHex = intToHex;
+
+var _console = require('./console');
 
 /**
  * @param {string|number} color
  * @returns {number}
  */
-export function colorToInt(color) {
+function colorToInt(color) {
   var rgb = void 0;
 
   if (typeof color === 'number') {
     rgb = color;
   } else if (typeof color === 'string') {
-    // TODO: more string formats
-    var c = color.substring(1);
+    var c = color[0] === '#' ? color.substring(1) : color;
+    if (c.length === 3) {
+      c = c.split('').map(function (char) {
+        return char + char;
+      }).join('');
+    }
+    if (c.length !== 6) {
+      (0, _console.consoleWarn)('\'' + color + '\' is not a valid rgb color');
+    }
     rgb = parseInt(c, 16);
   } else {
     throw new TypeError('Colors can only be numbers or strings, recieved ' + color.constructor.name + ' instead');
   }
 
   if (rgb < 0) {
-    consoleWarn('Colors cannot be negative: \'' + color + '\'');
+    (0, _console.consoleWarn)('Colors cannot be negative: \'' + color + '\'');
     rgb = 0;
-  } else if (rgb > 0xffffff) {
-    consoleWarn('\'' + color + '\' is not a valid rgb color');
+  } else if (rgb > 0xffffff || isNaN(rgb)) {
+    (0, _console.consoleWarn)('\'' + color + '\' is not a valid rgb color');
     rgb = 0xffffff;
   }
 
@@ -32,6 +47,10 @@ export function colorToInt(color) {
  * @param {number} color
  * @returns {string}
  */
-export function intToHex(color) {
-  return '#' + color.toString(16).padStart(6, '0');
+function intToHex(color) {
+  color = color.toString(16);
+
+  if (color.length < 6) color = '0'.repeat(6 - color.length) + color;
+
+  return '#' + color;
 }

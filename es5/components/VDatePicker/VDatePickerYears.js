@@ -1,15 +1,24 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_date-picker-years.styl');
 
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _util = require('./util');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // Mixins
-import Colorable from '../../mixins/colorable';
-
-// Utils
-import { createNativeLocaleFormatter } from './util';
-
-export default {
+exports.default = {
   name: 'v-date-picker-years',
 
-  mixins: [Colorable],
+  mixins: [_colorable2.default],
 
   data: function data() {
     return {
@@ -34,12 +43,12 @@ export default {
 
   computed: {
     formatter: function formatter() {
-      return this.format || createNativeLocaleFormatter(this.locale, { year: 'numeric', timeZone: 'UTC' }, { length: 4 });
+      return this.format || (0, _util.createNativeLocaleFormatter)(this.locale, { year: 'numeric', timeZone: 'UTC' }, { length: 4 });
     }
   },
 
   mounted: function mounted() {
-    this.$el.scrollTop = this.$el.scrollHeight / 2 - 125;
+    this.$el.scrollTop = this.$el.scrollHeight / 2 - this.$el.offsetHeight / 2;
   },
 
 
@@ -80,3 +89,5 @@ export default {
     }, this.genYearItems());
   }
 };
+
+// Utils

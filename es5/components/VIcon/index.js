@@ -1,8 +1,18 @@
-import VIcon from './VIcon';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VIcon = require('./VIcon');
+
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* istanbul ignore next */
-VIcon.install = function install(Vue) {
-  Vue.component(VIcon.name, VIcon);
+_VIcon2.default.install = function install(Vue) {
+  Vue.component(_VIcon2.default.name, _VIcon2.default);
 };
 
-export default VIcon;
+exports.default = _VIcon2.default;

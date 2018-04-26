@@ -1,12 +1,24 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-import Ripple from '../directives/ripple';
+var _ripple = require('../directives/ripple');
 
-export default {
+var _ripple2 = _interopRequireDefault(_ripple);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+exports.default = {
   name: 'routable',
 
   directives: {
-    Ripple: Ripple
+    Ripple: _ripple2.default
   },
 
   props: {
@@ -33,18 +45,17 @@ export default {
       var exact = this.exact;
       var tag = void 0;
 
-      var data = {
+      var data = _defineProperty({
         attrs: { disabled: this.disabled },
         class: this.classes,
         props: {},
         directives: [{
           name: 'ripple',
           value: this.ripple && !this.disabled ? this.ripple : false
-        }],
-        on: _extends({}, this.$listeners || {}, {
-          click: this.click
-        })
-      };
+        }]
+      }, this.to ? 'nativeOn' : 'on', _extends({}, this.$listeners, {
+        click: this.click
+      }));
 
       if (typeof this.exact === 'undefined') {
         exact = this.to === '/' || this.to === Object(this.to) && this.to.path === '/';

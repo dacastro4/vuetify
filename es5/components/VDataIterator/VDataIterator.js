@@ -1,11 +1,21 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_data-iterator.styl');
 
-import DataIterable from '../../mixins/data-iterable';
+var _dataIterable = require('../../mixins/data-iterable');
 
-export default {
+var _dataIterable2 = _interopRequireDefault(_dataIterable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-data-iterator',
 
-  mixins: [DataIterable],
+  mixins: [_dataIterable2.default],
 
   inheritAttrs: false,
 

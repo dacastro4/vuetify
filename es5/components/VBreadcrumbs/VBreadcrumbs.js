@@ -1,6 +1,12 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_breadcrumbs.styl');
 
-export default {
+exports.default = {
   name: 'v-breadcrumbs',
 
   props: {
@@ -41,17 +47,23 @@ export default {
     genChildren: function genChildren() {
       if (!this.$slots.default) return null;
 
+      var h = this.$createElement;
       var children = [];
       var dividerData = { staticClass: 'breadcrumbs__divider' };
-      var length = this.$slots.default.length;
 
-      for (var i = 0; i < length; i++) {
+      var createDividers = false;
+      for (var i = 0; i < this.$slots.default.length; i++) {
         var elm = this.$slots.default[i];
-        children.push(elm);
 
-        if (!elm.componentOptions || elm.componentOptions.tag !== 'v-breadcrumbs-item' || i === length - 1) continue;
-
-        children.push(this.$createElement('li', dividerData, this.computedDivider));
+        if (!elm.componentOptions || elm.componentOptions.Ctor.options.name !== 'v-breadcrumbs-item') {
+          children.push(elm);
+        } else {
+          if (createDividers) {
+            children.push(h('li', dividerData, this.computedDivider));
+          }
+          children.push(elm);
+          createDividers = true;
+        }
       }
 
       return children;

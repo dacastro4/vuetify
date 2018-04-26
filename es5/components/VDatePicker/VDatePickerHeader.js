@@ -1,26 +1,42 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+// Components
+
+
+// Mixins
+
+
+// Utils
+
 
 require('../../../src/stylus/components/_date-picker-header.styl');
 
-// Components
-import VBtn from '../VBtn';
-import VIcon from '../VIcon';
+var _VBtn = require('../VBtn');
 
-// Mixins
-import Colorable from '../../mixins/colorable';
+var _VBtn2 = _interopRequireDefault(_VBtn);
 
-// Utils
-import { createNativeLocaleFormatter, monthChange } from './util';
+var _VIcon = require('../VIcon');
 
-export default {
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _util = require('./util');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-date-picker-header',
 
-  components: {
-    VBtn: VBtn,
-    VIcon: VIcon
-  },
-
-  mixins: [Colorable],
+  mixins: [_colorable2.default],
 
   data: function data() {
     return {
@@ -31,10 +47,6 @@ export default {
 
 
   props: {
-    appendIcon: {
-      type: String,
-      default: 'chevron_right'
-    },
     disabled: Boolean,
     format: {
       type: Function,
@@ -44,7 +56,13 @@ export default {
       type: String,
       default: 'en-us'
     },
-    prependIcon: {
+    min: String,
+    max: String,
+    nextIcon: {
+      type: String,
+      default: 'chevron_right'
+    },
+    prevIcon: {
       type: String,
       default: 'chevron_left'
     },
@@ -59,9 +77,9 @@ export default {
       if (this.format) {
         return this.format;
       } else if (String(this.value).split('-')[1]) {
-        return createNativeLocaleFormatter(this.locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }, { length: 7 });
+        return (0, _util.createNativeLocaleFormatter)(this.locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }, { length: 7 });
       } else {
-        return createNativeLocaleFormatter(this.locale, { year: 'numeric', timeZone: 'UTC' }, { length: 4 });
+        return (0, _util.createNativeLocaleFormatter)(this.locale, { year: 'numeric', timeZone: 'UTC' }, { length: 4 });
       }
     }
   },
@@ -76,10 +94,12 @@ export default {
     genBtn: function genBtn(change) {
       var _this = this;
 
-      return this.$createElement('v-btn', {
+      var disabled = this.disabled || change < 0 && this.min && this.calculateChange(change) < this.min || change > 0 && this.max && this.calculateChange(change) > this.max;
+
+      return this.$createElement(_VBtn2.default, {
         props: {
           dark: this.dark,
-          disabled: this.disabled,
+          disabled: disabled,
           icon: true
         },
         nativeOn: {
@@ -88,7 +108,7 @@ export default {
             _this.$emit('input', _this.calculateChange(change));
           }
         }
-      }, [this.$createElement('v-icon', change < 0 ? this.prependIcon : this.appendIcon)]);
+      }, [this.$createElement(_VIcon2.default, change < 0 ? this.prevIcon : this.nextIcon)]);
     },
     calculateChange: function calculateChange(sign) {
       var _String$split$map = String(this.value).split('-').map(function (v) {
@@ -101,7 +121,7 @@ export default {
       if (month == null) {
         return '' + (year + sign);
       } else {
-        return monthChange(String(this.value), sign);
+        return (0, _util.monthChange)(String(this.value), sign);
       }
     },
     genHeader: function genHeader() {

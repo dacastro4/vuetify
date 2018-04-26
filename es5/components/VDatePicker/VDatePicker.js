@@ -1,64 +1,83 @@
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+'use strict';
 
-// Components
-import VBtn from '../VBtn';
-import VCard from '../VCard';
-import VIcon from '../VIcon';
-import VDatePickerTitle from './VDatePickerTitle';
-import VDatePickerHeader from './VDatePickerHeader';
-import VDatePickerDateTable from './VDatePickerDateTable';
-import VDatePickerMonthTable from './VDatePickerMonthTable';
-import VDatePickerYears from './VDatePickerYears';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }(); // Components
+
 
 // Mixins
-import Picker from '../../mixins/picker';
+
 
 // Utils
-import { pad, createNativeLocaleFormatter } from './util';
-import isValueAllowed from '../../util/isValueAllowed';
 
-export default {
+
+var _VDatePickerTitle = require('./VDatePickerTitle');
+
+var _VDatePickerTitle2 = _interopRequireDefault(_VDatePickerTitle);
+
+var _VDatePickerHeader = require('./VDatePickerHeader');
+
+var _VDatePickerHeader2 = _interopRequireDefault(_VDatePickerHeader);
+
+var _VDatePickerDateTable = require('./VDatePickerDateTable');
+
+var _VDatePickerDateTable2 = _interopRequireDefault(_VDatePickerDateTable);
+
+var _VDatePickerMonthTable = require('./VDatePickerMonthTable');
+
+var _VDatePickerMonthTable2 = _interopRequireDefault(_VDatePickerMonthTable);
+
+var _VDatePickerYears = require('./VDatePickerYears');
+
+var _VDatePickerYears2 = _interopRequireDefault(_VDatePickerYears);
+
+var _picker = require('../../mixins/picker');
+
+var _picker2 = _interopRequireDefault(_picker);
+
+var _util = require('./util');
+
+var _isDateAllowed2 = require('./util/isDateAllowed');
+
+var _isDateAllowed3 = _interopRequireDefault(_isDateAllowed2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-date-picker',
 
-  components: {
-    VBtn: VBtn,
-    VCard: VCard,
-    VIcon: VIcon,
-    VDatePickerTitle: VDatePickerTitle,
-    VDatePickerHeader: VDatePickerHeader,
-    VDatePickerDateTable: VDatePickerDateTable,
-    VDatePickerMonthTable: VDatePickerMonthTable,
-    VDatePickerYears: VDatePickerYears
-  },
-
-  mixins: [Picker],
+  mixins: [_picker2.default],
 
   data: function data() {
+    var _this = this;
+
     var now = new Date();
     return {
       activePicker: this.type.toUpperCase(),
       defaultColor: 'accent',
+      inputDay: null,
+      inputMonth: null,
+      inputYear: null,
       isReversing: false,
       now: now,
-      originalDate: this.value,
       // tableDate is a string in 'YYYY' / 'YYYY-M' format (leading zero for month is not required)
-      tableDate: this.type === 'month' ? '' + now.getFullYear() : now.getFullYear() + '-' + (now.getMonth() + 1)
+      tableDate: function () {
+        if (_this.pickerDate) {
+          return _this.pickerDate;
+        }
+
+        var date = _this.value || now.getFullYear() + '-' + (now.getMonth() + 1);
+        var type = _this.type === 'date' ? 'month' : 'year';
+        return _this.sanitizeDateString(date, type);
+      }()
     };
   },
 
 
   props: {
-    allowedDates: {
-      type: [Array, Object, Function],
-      default: function _default() {
-        return null;
-      }
-    },
-    autosave: Boolean,
-    appendIcon: {
-      type: String,
-      default: 'chevron_right'
-    },
+    allowedDates: Function,
     // Function formatting the day in date picker table
     dayFormat: {
       type: Function,
@@ -87,15 +106,23 @@ export default {
       type: String,
       default: 'en-us'
     },
+    max: String,
+    min: String,
     // Function formatting month in the months table
     monthFormat: {
       type: Function,
       default: null
     },
-    prependIcon: {
+    nextIcon: {
+      type: String,
+      default: 'chevron_right'
+    },
+    pickerDate: String,
+    prevIcon: {
       type: String,
       default: 'chevron_left'
     },
+    reactive: Boolean,
     readonly: Boolean,
     scrollable: Boolean,
     showCurrent: {
@@ -111,8 +138,8 @@ export default {
       type: String,
       default: 'date',
       validator: function validator(type) {
-        return ['date', 'month' /*, 'year'*/].includes(type);
-      }
+        return ['date', 'month'].includes(type);
+      } // TODO: year
     },
     value: String,
     // Function formatting the year in table header and pickup title
@@ -131,73 +158,30 @@ export default {
 
       return this.showCurrent || null;
     },
-    firstAllowedDate: function firstAllowedDate() {
-      var year = this.now.getFullYear();
-      var month = this.now.getMonth();
-
-      if (this.allowedDates) {
-        for (var date = 1; date <= 31; date++) {
-          var dateString = year + '-' + (month + 1) + '-' + date;
-          if (isNaN(new Date(dateString).getDate())) break;
-
-          var sanitizedDateString = this.sanitizeDateString(dateString, 'date');
-          if (isValueAllowed(sanitizedDateString, this.allowedDates)) {
-            return sanitizedDateString;
-          }
-        }
-      }
-
-      return this.sanitizeDateString(year + '-' + (month + 1) + '-' + this.now.getDate(), 'date');
-    },
-    firstAllowedMonth: function firstAllowedMonth() {
-      var year = this.now.getFullYear();
-
-      if (this.allowedDates) {
-        for (var month = 0; month < 12; month++) {
-          var dateString = year + '-' + pad(month + 1);
-          if (isValueAllowed(dateString, this.allowedDates)) {
-            return dateString;
-          }
-        }
-      }
-
-      return year + '-' + pad(this.now.getMonth() + 1);
-    },
-
-    // inputDate MUST be a string in ISO 8601 format (including leading zero for month/day)
-    // YYYY-MM for month picker
-    // YYYY-MM-DD for date picker
-    inputDate: {
-      get: function get() {
-        if (this.value) {
-          return this.sanitizeDateString(this.value, this.type);
-        }
-
-        return this.type === 'month' ? this.firstAllowedMonth : this.firstAllowedDate;
-      },
-      set: function set(value) {
-        var date = value == null ? this.originalDate : this.sanitizeDateString(value, this.type);
-        this.$emit('input', date);
-      }
-    },
-    day: function day() {
-      return this.inputDate.split('-')[2] * 1;
-    },
-    month: function month() {
-      return this.inputDate.split('-')[1] - 1;
-    },
-    year: function year() {
-      return this.inputDate.split('-')[0] * 1;
+    inputDate: function inputDate() {
+      return this.type === 'date' ? this.inputYear + '-' + (0, _util.pad)(this.inputMonth + 1) + '-' + (0, _util.pad)(this.inputDay) : this.inputYear + '-' + (0, _util.pad)(this.inputMonth + 1);
     },
     tableMonth: function tableMonth() {
-      return this.tableDate.split('-')[1] - 1;
+      return (this.pickerDate || this.tableDate).split('-')[1] - 1;
     },
     tableYear: function tableYear() {
-      return this.tableDate.split('-')[0] * 1;
+      return (this.pickerDate || this.tableDate).split('-')[0] * 1;
+    },
+    minMonth: function minMonth() {
+      return this.min ? this.sanitizeDateString(this.min, 'month') : null;
+    },
+    maxMonth: function maxMonth() {
+      return this.max ? this.sanitizeDateString(this.max, 'month') : null;
+    },
+    minYear: function minYear() {
+      return this.min ? this.sanitizeDateString(this.min, 'year') : null;
+    },
+    maxYear: function maxYear() {
+      return this.max ? this.sanitizeDateString(this.max, 'year') : null;
     },
     formatters: function formatters() {
       return {
-        year: this.yearFormat || createNativeLocaleFormatter(this.locale, { year: 'numeric', timeZone: 'UTC' }, { length: 4 }),
+        year: this.yearFormat || (0, _util.createNativeLocaleFormatter)(this.locale, { year: 'numeric', timeZone: 'UTC' }, { length: 4 }),
         titleDate: this.titleDateFormat || this.defaultTitleDateFormatter
       };
     },
@@ -208,7 +192,7 @@ export default {
         date: { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' }
       };
 
-      var titleDateFormatter = createNativeLocaleFormatter(this.locale, titleFormats[this.type], {
+      var titleDateFormatter = (0, _util.createNativeLocaleFormatter)(this.locale, titleFormats[this.type], {
         start: 0,
         length: { date: 10, month: 7, year: 4 }[this.type]
       });
@@ -229,87 +213,76 @@ export default {
       // compare for example '2000-9' and '2000-10'
       var sanitizeType = this.type === 'month' ? 'year' : 'month';
       this.isReversing = this.sanitizeDateString(val, sanitizeType) < this.sanitizeDateString(prev, sanitizeType);
+      this.$emit('update:pickerDate', val);
     },
-    value: function value(val) {
-      val && this.setTableDate();
+    pickerDate: function pickerDate(val) {
+      if (val) {
+        this.tableDate = val;
+      } else if (this.value && this.type === 'date') {
+        this.tableDate = this.sanitizeDateString(this.value, 'month');
+      } else if (this.value && this.type === 'month') {
+        this.tableDate = this.sanitizeDateString(this.value, 'year');
+      }
+    },
+    value: function value() {
+      this.setInputDate();
+      if (this.value && !this.pickerDate) {
+        this.tableDate = this.sanitizeDateString(this.inputDate, this.type === 'month' ? 'year' : 'month');
+      }
     },
     type: function type(_type) {
       this.activePicker = _type.toUpperCase();
 
       if (this.value) {
         var date = this.sanitizeDateString(this.value, _type);
-        this.$emit('input', isValueAllowed(date, this.allowedDates) ? date : null);
+        this.$emit('input', this.isDateAllowed(date) ? date : null);
       }
     }
   },
 
-  created: function created() {
-    this.setTableDate();
-  },
-
-
   methods: {
-    setTableDate: function setTableDate() {
-      this.tableDate = this.type === 'month' ? '' + this.year : this.year + '-' + pad(this.month + 1);
-    },
-    save: function save() {
-      if (this.originalDate) {
-        this.originalDate = this.value;
-      } else {
-        this.originalDate = this.inputDate;
-      }
-
-      if (this.$parent && this.$parent.isActive) this.$parent.isActive = false;
-    },
-    cancel: function cancel() {
-      this.inputDate = this.originalDate;
-      if (this.$parent && this.$parent.isActive) this.$parent.isActive = false;
+    isDateAllowed: function isDateAllowed(value) {
+      return (0, _isDateAllowed3.default)(value, this.min, this.max, this.allowedDates);
     },
     yearClick: function yearClick(value) {
+      this.inputYear = value;
       if (this.type === 'month') {
-        var date = value + '-' + pad(this.month + 1);
-        if (isValueAllowed(date, this.allowedDates)) this.inputDate = date;
         this.tableDate = '' + value;
       } else {
-        var _date = value + '-' + pad(this.tableMonth + 1) + '-' + pad(this.day);
-        if (isValueAllowed(_date, this.allowedDates)) this.inputDate = _date;
-        this.tableDate = value + '-' + pad(this.tableMonth + 1);
+        this.tableDate = value + '-' + (0, _util.pad)(this.tableMonth + 1);
       }
       this.activePicker = 'MONTH';
+      this.reactive && this.isDateAllowed(this.inputDate) && this.$emit('input', this.inputDate);
     },
     monthClick: function monthClick(value) {
-      var _this = this;
-
-      // Updates inputDate setting 'YYYY-MM' or 'YYYY-MM-DD' format, depending on the picker type
+      this.inputYear = parseInt(value.split('-')[0], 10);
+      this.inputMonth = parseInt(value.split('-')[1], 10) - 1;
       if (this.type === 'date') {
-        var date = value + '-' + pad(this.day);
-        if (isValueAllowed(date, this.allowedDates)) this.inputDate = date;
         this.tableDate = value;
         this.activePicker = 'DATE';
+        this.reactive && this.isDateAllowed(this.inputDate) && this.$emit('input', this.inputDate);
       } else {
-        this.inputDate = value;
-        this.$nextTick(function () {
-          return _this.autosave && _this.save();
-        });
+        this.$emit('input', this.inputDate);
+        this.$emit('change', this.inputDate);
       }
     },
     dateClick: function dateClick(value) {
-      var _this2 = this;
-
-      this.inputDate = value;
-      this.$nextTick(function () {
-        return _this2.autosave && _this2.save();
-      });
+      this.inputYear = parseInt(value.split('-')[0], 10);
+      this.inputMonth = parseInt(value.split('-')[1], 10) - 1;
+      this.inputDay = parseInt(value.split('-')[2], 10);
+      this.$emit('input', this.inputDate);
+      this.$emit('change', this.inputDate);
     },
     genPickerTitle: function genPickerTitle() {
-      var _this3 = this;
+      var _this2 = this;
 
-      return this.$createElement('v-date-picker-title', {
+      return this.$createElement(_VDatePickerTitle2.default, {
         props: {
-          date: this.formatters.titleDate(this.inputDate),
+          date: this.value ? this.formatters.titleDate(this.value) : '',
           selectingYear: this.activePicker === 'YEAR',
-          year: this.formatters.year('' + this.year),
-          yearIcon: this.yearIcon
+          year: this.formatters.year('' + this.inputYear),
+          yearIcon: this.yearIcon,
+          value: this.value
         },
         slot: 'title',
         style: this.readonly ? {
@@ -317,38 +290,40 @@ export default {
         } : undefined,
         on: {
           'update:selectingYear': function updateSelectingYear(value) {
-            return _this3.activePicker = value ? 'YEAR' : _this3.type.toUpperCase();
+            return _this2.activePicker = value ? 'YEAR' : _this2.type.toUpperCase();
           }
         }
       });
     },
     genTableHeader: function genTableHeader() {
-      var _this4 = this;
+      var _this3 = this;
 
-      return this.$createElement('v-date-picker-header', {
+      return this.$createElement(_VDatePickerHeader2.default, {
         props: {
-          appendIcon: this.appendIcon,
+          nextIcon: this.nextIcon,
           color: this.color,
           disabled: this.readonly,
           format: this.headerDateFormat,
           locale: this.locale,
-          prependIcon: this.prependIcon,
-          value: this.activePicker === 'DATE' ? this.tableDate : '' + this.tableYear
+          min: this.activePicker === 'DATE' ? this.minMonth : this.minYear,
+          max: this.activePicker === 'DATE' ? this.maxMonth : this.maxYear,
+          prevIcon: this.prevIcon,
+          value: this.activePicker === 'DATE' ? this.tableYear + '-' + (0, _util.pad)(this.tableMonth + 1) : '' + this.tableYear
         },
         on: {
           toggle: function toggle() {
-            return _this4.activePicker = _this4.activePicker === 'DATE' ? 'MONTH' : 'YEAR';
+            return _this3.activePicker = _this3.activePicker === 'DATE' ? 'MONTH' : 'YEAR';
           },
           input: function input(value) {
-            return _this4.tableDate = value;
+            return _this3.tableDate = value;
           }
         }
       });
     },
     genDateTable: function genDateTable() {
-      var _this5 = this;
+      var _this4 = this;
 
-      return this.$createElement('v-date-picker-date-table', {
+      return this.$createElement(_VDatePickerDateTable2.default, {
         props: {
           allowedDates: this.allowedDates,
           color: this.color,
@@ -359,7 +334,9 @@ export default {
           firstDayOfWeek: this.firstDayOfWeek,
           format: this.dayFormat,
           locale: this.locale,
-          tableDate: this.tableDate,
+          min: this.min,
+          max: this.max,
+          tableDate: this.tableYear + '-' + (0, _util.pad)(this.tableMonth + 1),
           scrollable: this.scrollable,
           value: this.value
         },
@@ -367,22 +344,24 @@ export default {
         on: {
           input: this.dateClick,
           tableDate: function tableDate(value) {
-            return _this5.tableDate = value;
+            return _this4.tableDate = value;
           }
         }
       });
     },
     genMonthTable: function genMonthTable() {
-      var _this6 = this;
+      var _this5 = this;
 
-      return this.$createElement('v-date-picker-month-table', {
+      return this.$createElement(_VDatePickerMonthTable2.default, {
         props: {
           allowedDates: this.type === 'month' ? this.allowedDates : null,
           color: this.color,
-          current: this.current,
+          current: this.current ? this.sanitizeDateString(this.current, 'month') : null,
           disabled: this.readonly,
           format: this.monthFormat,
           locale: this.locale,
+          min: this.minMonth,
+          max: this.maxMonth,
           scrollable: this.scrollable,
           value: !this.value || this.type === 'month' ? this.value : this.value.substr(0, 7),
           tableDate: '' + this.tableYear
@@ -391,17 +370,19 @@ export default {
         on: {
           input: this.monthClick,
           tableDate: function tableDate(value) {
-            return _this6.tableDate = value;
+            return _this5.tableDate = value;
           }
         }
       });
     },
     genYears: function genYears() {
-      return this.$createElement('v-date-picker-years', {
+      return this.$createElement(_VDatePickerYears2.default, {
         props: {
           color: this.color,
           format: this.yearFormat,
           locale: this.locale,
+          min: this.minYear,
+          max: this.maxYear,
           value: '' + this.tableYear
         },
         on: {
@@ -431,10 +412,30 @@ export default {
           _dateString$split2$2 = _dateString$split2[2],
           date = _dateString$split2$2 === undefined ? 1 : _dateString$split2$2;
 
-      return (year + '-' + pad(month) + '-' + pad(date)).substr(0, { date: 10, month: 7, year: 4 }[type]);
+      return (year + '-' + (0, _util.pad)(month) + '-' + (0, _util.pad)(date)).substr(0, { date: 10, month: 7, year: 4 }[type]);
+    },
+    setInputDate: function setInputDate() {
+      if (this.value) {
+        var array = this.value.split('-');
+        this.inputYear = parseInt(array[0], 10);
+        this.inputMonth = parseInt(array[1], 10) - 1;
+        if (this.type === 'date') {
+          this.inputDay = parseInt(array[2], 10);
+        }
+      } else {
+        this.inputYear = this.inputYear || this.now.getFullYear();
+        this.inputMonth = this.inputMonth == null ? this.inputMonth : this.now.getMonth();
+        this.inputDay = this.inputDay || this.now.getDate();
+      }
     }
   },
 
+  created: function created() {
+    if (this.pickerDate !== this.tableDate) {
+      this.$emit('update:pickerDate', this.tableDate);
+    }
+    this.setInputDate();
+  },
   render: function render(h) {
     return this.genPicker('picker--date');
   }

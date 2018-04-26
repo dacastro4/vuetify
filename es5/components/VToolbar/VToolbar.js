@@ -1,21 +1,40 @@
-// Styles
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_toolbar.styl');
 
-// Mixins
-import Applicationable from '../../mixins/applicationable';
-import Colorable from '../../mixins/colorable';
-import Themeable from '../../mixins/themeable';
-import SSRBootable from '../../mixins/ssr-bootable';
+var _applicationable = require('../../mixins/applicationable');
 
-// Directives
-import Scroll from '../../directives/scroll';
+var _applicationable2 = _interopRequireDefault(_applicationable);
 
-export default {
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _themeable = require('../../mixins/themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+var _ssrBootable = require('../../mixins/ssr-bootable');
+
+var _ssrBootable2 = _interopRequireDefault(_ssrBootable);
+
+var _scroll = require('../../directives/scroll');
+
+var _scroll2 = _interopRequireDefault(_scroll);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Styles
+exports.default = {
   name: 'v-toolbar',
 
-  mixins: [Applicationable('top', ['clippedLeft', 'clippedRight', 'computedHeight', 'invertedScroll', 'manualScroll']), Colorable, SSRBootable, Themeable],
+  mixins: [(0, _applicationable2.default)('top', ['clippedLeft', 'clippedRight', 'computedHeight', 'invertedScroll', 'manualScroll']), _colorable2.default, _ssrBootable2.default, _themeable2.default],
 
-  directives: { Scroll: Scroll },
+  directives: { Scroll: _scroll2.default },
 
   data: function data() {
     return {
@@ -228,3 +247,8 @@ export default {
     return h('nav', data, children);
   }
 };
+
+// Directives
+
+
+// Mixins

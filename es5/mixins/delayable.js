@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Delayable
  *
@@ -6,7 +11,7 @@
  * Changes the open or close
  * delay time for elements
  */
-export default {
+exports.default = {
   name: 'delayable',
 
   data: function data() {

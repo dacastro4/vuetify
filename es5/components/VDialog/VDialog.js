@@ -1,27 +1,61 @@
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 require('../../../src/stylus/components/_dialogs.styl');
 
+var _dependent = require('../../mixins/dependent');
+
+var _dependent2 = _interopRequireDefault(_dependent);
+
+var _detachable = require('../../mixins/detachable');
+
+var _detachable2 = _interopRequireDefault(_detachable);
+
+var _overlayable = require('../../mixins/overlayable');
+
+var _overlayable2 = _interopRequireDefault(_overlayable);
+
+var _returnable = require('../../mixins/returnable');
+
+var _returnable2 = _interopRequireDefault(_returnable);
+
+var _stackable = require('../../mixins/stackable');
+
+var _stackable2 = _interopRequireDefault(_stackable);
+
+var _toggleable = require('../../mixins/toggleable');
+
+var _toggleable2 = _interopRequireDefault(_toggleable);
+
+var _clickOutside = require('../../directives/click-outside');
+
+var _clickOutside2 = _interopRequireDefault(_clickOutside);
+
+var _helpers = require('../../util/helpers');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 // Mixins
-import Dependent from '../../mixins/dependent';
-import Detachable from '../../mixins/detachable';
-import Overlayable from '../../mixins/overlayable';
-import Stackable from '../../mixins/stackable';
-import Toggleable from '../../mixins/toggleable';
+
 
 // Directives
-import ClickOutside from '../../directives/click-outside';
+
 
 // Helpers
-import { getZIndex } from '../../util/helpers';
 
-export default {
+
+exports.default = {
   name: 'v-dialog',
 
-  mixins: [Dependent, Detachable, Overlayable, Stackable, Toggleable],
+  mixins: [_dependent2.default, _detachable2.default, _overlayable2.default, _returnable2.default, _stackable2.default, _toggleable2.default],
 
   directives: {
-    ClickOutside: ClickOutside
+    ClickOutside: _clickOutside2.default
   },
 
   data: function data() {
@@ -95,7 +129,7 @@ export default {
     closeConditional: function closeConditional(e) {
       // close dialog if !persistent, clicked outside and we're the topmost dialog.
       // Since this should only be called in a capture event (bottom up), we shouldn't need to stop propagation
-      return !this.persistent && getZIndex(this.$refs.content) >= this.getMaxZIndex() && !this.$refs.content.contains(e.target);
+      return this.isActive && !this.persistent && (0, _helpers.getZIndex)(this.$refs.content) >= this.getMaxZIndex() && !this.$refs.content.contains(e.target);
     },
     show: function show() {
       !this.fullscreen && !this.hideOverlay && this.genOverlay();
@@ -131,9 +165,11 @@ export default {
           include: this.getOpenDependentElements
         }
       }, { name: 'show', value: this.isActive }],
-      on: { click: function click(e) {
-          return e.stopPropagation();
-        } }
+      on: {
+        click: function click(e) {
+          e.stopPropagation();
+        }
+      }
     };
 
     if (!this.fullscreen) {
@@ -148,6 +184,7 @@ export default {
         'class': 'dialog__activator',
         on: {
           click: function click(e) {
+            e.stopPropagation();
             if (!_this.disabled) _this.isActive = !_this.isActive;
           }
         }
@@ -169,9 +206,9 @@ export default {
     }, [dialog]));
 
     return h('div', {
-      'class': 'dialog__container',
+      staticClass: 'dialog__container',
       style: {
-        display: !this.$slots.activator && 'none' || this.fullWidth ? 'block' : 'inline-block'
+        display: !this.$slots.activator || this.fullWidth ? 'block' : 'inline-block'
       }
     }, children);
   }

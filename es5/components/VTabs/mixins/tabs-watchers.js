@@ -1,12 +1,19 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Tabs watchers
  *
  * @mixin
  */
-export default {
+exports.default = {
   watch: {
-    activeTab: function activeTab(tab) {
-      this.callSlider();
+    activeTab: function activeTab(tab, prev) {
+      !prev && tab && this.updateTabs();
+
+      setTimeout(this.callSlider, 0);
 
       if (!tab) return;
 
@@ -17,26 +24,24 @@ export default {
     alignWithTitle: 'callSlider',
     centered: 'callSlider',
     fixedTabs: 'callSlider',
+    hasArrows: function hasArrows(val) {
+      if (!val) this.scrollOffset = 0;
+    },
+
     isBooted: 'findActiveLink',
     lazyValue: 'updateTabs',
     right: 'callSlider',
     value: function value(val) {
-      var tab = this.tabs.find(function (tab) {
-        return tab.action === val;
-      }) || this.tabs[val];
-
-      if (!tab) return;
-
-      this.tabClick(tab);
+      this.lazyValue = val;
     },
 
-    '$vuetify.application.left': 'onContainerResize',
-    '$vuetify.application.right': 'onContainerResize',
+    '$vuetify.application.left': 'onResize',
+    '$vuetify.application.right': 'onResize',
     scrollOffset: function scrollOffset(val) {
       this.$refs.container.style.transform = 'translateX(' + -val + 'px)';
       if (this.hasArrows) {
-        this.prependIconVisible = this.checkPrependIcon();
-        this.appendIconVisible = this.checkAppendIcon();
+        this.prevIconVisible = this.checkPrevIcon();
+        this.nextIconVisible = this.checkNextIcon();
       }
     }
   }

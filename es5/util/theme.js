@@ -1,12 +1,29 @@
-import { colorToInt, intToHex } from './colorUtils';
-import * as sRGB from './color/transformSRGB';
-import * as LAB from './color/transformCIELAB';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.genVariantColor = exports.genBaseColor = undefined;
+exports.parse = parse;
+exports.genVariations = genVariations;
+
+var _colorUtils = require('./colorUtils');
+
+var _transformSRGB = require('./color/transformSRGB');
+
+var sRGB = _interopRequireWildcard(_transformSRGB);
+
+var _transformCIELAB = require('./color/transformCIELAB');
+
+var LAB = _interopRequireWildcard(_transformCIELAB);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /**
  * @param {object} theme
  * @returns {object}
  */
-export function parse(theme) {
+function parse(theme) {
   var colors = Object.keys(theme);
   var parsedTheme = {};
 
@@ -14,13 +31,13 @@ export function parse(theme) {
     var name = colors[i];
     var value = theme[name];
 
-    parsedTheme[name] = colorToInt(value);
+    parsedTheme[name] = (0, _colorUtils.colorToInt)(value);
   }
 
   return parsedTheme;
 }
 
-export function genVariations(name, value) {
+function genVariations(name, value) {
   var values = Array(10);
   values[0] = genBaseColor(name, value);
 
@@ -54,8 +71,8 @@ function darken(value, amount) {
  * @param {string|number} value - The color value
  * @returns {string}
  */
-export var genBaseColor = function genBaseColor(name, value) {
-  value = intToHex(value);
+var genBaseColor = exports.genBaseColor = function genBaseColor(name, value) {
+  value = (0, _colorUtils.intToHex)(value);
   return '\n.' + name + ' {\n  background-color: ' + value + ' !important;\n  border-color: ' + value + ' !important;\n}\n.' + name + '--text {\n  color: ' + value + ' !important;\n}\n.' + name + '--text input,\n.' + name + '--text textarea {\n  caret-color: ' + value + ' !important;\n}\n.' + name + '--after::after {\n  background: ' + value + ' !important;\n}';
 };
 
@@ -68,7 +85,7 @@ export var genBaseColor = function genBaseColor(name, value) {
  * @param {number} n - The darken/lighten step number
  * @returns {string}
  */
-export var genVariantColor = function genVariantColor(name, value, type, n) {
-  value = intToHex(value);
+var genVariantColor = exports.genVariantColor = function genVariantColor(name, value, type, n) {
+  value = (0, _colorUtils.intToHex)(value);
   return '\n.' + name + '.' + type + '-' + n + ' {\n  background-color: ' + value + ' !important;\n  border-color: ' + value + ' !important;\n}\n.' + name + '--text.text--' + type + '-' + n + ' {\n  color: ' + value + ' !important;\n}\n.' + name + '--text.text--' + type + '-' + n + ' input,\n.' + name + '--text.text--' + type + '-' + n + ' textarea {\n  caret-color: ' + value + ' !important;\n}\n.' + name + '.' + type + '-' + n + '--after::after {\n  background: ' + value + ' !important;\n}';
 };

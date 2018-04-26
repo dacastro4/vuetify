@@ -1,3 +1,9 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 /**
@@ -8,7 +14,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
  * Computed properties for
  * the v-select component
  */
-export default {
+exports.default = {
   computed: {
     classes: function classes() {
       var classes = _extends({}, this.genSoloClasses(), {
@@ -22,7 +28,8 @@ export default {
         'input-group--multi-line': this.multiLine,
         'input-group--chips': this.chips,
         'input-group--multiple': this.multiple,
-        'input-group--open': this.menuIsVisible
+        'input-group--open': this.menuIsVisible,
+        'input-group--select--selecting-index': this.selectedIndex > -1
       });
 
       if (this.hasError) {
@@ -111,26 +118,20 @@ export default {
         return this.lazySearch;
       },
       set: function set(val) {
-        var _this2 = this;
-
-        if (!this.isAutocomplete || this.selectedIndex > -1) return;
+        if (!this.isAutocomplete || !this.multiple && this.selectedIndex > -1) return;
 
         this.lazySearch = val;
 
-        clearTimeout(this.searchTimeout);
-
-        this.searchTimeout = setTimeout(function () {
-          _this2.$emit('update:searchInput', val);
-        }, this.debounceSearch);
+        this.$emit('update:searchInput', val);
       }
     },
     selectedItem: function selectedItem() {
-      var _this3 = this;
+      var _this2 = this;
 
       if (this.isMultiple) return null;
 
       return this.selectedItems.find(function (i) {
-        return _this3.getValue(i) === _this3.getValue(_this3.inputValue);
+        return _this2.getValue(i) === _this2.getValue(_this2.inputValue);
       });
     },
     shouldOffset: function shouldOffset() {

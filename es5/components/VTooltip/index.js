@@ -1,8 +1,18 @@
-import VTooltip from './VTooltip';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VTooltip = require('./VTooltip');
+
+var _VTooltip2 = _interopRequireDefault(_VTooltip);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* istanbul ignore next */
-VTooltip.install = function install(Vue) {
-  Vue.component(VTooltip.name, VTooltip);
+_VTooltip2.default.install = function install(Vue) {
+  Vue.component(_VTooltip2.default.name, _VTooltip2.default);
 };
 
-export default VTooltip;
+exports.default = _VTooltip2.default;

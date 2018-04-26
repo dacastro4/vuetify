@@ -1,25 +1,45 @@
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+'use strict';
 
-// Components
-import VIcon from '../../components/VIcon';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VIcon = require('../../components/VIcon');
+
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+var _bootable = require('../../mixins/bootable');
+
+var _bootable2 = _interopRequireDefault(_bootable);
+
+var _toggleable = require('../../mixins/toggleable');
+
+var _toggleable2 = _interopRequireDefault(_toggleable);
+
+var _registrable = require('../../mixins/registrable');
+
+var _transitions = require('../transitions');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; } // Components
+
 
 // Mixins
-import Bootable from '../../mixins/bootable';
-import Toggleable from '../../mixins/toggleable';
-import { inject as RegistrableInject } from '../../mixins/registrable';
+
 
 // Transitions
-import { VExpandTransition } from '../transitions';
+
 
 /**
  * List group
  *
  * @component
  */
-export default {
+exports.default = {
   name: 'v-list-group',
 
-  mixins: [Bootable, RegistrableInject('list', 'v-list-group', 'v-list'), Toggleable],
+  mixins: [_bootable2.default, (0, _registrable.inject)('list', 'v-list-group', 'v-list'), _toggleable2.default],
 
   inject: ['listClick'],
 
@@ -103,17 +123,19 @@ export default {
       this.isActive = !this.isActive;
     },
     genIcon: function genIcon(icon) {
-      return this.$createElement(VIcon, icon);
+      return this.$createElement(_VIcon2.default, icon);
     },
     genAppendIcon: function genAppendIcon() {
-      var icon = !this.subGroup ? this.appendIcon : '';
+      var icon = !this.subGroup ? this.appendIcon : false;
 
-      return this.$createElement('li', {
+      if (!icon && !this.$slots.appendIcon) return null;
+
+      return this.$createElement('div', {
         staticClass: 'list__group__header__append-icon'
       }, [this.$slots.appendIcon || this.genIcon(icon)]);
     },
     genGroup: function genGroup() {
-      return this.$createElement('ul', {
+      return this.$createElement('div', {
         staticClass: 'list__group__header',
         'class': this.headerClasses,
         on: Object.assign({}, {
@@ -123,7 +145,7 @@ export default {
       }, [this.genPrependIcon(), this.$slots.activator, this.genAppendIcon()]);
     },
     genItems: function genItems() {
-      return this.$createElement('ul', {
+      return this.$createElement('div', {
         staticClass: 'list__group__items',
         'class': this.itemsClasses,
         directives: [{
@@ -134,9 +156,11 @@ export default {
       }, this.showLazyContent(this.$slots.default));
     },
     genPrependIcon: function genPrependIcon() {
-      var icon = this.prependIcon ? this.prependIcon : this.subGroup ? 'arrow_drop_down' : '';
+      var icon = this.prependIcon ? this.prependIcon : this.subGroup ? 'arrow_drop_down' : false;
 
-      return this.$createElement('li', {
+      if (!icon && !this.$slots.prependIcon) return null;
+
+      return this.$createElement('div', {
         staticClass: 'list__group__header__prepend-icon',
         'class': _defineProperty({}, this.activeClass, this.isActive)
       }, [this.$slots.prependIcon || this.genIcon(icon)]);
@@ -151,9 +175,9 @@ export default {
   },
 
   render: function render(h) {
-    return h('li', {
+    return h('div', {
       staticClass: 'list__group',
       'class': this.groupClasses
-    }, [this.genGroup(), h(VExpandTransition, [this.genItems()])]);
+    }, [this.genGroup(), h(_transitions.VExpandTransition, [this.genItems()])]);
   }
 };

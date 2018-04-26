@@ -1,15 +1,40 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-import VBtn from '../components/VBtn';
-import VIcon from '../components/VIcon';
-import VSelect from '../components/VSelect';
+var _VBtn = require('../components/VBtn');
 
-import Filterable from './filterable';
-import Themeable from './themeable';
-import Loadable from './loadable';
+var _VBtn2 = _interopRequireDefault(_VBtn);
 
-import { getObjectValueByPath } from '../util/helpers';
-import { consoleWarn } from '../util/console';
+var _VIcon = require('../components/VIcon');
+
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+var _VSelect = require('../components/VSelect');
+
+var _VSelect2 = _interopRequireDefault(_VSelect);
+
+var _filterable = require('./filterable');
+
+var _filterable2 = _interopRequireDefault(_filterable);
+
+var _themeable = require('./themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+var _loadable = require('./loadable');
+
+var _loadable2 = _interopRequireDefault(_loadable);
+
+var _helpers = require('../util/helpers');
+
+var _console = require('../util/console');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * DataIterable
@@ -20,14 +45,8 @@ import { consoleWarn } from '../util/console';
  * providing selection, pagination, sorting and filtering.
  *
  */
-export default {
+exports.default = {
   name: 'data-iterable',
-
-  components: {
-    VBtn: VBtn,
-    VIcon: VIcon,
-    VSelect: VSelect
-  },
 
   data: function data() {
     return {
@@ -48,7 +67,7 @@ export default {
   },
 
 
-  mixins: [Filterable, Loadable, Themeable],
+  mixins: [_filterable2.default, _loadable2.default, _themeable2.default],
 
   props: {
     expand: Boolean,
@@ -58,6 +77,14 @@ export default {
     noResultsText: {
       type: String,
       default: 'No matching records found'
+    },
+    nextIcon: {
+      type: String,
+      default: 'chevron_right'
+    },
+    prevIcon: {
+      type: String,
+      default: 'chevron_left'
     },
     rowsPerPageItems: {
       type: Array,
@@ -98,8 +125,8 @@ export default {
         if (index === null) return items;
 
         return items.sort(function (a, b) {
-          var sortA = getObjectValueByPath(a, index);
-          var sortB = getObjectValueByPath(b, index);
+          var sortA = (0, _helpers.getObjectValueByPath)(a, index);
+          var sortB = (0, _helpers.getObjectValueByPath)(b, index);
 
           if (isDescending) {
             var _ref = [sortB, sortA];
@@ -219,15 +246,15 @@ export default {
   },
 
   watch: {
-    search: function search() {
-      this.updatePagination({ page: 1, totalItems: this.itemsLength });
+    itemsLength: function itemsLength(totalItems) {
+      this.updatePagination({ page: 1, totalItems: totalItems });
     }
   },
 
   methods: {
     initPagination: function initPagination() {
       if (!this.rowsPerPageItems.length) {
-        consoleWarn('The prop \'rows-per-page-items\' can not be empty', this);
+        (0, _console.consoleWarn)('The prop \'rows-per-page-items\' can not be empty', this);
       } else {
         this.defaultPagination.rowsPerPage = this.rowsPerPageItems[0];
       }
@@ -312,7 +339,7 @@ export default {
         },
         set: function set(value) {
           if (itemKey == null) {
-            consoleWarn('"' + keyProp + '" attribute must be defined for item', _this4);
+            (0, _console.consoleWarn)('"' + keyProp + '" attribute must be defined for item', _this4);
           }
 
           var selected = _this4.value.slice();
@@ -329,7 +356,7 @@ export default {
         },
         set: function set(value) {
           if (itemKey == null) {
-            consoleWarn('"' + keyProp + '" attribute must be defined for item', _this4);
+            (0, _console.consoleWarn)('"' + keyProp + '" attribute must be defined for item', _this4);
           }
 
           if (!_this4.expand) {
@@ -359,7 +386,7 @@ export default {
     genPrevIcon: function genPrevIcon() {
       var _this5 = this;
 
-      return this.$createElement('v-btn', {
+      return this.$createElement(_VBtn2.default, {
         props: {
           disabled: this.computedPagination.page === 1,
           icon: true,
@@ -376,7 +403,7 @@ export default {
         attrs: {
           'aria-label': 'Previous page' // TODO: Localization
         }
-      }, [this.$createElement('v-icon', 'chevron_left')]);
+      }, [this.$createElement(_VIcon2.default, this.prevIcon)]);
     },
     genNextIcon: function genNextIcon() {
       var _this6 = this;
@@ -384,7 +411,7 @@ export default {
       var pagination = this.computedPagination;
       var disabled = pagination.rowsPerPage < 0 || pagination.page * pagination.rowsPerPage >= this.itemsLength || this.pageStop < 0;
 
-      return this.$createElement('v-btn', {
+      return this.$createElement(_VBtn2.default, {
         props: {
           disabled: disabled,
           icon: true,
@@ -401,14 +428,14 @@ export default {
         attrs: {
           'aria-label': 'Next page' // TODO: Localization
         }
-      }, [this.$createElement('v-icon', 'chevron_right')]);
+      }, [this.$createElement(_VIcon2.default, this.nextIcon)]);
     },
     genSelect: function genSelect() {
       var _this7 = this;
 
       return this.$createElement('div', {
         'class': this.actionsSelectClasses
-      }, [this.rowsPerPageText, this.$createElement('v-select', {
+      }, [this.rowsPerPageText, this.$createElement(_VSelect2.default, {
         attrs: {
           'aria-label': this.rowsPerPageText
         },

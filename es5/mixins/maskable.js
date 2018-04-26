@@ -1,17 +1,12 @@
-/**
- * Maskable
- *
- * @mixin
- *
- * Creates an input mask that is
- * generated from a masked str
- *
- * Example: mask="#### #### #### ####"
- */
+'use strict';
 
-import { isMaskDelimiter, maskText as _maskText, unmaskText as _unmaskText } from '../util/mask';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-export default {
+var _mask = require('../util/mask');
+
+exports.default = {
   name: 'maskable',
 
   data: function data() {
@@ -59,18 +54,18 @@ export default {
       if (!this.$refs.input) return;
 
       var oldValue = this.$refs.input.value;
-      var newValue = this.maskText(_unmaskText(this.lazyValue));
+      var newValue = this.maskText((0, _mask.unmaskText)(this.lazyValue));
       var position = 0;
       var selection = this.selection;
 
       for (var index = 0; index < selection; index++) {
-        isMaskDelimiter(oldValue[index]) || position++;
+        (0, _mask.isMaskDelimiter)(oldValue[index]) || position++;
       }
 
       selection = 0;
       if (newValue) {
         for (var _index = 0; _index < newValue.length; _index++) {
-          isMaskDelimiter(newValue[_index]) || position--;
+          (0, _mask.isMaskDelimiter)(newValue[_index]) || position--;
           selection++;
           if (position <= 0) break;
         }
@@ -115,7 +110,7 @@ export default {
       if (newValue) {
         for (var index = 0; index < newValue.length; index++) {
           if (this.lazySelection <= 0) break;
-          isMaskDelimiter(newValue[index]) || this.lazySelection--;
+          (0, _mask.isMaskDelimiter)(newValue[index]) || this.lazySelection--;
           selection++;
         }
       }
@@ -125,10 +120,10 @@ export default {
       this.$emit('input', this.returnMaskedValue ? this.$refs.input.value : this.lazyValue);
     },
     maskText: function maskText(text) {
-      return this.mask ? _maskText(text, this.masked, this.dontFillMaskBlanks) : text;
+      return this.mask ? (0, _mask.maskText)(text, this.masked, this.dontFillMaskBlanks) : text;
     },
     unmaskText: function unmaskText(text) {
-      return this.mask && !this.returnMaskedValue ? _unmaskText(text) : text;
+      return this.mask && !this.returnMaskedValue ? (0, _mask.unmaskText)(text) : text;
     },
 
     // When the input changes and is
@@ -143,8 +138,17 @@ export default {
       this.lazySelection = 0;
 
       for (var index = 0; index < this.selection; index++) {
-        isMaskDelimiter(input.value[index]) || this.lazySelection++;
+        (0, _mask.isMaskDelimiter)(input.value[index]) || this.lazySelection++;
       }
     }
   }
-};
+}; /**
+    * Maskable
+    *
+    * @mixin
+    *
+    * Creates an input mask that is
+    * generated from a masked str
+    *
+    * Example: mask="#### #### #### ####"
+    */

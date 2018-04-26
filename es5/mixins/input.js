@@ -1,18 +1,33 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _loadable = require('./loadable');
+
+var _loadable2 = _interopRequireDefault(_loadable);
+
+var _themeable = require('./themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+var _validatable = require('./validatable');
+
+var _validatable2 = _interopRequireDefault(_validatable);
+
+var _VIcon = require('../components/VIcon');
+
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-import Loadable from './loadable';
-import Themeable from './themeable';
-import Validatable from './validatable';
-import VIcon from '../components/VIcon';
-
-export default {
+exports.default = {
   name: 'input',
 
-  components: {
-    VIcon: VIcon
-  },
-
-  mixins: [Loadable, Themeable, Validatable],
+  mixins: [_loadable2.default, _themeable2.default, _validatable2.default],
 
   data: function data() {
     return {
@@ -90,7 +105,7 @@ export default {
     genMessages: function genMessages() {
       var messages = null;
 
-      if ((this.hint && this.isFocused || this.hint && this.persistentHint) && this.validations.length === 0) {
+      if (this.hint && (this.isFocused || this.persistentHint) && !this.validations.length) {
         messages = [this.genHint()];
       } else if (this.validations.length) {
         messages = [this.genError(this.validations[0])];
@@ -122,7 +137,7 @@ export default {
       var icon = shouldClear ? 'clear' : this[type + 'Icon'];
       var callback = shouldClear ? this.clearableCallback : this[type + 'IconCb'] || defaultCallback;
 
-      return this.$createElement('v-icon', {
+      return this.$createElement(_VIcon2.default, {
         'class': (_class = {}, _defineProperty(_class, 'input-group__' + type + '-icon', true), _defineProperty(_class, 'input-group__icon-cb', !!callback), _defineProperty(_class, 'input-group__icon-clearable', shouldClear), _class),
         props: {
           disabled: this.disabled

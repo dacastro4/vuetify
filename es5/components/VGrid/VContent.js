@@ -1,13 +1,22 @@
-// Styles
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_content.styl');
 
-// Mixins
-import SSRBootable from '../../mixins/ssr-bootable';
+var _ssrBootable = require('../../mixins/ssr-bootable');
 
-export default {
+var _ssrBootable2 = _interopRequireDefault(_ssrBootable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Styles
+exports.default = {
   name: 'v-content',
 
-  mixins: [SSRBootable],
+  mixins: [_ssrBootable2.default],
 
   props: {
     tag: {
@@ -47,3 +56,5 @@ export default {
     return h(this.tag, data, [h('div', { staticClass: 'content--wrap' }, this.$slots.default)]);
   }
 };
+
+// Mixins

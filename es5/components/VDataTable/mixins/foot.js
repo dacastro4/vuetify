@@ -1,4 +1,9 @@
-export default {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
   methods: {
     genTFoot: function genTFoot() {
       if (!this.$slots.footer) {
@@ -6,7 +11,7 @@ export default {
       }
 
       var footer = this.$slots.footer;
-      var row = this.needsTR(footer) ? this.genTR(footer) : footer;
+      var row = this.hasTag(footer, 'td') ? this.genTR(footer) : footer;
 
       return this.$createElement('tfoot', [row]);
     },

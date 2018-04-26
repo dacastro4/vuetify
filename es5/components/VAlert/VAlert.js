@@ -1,19 +1,33 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_alerts.styl');
 
-import VIcon from '../VIcon';
+var _VIcon = require('../VIcon');
 
-import Colorable from '../../mixins/colorable';
-import Toggleable from '../../mixins/toggleable';
-import Transitionable from '../../mixins/transitionable';
+var _VIcon2 = _interopRequireDefault(_VIcon);
 
-export default {
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _toggleable = require('../../mixins/toggleable');
+
+var _toggleable2 = _interopRequireDefault(_toggleable);
+
+var _transitionable = require('../../mixins/transitionable');
+
+var _transitionable2 = _interopRequireDefault(_transitionable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-alert',
 
-  components: {
-    VIcon: VIcon
-  },
-
-  mixins: [Colorable, Toggleable, Transitionable],
+  mixins: [_colorable2.default, _toggleable2.default, _transitionable2.default],
 
   props: {
     dismissible: Boolean,
@@ -65,7 +79,7 @@ export default {
     var children = [h('div', this.$slots.default)];
 
     if (this.computedIcon) {
-      children.unshift(h('v-icon', {
+      children.unshift(h(_VIcon2.default, {
         'class': 'alert__icon'
       }, this.computedIcon));
     }
@@ -76,7 +90,7 @@ export default {
         on: { click: function click() {
             return _this.$emit('input', false);
           } }
-      }, [h(VIcon, {
+      }, [h(_VIcon2.default, {
         props: {
           right: true
         }

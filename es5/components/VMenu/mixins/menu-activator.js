@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Menu activator
  *
@@ -6,7 +11,7 @@
  * Handles the click and hover activation
  * Supports slotted and detached activators
  */
-export default {
+exports.default = {
   methods: {
     activatorClickHandler: function activatorClickHandler(e) {
       if (this.disabled) return;

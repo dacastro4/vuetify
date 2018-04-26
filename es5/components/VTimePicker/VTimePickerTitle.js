@@ -1,32 +1,36 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_time-picker-title.styl');
 
+var _pickerButton = require('../../mixins/picker-button');
+
+var _pickerButton2 = _interopRequireDefault(_pickerButton);
+
+var _util = require('../VDatePicker/util');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // Mixins
-import PickerButton from '../../mixins/picker-button';
-
-// Utils
-import { pad } from '../VDatePicker/util';
-
-export default {
+exports.default = {
   name: 'v-time-picker-title',
 
-  mixins: [PickerButton],
+  mixins: [_pickerButton2.default],
 
   props: {
     ampm: Boolean,
-    selectingHour: Boolean,
-    value: String
-  },
-
-  computed: {
-    hour: function hour() {
-      return parseInt(this.value.split(':')[0], 10);
+    hour: Number,
+    minute: Number,
+    period: {
+      type: String,
+      validator: function validator(period) {
+        return period === 'am' || period === 'pm';
+      }
     },
-    minute: function minute() {
-      return parseInt(this.value.split(':')[1], 10);
-    },
-    period: function period() {
-      return this.hour < 12 ? 'am' : 'pm';
-    }
+    selectingHour: Boolean
   },
 
   methods: {
@@ -36,9 +40,12 @@ export default {
         hour = hour ? (hour - 1) % 12 + 1 : 12;
       }
 
+      var displayedHour = this.hour == null ? '--' : this.ampm ? hour : (0, _util.pad)(hour);
+      var displayedMinute = this.minute == null ? '--' : (0, _util.pad)(this.minute);
+
       return this.$createElement('div', {
         'class': 'time-picker-title__time'
-      }, [this.genPickerButton('selectingHour', true, this.ampm ? hour : pad(hour)), this.$createElement('span', ':'), this.genPickerButton('selectingHour', false, pad(this.minute))]);
+      }, [this.genPickerButton('selectingHour', true, displayedHour), this.$createElement('span', ':'), this.genPickerButton('selectingHour', false, displayedMinute)]);
     },
     genAmPm: function genAmPm() {
       return this.$createElement('div', {
@@ -53,3 +60,5 @@ export default {
     }, [this.genTime(), this.ampm ? this.genAmPm() : null]);
   }
 };
+
+// Utils

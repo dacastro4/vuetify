@@ -1,8 +1,18 @@
-import VSelect from './VSelect';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VSelect = require('./VSelect');
+
+var _VSelect2 = _interopRequireDefault(_VSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* istanbul ignore next */
-VSelect.install = function install(Vue) {
-  Vue.component(VSelect.name, VSelect);
+_VSelect2.default.install = function install(Vue) {
+  Vue.component(_VSelect2.default.name, _VSelect2.default);
 };
 
-export default VSelect;
+exports.default = _VSelect2.default;

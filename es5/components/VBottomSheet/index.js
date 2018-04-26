@@ -1,8 +1,18 @@
-import VBottomSheet from './VBottomSheet';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VBottomSheet = require('./VBottomSheet');
+
+var _VBottomSheet2 = _interopRequireDefault(_VBottomSheet);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* istanbul ignore next */
-VBottomSheet.install = function install(Vue) {
-  Vue.component(VBottomSheet.name, VBottomSheet);
+_VBottomSheet2.default.install = function install(Vue) {
+  Vue.component(_VBottomSheet2.default.name, _VBottomSheet2.default);
 };
 
-export default VBottomSheet;
+exports.default = _VBottomSheet2.default;

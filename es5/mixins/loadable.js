@@ -1,3 +1,15 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VProgressLinear = require('../components/VProgressLinear');
+
+var _VProgressLinear2 = _interopRequireDefault(_VProgressLinear);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Loadable
  *
@@ -7,7 +19,7 @@
  * Can use a default bar with a specific color
  * or designate a custom progress linear bar
  */
-export default {
+exports.default = {
   name: 'loadable',
 
   props: {
@@ -21,7 +33,7 @@ export default {
     genProgress: function genProgress() {
       if (this.loading === false) return null;
 
-      return this.$slots.progress || this.$createElement('v-progress-linear', {
+      return this.$slots.progress || this.$createElement(_VProgressLinear2.default, {
         props: {
           color: this.loading === true || this.loading === '' ? this.color || 'primary' : this.loading,
           height: 2,

@@ -1,8 +1,18 @@
-import VSnackbar from './VSnackbar';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VSnackbar = require('./VSnackbar');
+
+var _VSnackbar2 = _interopRequireDefault(_VSnackbar);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* istanbul ignore next */
-VSnackbar.install = function install(Vue) {
-  Vue.component(VSnackbar.name, VSnackbar);
+_VSnackbar2.default.install = function install(Vue) {
+  Vue.component(_VSnackbar2.default.name, _VSnackbar2.default);
 };
 
-export default VSnackbar;
+exports.default = _VSnackbar2.default;

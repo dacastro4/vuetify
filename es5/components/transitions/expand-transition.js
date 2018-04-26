@@ -1,13 +1,17 @@
-import { addOnceEventListener } from '../../util/helpers';
+'use strict';
 
-export default function () {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function () {
   var expandedParentClass = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
   return {
     enter: function enter(el, done) {
       el._parent = el.parentNode;
 
-      addOnceEventListener(el, 'transitionend', done);
+      (0, _helpers.addOnceEventListener)(el, 'transitionend', done);
 
       // Get height that is to be scrolled
       el.style.overflow = 'hidden';
@@ -25,7 +29,7 @@ export default function () {
     },
     leave: function leave(el, done) {
       // Remove initial transition
-      addOnceEventListener(el, 'transitionend', done);
+      (0, _helpers.addOnceEventListener)(el, 'transitionend', done);
 
       // Set height before we transition to 0
       el.style.overflow = 'hidden';
@@ -36,7 +40,9 @@ export default function () {
       }, 100);
     },
     afterLeave: function afterLeave(el) {
-      expandedParentClass && el._parent.classList.remove(expandedParentClass);
+      expandedParentClass && el._parent && el._parent.classList.remove(expandedParentClass);
     }
   };
-}
+};
+
+var _helpers = require('../../util/helpers');

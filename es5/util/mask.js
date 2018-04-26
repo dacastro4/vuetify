@@ -1,3 +1,25 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Default delimiter RegExp
+ *
+ * @type {RegExp}
+ */
+var defaultDelimiters = exports.defaultDelimiters = /[-!$%^&*()_+|~=`{}[\]:";'<>?,./\\ ]/;
+
+/**
+ *
+ * @param {String} char
+ *
+ * @return {Boolean}
+ */
+var isMaskDelimiter = exports.isMaskDelimiter = function isMaskDelimiter(char) {
+  return char && defaultDelimiters.test(char);
+};
+
 /**
  * Mask keys
  *
@@ -46,20 +68,13 @@ var allowedMasks = {
   }
 
   /**
-   * Default delimiter RegExp
+   * Is Character mask
    *
-   * @type {RegExp}
+   * @param  {String} char
+   *
+   * @return {Boolean}
    */
-};export var defaultDelimiters = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/\\ ]/;
-
-/**
- * Is Character mask
- *
- * @param  {String} char
- *
- * @return {Boolean}
- */
-var isMask = function isMask(char) {
+};var isMask = function isMask(char) {
   return allowedMasks.hasOwnProperty(char);
 };
 
@@ -73,16 +88,6 @@ var isMask = function isMask(char) {
  */
 var convert = function convert(mask, char) {
   return allowedMasks[mask].convert ? allowedMasks[mask].convert(char) : char;
-};
-
-/**
- *
- * @param {String} char
- *
- * @return {Boolean}
- */
-export var isMaskDelimiter = function isMaskDelimiter(char) {
-  return char && defaultDelimiters.test(char);
 };
 
 /**
@@ -110,7 +115,7 @@ var maskValidates = function maskValidates(mask, char) {
  *
  * @return {String}
  */
-export var maskText = function maskText(text, masked, dontFillMaskBlanks) {
+var maskText = exports.maskText = function maskText(text, masked, dontFillMaskBlanks) {
   if (text == null) return '';
   text = String(text);
   if (!masked.length || !text.length) return text;
@@ -155,6 +160,6 @@ export var maskText = function maskText(text, masked, dontFillMaskBlanks) {
  *
  * @return {String}
  */
-export var unmaskText = function unmaskText(text) {
+var unmaskText = exports.unmaskText = function unmaskText(text) {
   return text ? String(text).replace(new RegExp(defaultDelimiters, 'g'), '') : text;
 };

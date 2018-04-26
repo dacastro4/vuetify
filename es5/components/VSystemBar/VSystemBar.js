@@ -1,13 +1,29 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_system-bars.styl');
 
-import Applicationable from '../../mixins/applicationable';
-import Colorable from '../../mixins/colorable';
-import Themeable from '../../mixins/themeable';
+var _applicationable = require('../../mixins/applicationable');
 
-export default {
+var _applicationable2 = _interopRequireDefault(_applicationable);
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _themeable = require('../../mixins/themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-system-bar',
 
-  mixins: [Applicationable('bar', ['height', 'window']), Colorable, Themeable],
+  mixins: [(0, _applicationable2.default)('bar', ['height', 'window']), _colorable2.default, _themeable2.default],
 
   props: {
     height: {

@@ -1,14 +1,19 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Tabs touch
  *
  * @mixin
  */
-export default {
+exports.default = {
   methods: {
     newOffset: function newOffset(direction) {
       var clientWidth = this.$refs.wrapper.clientWidth;
 
-      if (direction === 'prepend') {
+      if (direction === 'prev') {
         return Math.max(this.scrollOffset - clientWidth, 0);
       } else {
         return Math.min(this.scrollOffset + clientWidth, this.$refs.container.clientWidth - clientWidth);

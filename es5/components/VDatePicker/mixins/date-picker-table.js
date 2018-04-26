@@ -1,13 +1,24 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../../src/stylus/components/_date-picker-table.styl');
 
+var _touch = require('../../../directives/touch');
+
+var _touch2 = _interopRequireDefault(_touch);
+
+var _isDateAllowed = require('.././util/isDateAllowed');
+
+var _isDateAllowed2 = _interopRequireDefault(_isDateAllowed);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // Directives
-import Touch from '../../../directives/touch';
-
-// Util
-import isValueAllowed from '../../../util/isValueAllowed';
-
-export default {
-  directives: { Touch: Touch },
+exports.default = {
+  directives: { Touch: _touch2.default },
 
   data: function data() {
     return {
@@ -18,12 +29,7 @@ export default {
 
 
   props: {
-    allowedDates: {
-      type: [Array, Object, Function],
-      default: function _default() {
-        return null;
-      }
-    },
+    allowedDates: Function,
     current: String,
     disabled: Boolean,
     format: {
@@ -34,6 +40,8 @@ export default {
       type: String,
       default: 'en-us'
     },
+    min: String,
+    max: String,
     scrollable: Boolean,
     tableDate: {
       type: String,
@@ -70,7 +78,8 @@ export default {
 
       var classes = {
         'btn--active': isSelected,
-        'btn--flat': !isSelected || isFloating && isSelected && !isDisabled && !this.disabled,
+        'btn--flat': !isSelected,
+        'btn--icon': isSelected && !isDisabled && isFloating,
         'btn--floating': isFloating,
         'btn--depressed': !isFloating && isSelected,
         'btn--disabled': isDisabled || this.disabled && isSelected,
@@ -84,7 +93,7 @@ export default {
     genButton: function genButton(value, isFloating) {
       var _this = this;
 
-      var isDisabled = !isValueAllowed(value, this.allowedDates);
+      var isDisabled = !(0, _isDateAllowed2.default)(value, this.min, this.max, this.allowedDates);
 
       return this.$createElement('button', {
         staticClass: 'btn',
@@ -137,3 +146,5 @@ export default {
     }
   }
 };
+
+// Utils

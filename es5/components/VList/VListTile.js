@@ -1,22 +1,42 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _colorable = require('../../mixins/colorable');
 
-// Mixins
-import Colorable from '../../mixins/colorable';
-import Routable from '../../mixins/routable';
-import Toggleable from '../../mixins/toggleable';
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _routable = require('../../mixins/routable');
+
+var _routable2 = _interopRequireDefault(_routable);
+
+var _toggleable = require('../../mixins/toggleable');
+
+var _toggleable2 = _interopRequireDefault(_toggleable);
+
+var _ripple = require('../../directives/ripple');
+
+var _ripple2 = _interopRequireDefault(_ripple);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; } // Mixins
+
 
 // Directives
-import Ripple from '../../directives/ripple';
 
-export default {
+
+exports.default = {
   name: 'v-list-tile',
 
-  mixins: [Colorable, Routable, Toggleable],
+  mixins: [_colorable2.default, _routable2.default, _toggleable2.default],
 
   directives: {
-    Ripple: Ripple
+    Ripple: _ripple2.default
   },
 
   inheritAttrs: false,
@@ -69,7 +89,7 @@ export default {
 
     data.attrs = Object.assign({}, data.attrs, this.$attrs);
 
-    return h('li', {
+    return h('div', {
       'class': this.listClasses,
       attrs: {
         disabled: this.disabled

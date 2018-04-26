@@ -1,8 +1,27 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.createSimpleFunctional = createSimpleFunctional;
+exports.createSimpleTransition = createSimpleTransition;
+exports.createJavaScriptTransition = createJavaScriptTransition;
+exports.directiveConfig = directiveConfig;
+exports.addOnceEventListener = addOnceEventListener;
+exports.getObjectValueByPath = getObjectValueByPath;
+exports.createRange = createRange;
+exports.getZIndex = getZIndex;
+exports.escapeHTML = escapeHTML;
+exports.filterObjectOnKeys = filterObjectOnKeys;
+exports.filterChildren = filterChildren;
+exports.convertToUnit = convertToUnit;
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-export function createSimpleFunctional(c) {
+function createSimpleFunctional(c) {
   var el = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'div';
   var name = arguments[2];
 
@@ -23,7 +42,7 @@ export function createSimpleFunctional(c) {
   };
 }
 
-export function createSimpleTransition(name) {
+function createSimpleTransition(name) {
   var origin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'top center 0';
   var mode = arguments[2];
 
@@ -59,7 +78,7 @@ export function createSimpleTransition(name) {
   };
 }
 
-export function createJavaScriptTransition(name, functions) {
+function createJavaScriptTransition(name, functions) {
   var css = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
   var mode = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'in-out';
 
@@ -92,13 +111,13 @@ export function createJavaScriptTransition(name, functions) {
   };
 }
 
-export function directiveConfig(binding) {
+function directiveConfig(binding) {
   var defaults = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
   return Object.assign({}, defaults, binding.modifiers, { value: binding.arg }, binding.value || {});
 }
 
-export function addOnceEventListener(el, event, cb) {
+function addOnceEventListener(el, event, cb) {
   var once = function once() {
     cb();
     el.removeEventListener(event, once, false);
@@ -107,7 +126,7 @@ export function addOnceEventListener(el, event, cb) {
   el.addEventListener(event, once, false);
 }
 
-export function getObjectValueByPath(obj, path) {
+function getObjectValueByPath(obj, path) {
   // credit: http://stackoverflow.com/questions/6491463/accessing-nested-javascript-objects-with-string-key#comment55278413_6491621
   if (!path || path.constructor !== String) return;
   path = path.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
@@ -124,18 +143,19 @@ export function getObjectValueByPath(obj, path) {
   return obj;
 }
 
-export function createRange(length) {
+function createRange(length) {
   return [].concat(_toConsumableArray(Array.from({ length: length }, function (v, k) {
     return k;
   })));
 }
 
-export function getZIndex(el) {
+function getZIndex(el) {
   if (!el || el.nodeType !== Node.ELEMENT_NODE) return 0;
-  var zi = document.defaultView.getComputedStyle(el).getPropertyValue('z-index');
-  if (isNaN(zi)) return getZIndex(el.parentNode);
 
-  return zi;
+  var index = window.getComputedStyle(el).getPropertyValue('z-index');
+
+  if (isNaN(index)) return getZIndex(el.parentNode);
+  return index;
 }
 
 var tagsToReplace = {
@@ -144,13 +164,13 @@ var tagsToReplace = {
   '>': '&gt;'
 };
 
-export function escapeHTML(str) {
+function escapeHTML(str) {
   return str.replace(/[&<>]/g, function (tag) {
     return tagsToReplace[tag] || tag;
   });
 }
 
-export function filterObjectOnKeys(obj, keys) {
+function filterObjectOnKeys(obj, keys) {
   var filtered = {};
 
   for (var i = 0; i < keys.length; i++) {
@@ -163,11 +183,17 @@ export function filterObjectOnKeys(obj, keys) {
   return filtered;
 }
 
-export function filterChildren() {
+function filterChildren() {
   var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var tag = arguments[1];
 
   return array.filter(function (child) {
     return child.componentOptions && child.componentOptions.Ctor.options.name === tag;
   });
+}
+
+function convertToUnit(str) {
+  var unit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'px';
+
+  return isNaN(str) ? str : '' + Number(str) + unit;
 }

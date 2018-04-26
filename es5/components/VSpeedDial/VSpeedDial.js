@@ -1,19 +1,37 @@
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 require('../../../src/stylus/components/_speed-dial.styl');
 
-import Toggleable from '../../mixins/toggleable';
-import Positionable from '../../mixins/positionable';
-import Transitionable from '../../mixins/transitionable';
+var _toggleable = require('../../mixins/toggleable');
 
-import ClickOutside from '../../directives/click-outside';
+var _toggleable2 = _interopRequireDefault(_toggleable);
 
-export default {
+var _positionable = require('../../mixins/positionable');
+
+var _positionable2 = _interopRequireDefault(_positionable);
+
+var _transitionable = require('../../mixins/transitionable');
+
+var _transitionable2 = _interopRequireDefault(_transitionable);
+
+var _clickOutside = require('../../directives/click-outside');
+
+var _clickOutside2 = _interopRequireDefault(_clickOutside);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+exports.default = {
   name: 'v-speed-dial',
 
-  mixins: [Positionable, Toggleable, Transitionable],
+  mixins: [_positionable2.default, _toggleable2.default, _transitionable2.default],
 
-  directives: { ClickOutside: ClickOutside },
+  directives: { ClickOutside: _clickOutside2.default },
 
   props: {
     direction: {

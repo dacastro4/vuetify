@@ -1,9 +1,14 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Tabs computed
  *
  * @mixin
  */
-export default {
+exports.default = {
   computed: {
     activeIndex: function activeIndex() {
       var _this = this;

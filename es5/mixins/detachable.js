@@ -1,7 +1,18 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-import Bootable from './bootable';
-import { consoleWarn } from '../util/console';
+var _bootable = require('./bootable');
+
+var _bootable2 = _interopRequireDefault(_bootable);
+
+var _console = require('../util/console');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function validateAttachTarget(val) {
   var type = typeof val === 'undefined' ? 'undefined' : _typeof(val);
@@ -11,14 +22,14 @@ function validateAttachTarget(val) {
   return val.nodeType === Node.ELEMENT_NODE;
 }
 
-export default {
+exports.default = {
   name: 'detachable',
 
-  mixins: [Bootable],
+  mixins: [_bootable2.default],
 
   props: {
     attach: {
-      type: [Boolean, String, Object],
+      type: null,
       default: false,
       validator: validateAttachTarget
     },
@@ -66,7 +77,7 @@ export default {
       }
 
       if (!target) {
-        consoleWarn('Unable to locate target ' + (this.attach || '[data-app]'), this);
+        (0, _console.consoleWarn)('Unable to locate target ' + (this.attach || '[data-app]'), this);
         return;
       }
 

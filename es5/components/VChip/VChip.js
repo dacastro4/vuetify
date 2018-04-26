@@ -1,18 +1,33 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_chips.styl');
 
-import VIcon from '../VIcon';
-import Colorable from '../../mixins/colorable';
-import Themeable from '../../mixins/themeable';
-import Toggleable from '../../mixins/toggleable';
+var _VIcon = require('../VIcon');
 
-export default {
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+var _colorable = require('../../mixins/colorable');
+
+var _colorable2 = _interopRequireDefault(_colorable);
+
+var _themeable = require('../../mixins/themeable');
+
+var _themeable2 = _interopRequireDefault(_themeable);
+
+var _toggleable = require('../../mixins/toggleable');
+
+var _toggleable2 = _interopRequireDefault(_toggleable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-chip',
 
-  components: {
-    VIcon: VIcon
-  },
-
-  mixins: [Colorable, Themeable, Toggleable],
+  mixins: [_colorable2.default, _themeable2.default, _toggleable2.default],
 
   props: {
     close: Boolean,
@@ -61,7 +76,7 @@ export default {
         }
       };
 
-      return h('div', data, [h(VIcon, 'cancel')]);
+      return h('div', data, [h(_VIcon2.default, 'cancel')]);
     },
     genContent: function genContent(h) {
       var children = [this.$slots.default];

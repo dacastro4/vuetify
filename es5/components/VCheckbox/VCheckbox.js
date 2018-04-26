@@ -1,20 +1,33 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 require('../../../src/stylus/components/_input-groups.styl');
+
 require('../../../src/stylus/components/_selection-controls.styl');
 
-import VIcon from '../VIcon';
-import { VFadeTransition } from '../transitions';
-import Rippleable from '../../mixins/rippleable';
-import Selectable from '../../mixins/selectable';
+var _VIcon = require('../VIcon');
 
-export default {
+var _VIcon2 = _interopRequireDefault(_VIcon);
+
+var _transitions = require('../transitions');
+
+var _rippleable = require('../../mixins/rippleable');
+
+var _rippleable2 = _interopRequireDefault(_rippleable);
+
+var _selectable = require('../../mixins/selectable');
+
+var _selectable2 = _interopRequireDefault(_selectable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
   name: 'v-checkbox',
 
-  components: {
-    VFadeTransition: VFadeTransition,
-    VIcon: VIcon
-  },
-
-  mixins: [Rippleable, Selectable],
+  mixins: [_rippleable2.default, _selectable2.default],
 
   data: function data() {
     return {
@@ -67,7 +80,7 @@ export default {
   },
 
   render: function render(h) {
-    var transition = h('v-fade-transition', [h('v-icon', {
+    var transition = h(_transitions.VFadeTransition, [h(_VIcon2.default, {
       staticClass: 'icon--selection-control',
       'class': {
         'icon--checkbox': this.icon === 'check_box'
@@ -82,7 +95,7 @@ export default {
       attrs: {
         tabindex: this.disabled ? -1 : this.internalTabIndex || this.tabindex,
         role: 'checkbox',
-        'aria-checked': this.inputIndeterminate && 'mixed' || this.isActive && 'true' || 'false',
+        'aria-checked': this.inputIndeterminate ? 'mixed' : this.isActive ? 'true' : 'false',
         'aria-label': this.label
       }
     };

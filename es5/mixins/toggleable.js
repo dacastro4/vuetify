@@ -1,6 +1,13 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.factory = factory;
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-export function factory() {
+function factory() {
   var _watch;
 
   var prop = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'value';
@@ -30,4 +37,4 @@ export function factory() {
 
 var Toggleable = factory();
 
-export default Toggleable;
+exports.default = Toggleable;
