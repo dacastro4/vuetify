@@ -18,11 +18,6 @@ export default {
 
   inject: ['isMandatory', 'name'],
 
-  components: {
-    VFadeTransition,
-    VIcon
-  },
-
   mixins: [
     Colorable,
     Rippleable,
@@ -101,7 +96,7 @@ export default {
         class: this.classes,
         attrs: {
           role: 'radio',
-          'aria-checked': this.isActive && 'true' || 'false',
+          'aria-checked': this.isActive ? 'true' : 'false',
           'aria-label': this.label
         },
         on: {
@@ -126,8 +121,7 @@ export default {
       }, this.$slots.label || this.label)
     },
     toggle () {
-      const mandatory = this.isMandatory &&
-        this.isMandatory() || false
+      const mandatory = !!this.isMandatory && this.isMandatory()
 
       if (!this.disabled && (!this.isActive || !mandatory)) {
         this.$refs.input.checked = true
@@ -146,8 +140,8 @@ export default {
   },
 
   render (h) {
-    const transition = h('v-fade-transition', {}, [
-      h('v-icon', {
+    const transition = h(VFadeTransition, {}, [
+      h(VIcon, {
         staticClass: 'icon--selection-control',
         'class': {
           'icon--radio': this.isActive

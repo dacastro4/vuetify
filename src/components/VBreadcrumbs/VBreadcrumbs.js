@@ -1,4 +1,4 @@
-require('../../stylus/components/_breadcrumbs.styl')
+import '../../stylus/components/_breadcrumbs.styl'
 
 export default {
   name: 'v-breadcrumbs',
@@ -47,20 +47,26 @@ export default {
     genChildren () {
       if (!this.$slots.default) return null
 
+      const h = this.$createElement
       const children = []
       const dividerData = { staticClass: 'breadcrumbs__divider' }
-      const length = this.$slots.default.length
 
-      for (let i = 0; i < length; i++) {
+      let createDividers = false
+      for (let i = 0; i < this.$slots.default.length; i++) {
         const elm = this.$slots.default[i]
-        children.push(elm)
 
-        if (!elm.componentOptions ||
-          elm.componentOptions.tag !== 'v-breadcrumbs-item' ||
-          i === length - 1
-        ) continue
-
-        children.push(this.$createElement('li', dividerData, this.computedDivider))
+        if (
+          !elm.componentOptions ||
+          elm.componentOptions.Ctor.options.name !== 'v-breadcrumbs-item'
+        ) {
+          children.push(elm)
+        } else {
+          if (createDividers) {
+            children.push(h('li', dividerData, this.computedDivider))
+          }
+          children.push(elm)
+          createDividers = true
+        }
       }
 
       return children

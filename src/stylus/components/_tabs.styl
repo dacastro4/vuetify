@@ -8,8 +8,8 @@ tabs__bar($material)
   .tabs__div
     color: $material.tabs.active
 
-    &.tabs__item--disabled
-      color: $material.buttons.disabled
+  .tabs__item--disabled
+    color: $material.buttons.disabled
 
 theme(tabs__bar, "tabs__bar")
 
@@ -29,10 +29,10 @@ theme(tabs__bar, "tabs__bar")
   user-select: none
   width: 32px
 
-  &--prepend
+  &--prev
     left: 4px
 
-  &--append
+  &--next
     right: 4px
 
 .tabs__wrapper
@@ -101,8 +101,7 @@ theme(tabs__bar, "tabs__bar")
       margin-left: auto
 
   &--centered,
-  &--fixed-tabs,
-  &--right
+  &--fixed-tabs
     > .tabs__div:last-child
       margin-right: auto
 
@@ -143,6 +142,9 @@ theme(tabs__bar, "tabs__bar")
 
   &:not(.tabs__item--active)
     opacity: .7
+
+  &--disabled
+    pointer-events: none
 
 .tabs__slider
   height: 2px

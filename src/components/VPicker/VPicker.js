@@ -1,4 +1,4 @@
-require('../../stylus/components/_pickers.styl')
+import '../../stylus/components/_pickers.styl'
 
 // Components
 import VCard from '../VCard'
@@ -10,10 +10,6 @@ import Themeable from '../../mixins/themeable'
 export default {
   name: 'v-picker',
 
-  components: {
-    VCard
-  },
-
   mixins: [Colorable, Themeable],
 
   data () {
@@ -23,10 +19,16 @@ export default {
   },
 
   props: {
+    fullWidth: Boolean,
     landscape: Boolean,
     transition: {
       type: String,
       default: 'fade-transition'
+    },
+    width: {
+      type: [Number, String],
+      default: 290,
+      validator: value => parseInt(value, 10) > 0
     }
   },
 
@@ -56,8 +58,13 @@ export default {
     },
     genBody () {
       return this.$createElement('div', {
-        staticClass: 'picker__body'
-      }, [this.genBodyTransition()])
+        staticClass: 'picker__body',
+        style: this.fullWidth ? undefined : {
+          width: this.width + 'px'
+        }
+      }, [
+        this.genBodyTransition()
+      ])
     },
     genActions () {
       return this.$createElement('div', {
@@ -67,7 +74,7 @@ export default {
   },
 
   render (h) {
-    return h('v-card', {
+    return h(VCard, {
       staticClass: 'picker',
       'class': {
         'picker--landscape': this.landscape,

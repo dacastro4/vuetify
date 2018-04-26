@@ -1,4 +1,4 @@
-require('../../stylus/components/_navigation-drawer.styl')
+import '../../stylus/components/_navigation-drawer.styl'
 
 // Mixins
 import Applicationable from '../../mixins/applicationable'
@@ -114,7 +114,8 @@ export default {
       }
     },
     isMobile () {
-      return !this.permanent &&
+      return !this.stateless &&
+        !this.permanent &&
         !this.temporary &&
         this.$vuetify.breakpoint.width < parseInt(this.mobileBreakPoint, 10)
     },
@@ -173,8 +174,8 @@ export default {
 
   watch: {
     $route () {
-      if (this.reactsToRoute) {
-        this.isActive = !this.closeConditional()
+      if (this.reactsToRoute && this.closeConditional()) {
+        this.isActive = false
       }
     },
     isActive (val) {
@@ -240,7 +241,7 @@ export default {
       }
     },
     closeConditional () {
-      return this.reactsToClick
+      return this.isActive && this.reactsToClick
     },
     genDirectives () {
       const directives = [{
@@ -284,7 +285,7 @@ export default {
       this.calculateTouchArea()
 
       if (Math.abs(e.touchendX - e.touchstartX) < 100) return
-      else if (!this.right &&
+      if (!this.right &&
         e.touchstartX <= this.touchArea.left
       ) this.isActive = true
       else if (this.right && this.isActive) this.isActive = false
@@ -294,7 +295,7 @@ export default {
       this.calculateTouchArea()
 
       if (Math.abs(e.touchendX - e.touchstartX) < 100) return
-      else if (this.right &&
+      if (this.right &&
         e.touchstartX >= this.touchArea.right
       ) this.isActive = true
       else if (!this.right && this.isActive) this.isActive = false
@@ -323,6 +324,10 @@ export default {
           if (!this.miniVariant) return
 
           this.$emit('update:miniVariant', false)
+        },
+        transitionend: e => {
+          this.$emit('transitionend', e)
+          window.dispatchEvent(new Event('resize'))
         }
       }
     }

@@ -1,4 +1,4 @@
-require('../../stylus/components/_date-picker-title.styl')
+import '../../stylus/components/_date-picker-title.styl'
 
 // Components
 import VIcon from '../VIcon'
@@ -8,10 +8,6 @@ import PickerButton from '../../mixins/picker-button'
 
 export default {
   name: 'v-date-picker-title',
-
-  components: {
-    VIcon
-  },
 
   mixins: [PickerButton],
 
@@ -31,6 +27,9 @@ export default {
     },
     yearIcon: {
       type: String
+    },
+    value: {
+      type: String
     }
   },
 
@@ -41,13 +40,14 @@ export default {
   },
 
   watch: {
-    date: 'setReversing',
-    year: 'setReversing'
+    value (val, prev) {
+      this.isReversing = val < prev
+    }
   },
 
   methods: {
     genYearIcon () {
-      return this.$createElement('v-icon', {
+      return this.$createElement(VIcon, {
         props: {
           dark: true
         }
@@ -62,20 +62,17 @@ export default {
     genTitleText () {
       return this.$createElement('transition', {
         props: {
-          name: this.computedTransition,
+          name: this.computedTransition
         }
       }, [
         this.$createElement('div', {
-          domProps: { innerHTML: this.date },
-          key: this.date
+          domProps: { innerHTML: this.date || '&nbsp;' },
+          key: this.value
         })
       ])
     },
     genTitleDate (title) {
       return this.genPickerButton('selectingYear', false, this.genTitleText(title), 'date-picker-title__date')
-    },
-    setReversing (val, prev) {
-      this.isReversing = val < prev
     }
   },
 

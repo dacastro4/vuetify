@@ -1,4 +1,4 @@
-require('../../stylus/components/_sliders.styl')
+import '../../stylus/components/_sliders.styl'
 
 import { addOnceEventListener, createRange } from '../../util/helpers'
 
@@ -17,8 +17,6 @@ export default {
   mixins: [Colorable, Input],
 
   directives: { ClickOutside },
-
-  components: { VScaleTransition },
 
   data () {
     return {
@@ -227,7 +225,7 @@ export default {
       }
     },
     genThumbLabel (h) {
-      return h('v-scale-transition', {
+      return h(VScaleTransition, {
         props: { origin: 'bottom center' }
       }, [
         h('div', {
@@ -282,7 +280,7 @@ export default {
       }, children)
     },
     genSteps (h) {
-      const ticks = createRange(this.numTicks + 1).map((i) => {
+      const ticks = createRange(this.numTicks + 1).map(i => {
         const span = h('span', {
           key: i,
           staticClass: 'slider__tick',

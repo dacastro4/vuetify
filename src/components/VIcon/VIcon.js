@@ -1,7 +1,8 @@
-require('../../stylus/components/_icons.styl')
+import '../../stylus/components/_icons.styl'
 
 import Themeable from '../../mixins/themeable'
 import Colorable from '../../mixins/colorable'
+import { convertToUnit } from '../../util/helpers'
 
 const SIZE_MAP = {
   small: '16px',
@@ -11,7 +12,7 @@ const SIZE_MAP = {
   xLarge: '40px'
 }
 
-function isFontAwesome5(iconType) {
+function isFontAwesome5 (iconType) {
   return ['fas', 'far', 'fal', 'fab'].some(val => iconType.includes(val))
 }
 
@@ -39,7 +40,7 @@ export default {
     const { small, medium, large, xLarge } = props
     const sizes = { small, medium, large, xLarge }
     const explicitSize = Object.keys(sizes).find(key => sizes[key] && key)
-    const fontSize = explicitSize && SIZE_MAP[explicitSize] || props.size
+    const fontSize = (explicitSize && SIZE_MAP[explicitSize]) || convertToUnit(props.size)
 
     if (fontSize) data.style = { fontSize, ...data.style }
 
@@ -95,7 +96,7 @@ export default {
       iconType,
       isCustomIcon ? iconName : null
     ].reduce((prev, curr) => curr ? `${prev} ${curr}` : prev)
-    .trim()
+      .trim()
 
     return h('i', data, children)
   }

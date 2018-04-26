@@ -1,5 +1,6 @@
 import 'vuetify/src/util/helpers'
-import { PluginFunction } from 'vue'
+import 'vuetify/src/util/colors'
+import Vue, { PluginFunction } from 'vue'
 
 declare class Vuetify {
   static install: PluginFunction<never>
@@ -60,12 +61,35 @@ declare interface VuetifyOptions {
   themeCache?: VuetifyThemeCache
 }
 
+declare type VuetifyGoToEasing =
+  ((t: number) => number) |
+  'linear' |
+  'easeInQuad' |
+  'easeOutQuad' |
+  'easeInOutQuad' |
+  'easeInCubic' |
+  'easeOutCubic' |
+  'easeInOutCubic' |
+  'easeInQuart' |
+  'easeOutQuart' |
+  'easeInOutQuart' |
+  'easeInQuint' |
+  'easeOutQuint' |
+  'easeInOutQuint'
+
+declare interface VuetifyGoToOptions {
+  duration?: number
+  offset?: number
+  easing?: VuetifyGoToEasing
+}
+
 declare interface VuetifyObject {
   application: VuetifyApplication
   breakpoint: VuetifyBreakpoint
   dark: boolean
   theme: VuetifyTheme
   options: VuetifyOptions
+  goTo: (target: string | number | HTMLElement | Vue, options?: VuetifyGoToOptions) => void
 }
 
 declare module 'vue/types/vue' {

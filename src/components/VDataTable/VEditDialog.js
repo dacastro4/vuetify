@@ -1,7 +1,15 @@
-require('../../stylus/components/_small-dialog.styl')
+import '../../stylus/components/_small-dialog.styl'
+
+// Mixins
+import Returnable from '../../mixins/returnable'
+
+import VBtn from '../VBtn'
+import VMenu from '../VMenu'
 
 export default {
   name: 'v-edit-dialog',
+
+  mixins: [ Returnable ],
 
   data () {
     return {
@@ -16,6 +24,7 @@ export default {
     },
     large: Boolean,
     lazy: Boolean,
+    persistent: Boolean,
     saveText: {
       default: 'Save'
     },
@@ -27,15 +36,7 @@ export default {
 
   watch: {
     isActive (val) {
-      val &&
-        this.$emit('open') &&
-        setTimeout(this.focus, 50) // Give DOM time to paint
-
-      if (!val) {
-        !this.isSaving && this.$emit('cancel')
-        this.isSaving && this.$emit('close')
-        this.isSaving = false
-      }
+      val && setTimeout(this.focus, 50) // Give DOM time to paint
     }
   },
 
@@ -47,13 +48,8 @@ export default {
       const input = this.$refs.content.querySelector('input')
       input && input.focus()
     },
-    save () {
-      this.isSaving = true
-      this.isActive = false
-      this.$emit('save')
-    },
     genButton (fn, text) {
-      return this.$createElement('v-btn', {
+      return this.$createElement(VBtn, {
         props: {
           flat: true,
           color: 'primary',
@@ -67,15 +63,16 @@ export default {
         'class': 'small-dialog__actions'
       }, [
         this.genButton(this.cancel, this.cancelText),
-        this.genButton(this.save, this.saveText)
+        this.genButton(() => this.save(this.returnValue), this.saveText)
       ])
     },
     genContent () {
       return this.$createElement('div', {
         on: {
           keydown: e => {
+            const input = this.$refs.content.querySelector('input')
             e.keyCode === 27 && this.cancel()
-            e.keyCode === 13 && this.save()
+            e.keyCode === 13 && input && this.save(input.value)
           }
         },
         ref: 'content'
@@ -84,7 +81,7 @@ export default {
   },
 
   render (h) {
-    return h('v-menu', {
+    return h(VMenu, {
       'class': 'small-dialog',
       props: {
         contentClass: 'small-dialog__content',
@@ -92,6 +89,7 @@ export default {
         origin: 'top right',
         right: true,
         value: this.isActive,
+        closeOnClick: !this.persistent,
         closeOnContentClick: false,
         lazy: this.lazy
       },

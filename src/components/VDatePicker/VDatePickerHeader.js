@@ -1,4 +1,4 @@
-require('../../stylus/components/_date-picker-header.styl')
+import '../../stylus/components/_date-picker-header.styl'
 
 // Components
 import VBtn from '../VBtn'
@@ -13,11 +13,6 @@ import { createNativeLocaleFormatter, monthChange } from './util'
 export default {
   name: 'v-date-picker-header',
 
-  components: {
-    VBtn,
-    VIcon
-  },
-
   mixins: [Colorable],
 
   data () {
@@ -28,10 +23,6 @@ export default {
   },
 
   props: {
-    appendIcon: {
-      type: String,
-      default: 'chevron_right'
-    },
     disabled: Boolean,
     format: {
       type: Function,
@@ -41,7 +32,13 @@ export default {
       type: String,
       default: 'en-us'
     },
-    prependIcon: {
+    min: String,
+    max: String,
+    nextIcon: {
+      type: String,
+      default: 'chevron_right'
+    },
+    prevIcon: {
       type: String,
       default: 'chevron_left'
     },
@@ -71,10 +68,14 @@ export default {
 
   methods: {
     genBtn (change) {
-      return this.$createElement('v-btn', {
+      const disabled = this.disabled ||
+        (change < 0 && this.min && this.calculateChange(change) < this.min) ||
+        (change > 0 && this.max && this.calculateChange(change) > this.max)
+
+      return this.$createElement(VBtn, {
         props: {
           dark: this.dark,
-          disabled: this.disabled,
+          disabled,
           icon: true
         },
         nativeOn: {
@@ -84,7 +85,7 @@ export default {
           }
         }
       }, [
-        this.$createElement('v-icon', change < 0 ? this.prependIcon : this.appendIcon)
+        this.$createElement(VIcon, change < 0 ? this.prevIcon : this.nextIcon)
       ])
     },
     calculateChange (sign) {

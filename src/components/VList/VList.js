@@ -1,5 +1,5 @@
 // Styles
-require('../../stylus/components/_lists.styl')
+import '../../stylus/components/_lists.styl'
 
 // Mixins
 import Themeable from '../../mixins/themeable'
@@ -72,6 +72,6 @@ export default {
       'class': this.classes
     }
 
-    return h('ul', data, [this.$slots.default])
+    return h('div', data, [this.$slots.default])
   }
 }

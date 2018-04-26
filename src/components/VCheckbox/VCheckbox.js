@@ -1,5 +1,5 @@
-require('../../stylus/components/_input-groups.styl')
-require('../../stylus/components/_selection-controls.styl')
+import '../../stylus/components/_input-groups.styl'
+import '../../stylus/components/_selection-controls.styl'
 
 import VIcon from '../VIcon'
 import { VFadeTransition } from '../transitions'
@@ -8,11 +8,6 @@ import Selectable from '../../mixins/selectable'
 
 export default {
   name: 'v-checkbox',
-
-  components: {
-    VFadeTransition,
-    VIcon
-  },
 
   mixins: [Rippleable, Selectable],
 
@@ -66,8 +61,8 @@ export default {
   },
 
   render (h) {
-    const transition = h('v-fade-transition', [
-      h('v-icon', {
+    const transition = h(VFadeTransition, [
+      h(VIcon, {
         staticClass: 'icon--selection-control',
         'class': {
           'icon--checkbox': this.icon === 'check_box'
@@ -85,7 +80,7 @@ export default {
           ? -1
           : this.internalTabIndex || this.tabindex,
         role: 'checkbox',
-        'aria-checked': this.inputIndeterminate && 'mixed' || this.isActive && 'true' || 'false',
+        'aria-checked': this.inputIndeterminate ? 'mixed' : (this.isActive ? 'true' : 'false'),
         'aria-label': this.label
       }
     }

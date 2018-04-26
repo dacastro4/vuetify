@@ -21,12 +21,6 @@ import { consoleWarn } from '../util/console'
 export default {
   name: 'data-iterable',
 
-  components: {
-    VBtn,
-    VIcon,
-    VSelect
-  },
-
   data () {
     return {
       searchLength: 0,
@@ -55,6 +49,14 @@ export default {
     noResultsText: {
       type: String,
       default: 'No matching records found'
+    },
+    nextIcon: {
+      type: String,
+      default: 'chevron_right'
+    },
+    prevIcon: {
+      type: String,
+      default: 'chevron_left'
     },
     rowsPerPageItems: {
       type: Array,
@@ -210,8 +212,8 @@ export default {
   },
 
   watch: {
-    search () {
-      this.updatePagination({ page: 1, totalItems: this.itemsLength })
+    itemsLength (totalItems) {
+      this.updatePagination({ page: 1, totalItems })
     }
   },
 
@@ -300,7 +302,7 @@ export default {
 
       Object.defineProperty(props, 'selected', {
         get: () => this.selected[item[this.itemKey]],
-        set: (value) => {
+        set: value => {
           if (itemKey == null) {
             consoleWarn(`"${keyProp}" attribute must be defined for item`, this)
           }
@@ -314,7 +316,7 @@ export default {
 
       Object.defineProperty(props, 'expanded', {
         get: () => this.expanded[item[this.itemKey]],
-        set: (value) => {
+        set: value => {
           if (itemKey == null) {
             consoleWarn(`"${keyProp}" attribute must be defined for item`, this)
           }
@@ -344,7 +346,7 @@ export default {
       return this.genFilteredItems()
     },
     genPrevIcon () {
-      return this.$createElement('v-btn', {
+      return this.$createElement(VBtn, {
         props: {
           disabled: this.computedPagination.page === 1,
           icon: true,
@@ -361,7 +363,7 @@ export default {
         attrs: {
           'aria-label': 'Previous page' // TODO: Localization
         }
-      }, [this.$createElement('v-icon', 'chevron_left')])
+      }, [this.$createElement(VIcon, this.prevIcon)])
     },
     genNextIcon () {
       const pagination = this.computedPagination
@@ -369,7 +371,7 @@ export default {
         pagination.page * pagination.rowsPerPage >= this.itemsLength ||
         this.pageStop < 0
 
-      return this.$createElement('v-btn', {
+      return this.$createElement(VBtn, {
         props: {
           disabled,
           icon: true,
@@ -386,14 +388,14 @@ export default {
         attrs: {
           'aria-label': 'Next page' // TODO: Localization
         }
-      }, [this.$createElement('v-icon', 'chevron_right')])
+      }, [this.$createElement(VIcon, this.nextIcon)])
     },
     genSelect () {
       return this.$createElement('div', {
         'class': this.actionsSelectClasses
       }, [
         this.rowsPerPageText,
-        this.$createElement('v-select', {
+        this.$createElement(VSelect, {
           attrs: {
             'aria-label': this.rowsPerPageText
           },
@@ -405,7 +407,7 @@ export default {
             minWidth: '75px'
           },
           on: {
-            input: (val) => {
+            input: val => {
               this.updatePagination({
                 page: 1,
                 rowsPerPage: val

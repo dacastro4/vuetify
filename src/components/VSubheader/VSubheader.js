@@ -1,4 +1,4 @@
-require('../../stylus/components/_subheaders.styl')
+import '../../stylus/components/_subheaders.styl'
 
 import Themeable from '../../mixins/themeable'
 
@@ -20,6 +20,6 @@ export default {
     if (props.light) data.staticClass += ' theme--light'
     if (props.dark) data.staticClass += ' theme--dark'
 
-    return h('li', data, children)
+    return h('div', data, children)
   }
 }

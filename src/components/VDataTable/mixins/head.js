@@ -1,6 +1,16 @@
 import { consoleWarn } from '../../../util/console'
 
+import VCheckbox from '../../VCheckbox'
+import VIcon from '../../VIcon'
+
 export default {
+  props: {
+    sortIcon: {
+      type: String,
+      default: 'arrow_upward'
+    }
+  },
+
   methods: {
     genTHead () {
       if (this.hideHeaders) return // Exit Early since no headers are needed.
@@ -14,10 +24,10 @@ export default {
           all: this.everyItem
         })
 
-        children = [this.needsTR(row) ? this.genTR(row) : row, this.genTProgress()]
+        children = [this.hasTag(row, 'th') ? this.genTR(row) : row, this.genTProgress()]
       } else {
         const row = this.headers.map(o => this.genHeader(o))
-        const checkbox = this.$createElement('v-checkbox', {
+        const checkbox = this.$createElement(VCheckbox, {
           props: {
             dark: this.dark,
             light: this.light,
@@ -58,13 +68,13 @@ export default {
         }
       }
 
-      if ('sortable' in header && header.sortable || !('sortable' in header)) {
+      if (header.sortable == null || header.sortable) {
         this.genHeaderSortingData(header, children, data, classes)
       } else {
         data.attrs['aria-label'] += ': Not sorted.' // TODO: Localization
       }
 
-      classes.push(`text-xs-${header.align || 'right'}`)
+      classes.push(`text-xs-${header.align || 'left'}`)
       if (Array.isArray(header.class)) {
         classes.push(...header.class)
       } else if (header.class) {
@@ -95,12 +105,12 @@ export default {
       }
 
       classes.push('sortable')
-      const icon = this.$createElement('v-icon', {
+      const icon = this.$createElement(VIcon, {
         props: {
           small: true
         }
-      }, 'arrow_upward')
-      if (header.align && header.align === 'left') {
+      }, this.sortIcon)
+      if (!header.align || header.align === 'left') {
         children.push(icon)
       } else {
         children.unshift(icon)
